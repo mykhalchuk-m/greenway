@@ -3,6 +3,10 @@ package com.mmm.grenway.javafx.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.mmm.grenway.javafx.cfg.ScreenConfig;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,6 +16,12 @@ import javafx.scene.control.TextField;
 
 public class LoginController implements Initializable {
 
+	@Autowired
+	private ScreenConfig screenConfig;
+	
+	@Autowired
+	private MainController mainController;
+	
 	@FXML
 	private TextField userName;
 	@FXML
@@ -29,5 +39,6 @@ public class LoginController implements Initializable {
 	@FXML
 	private void doLogin(ActionEvent event) {
 		System.out.println("do Login");
+		screenConfig.loadView(mainController, "MainPane.fxml");
 	}
 }
