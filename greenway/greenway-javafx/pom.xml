@@ -6,6 +6,5 @@
 		<artifactId>greenway</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>greenway-entity</artifactId>
-	
+	<artifactId>greenway-javafx</artifactId>
 </project>
