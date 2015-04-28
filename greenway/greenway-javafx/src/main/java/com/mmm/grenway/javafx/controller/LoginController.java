@@ -1,44 +1,78 @@
 package com.mmm.grenway.javafx.controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.mmm.grenway.javafx.cfg.ScreenConfig;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-
-public class LoginController implements Initializable {
+public class LoginController {
 
 	@Autowired
 	private ScreenConfig screenConfig;
-	
+
 	@Autowired
 	private MainController mainController;
-	
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
 	@FXML
 	private TextField userName;
 	@FXML
-	private TextField password;
+	private PasswordField password;
 	@FXML
 	private Label errorMessage;
 	@FXML
 	private Button login;
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	@FXML
+	public void initialize() {
 		System.out.println("Login controller");
+		login.setOnKeyPressed(manageEnterPressed());
+		userName.setOnKeyPressed(manageEnterPressed());
+		password.setOnKeyPressed(manageEnterPressed());
 	}
-	
+
 	@FXML
 	private void doLogin(ActionEvent event) {
 		System.out.println("do Login");
-		screenConfig.loadView(mainController, "MainPane.fxml");
+		String name = userName.getText();
+		String pass = password.getText();
+
+		try {
+			Authentication request = new UsernamePasswordAuthenticationToken(name, pass);
+			Authentication response = authenticationManager.authenticate(request);
+
+			SecurityContextHolder.getContext().setAuthentication(response);
+			screenConfig.loadView(mainController, "MainPane.fxml");
+		} catch (AuthenticationException e) {
+			errorMessage.setText(e.getMessage());
+		}
+	}
+
+	private EventHandler<KeyEvent> manageEnterPressed() {
+		return new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.ENTER) {
+					doLogin(null);
+				}
+			}
+		};
 	}
 }

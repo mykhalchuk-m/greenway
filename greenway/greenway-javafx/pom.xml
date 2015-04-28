@@ -7,4 +7,12 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>greenway-javafx</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.mmm.greenway</groupId>
+			<artifactId>greenway-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

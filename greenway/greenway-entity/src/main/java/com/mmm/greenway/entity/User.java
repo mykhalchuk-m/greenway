@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 @Entity
-@Table
+@Table(name = "users")
 public class User {
 	@Id
 	private String userName;
@@ -37,7 +37,7 @@ public class User {
 		this.credentialsNonExpired = true;
 		this.enabled = true;
 	}
-	
+
 	public String getUserName() {
 		return userName;
 	}

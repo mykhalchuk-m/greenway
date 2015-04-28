@@ -1,17 +1,27 @@
 package com.mmm.grenway.javafx.controller;
 
-import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.fxml.Initializable;
+import javafx.fxml.FXML;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Component
-public class MainController implements Initializable {
+public class MainController {
 	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	@FXML
+	private TabPane tabPane;
+	@Autowired
+	private ResourceBundle resourceBundle;
+	
+	@FXML
+	private void initialize() {
 		System.out.println("Main controller");
+		
+		
+		Tab adminTab = new Tab();
+		adminTab.setText(resourceBundle.getString("main.tab.admin.title"));
+		tabPane.getTabs().add(adminTab);
 	}
 }

@@ -1,37 +1,36 @@
 package com.mmm.grenway.javafx.cfg;
 
 import java.net.URL;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-
 
 @Configuration
 @Component
 public class ScreenConfig {
 	private Stage primaryStage;
-	private StackPane root;
 	private Scene scene;
+	
+	@Autowired
+	private ResourceBundle resourceBundle;
 	
 	public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 	
-    public void showMainScreen() {
-        root = new StackPane();
-        primaryStage.setTitle("SpringFX");
-        scene = new Scene(root);
+    public void preparePrimaryScreen() {
+        primaryStage.setTitle("GreenWay App");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
 
@@ -44,8 +43,12 @@ public class ScreenConfig {
         primaryStage.show();
     }
     
+    /**
+     * @param node
+     */
     private void setNode(Node node) {
-    	root.getChildren().setAll(node);
+    	Scene scene = new Scene((Parent) node);
+    	primaryStage.setScene(scene);
     }
     
     public void loadView(Object controllerInstance, String fxmlFileName) {
@@ -54,7 +57,7 @@ public class ScreenConfig {
     
     private Node getNode(final Object control, URL location) {
         FXMLLoader loader = new FXMLLoader(location);
-        loader.setResources(ResourceBundle.getBundle("lang", new Locale("ua", "UA")));
+        loader.setResources(resourceBundle);
         loader.setControllerFactory(new Callback<Class<?>, Object>() {
             public Object call(Class<?> aClass) {
                 return control;

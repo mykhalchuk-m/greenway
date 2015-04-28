@@ -8,9 +8,9 @@
 
 <AnchorPane prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.LoginController">
    <children>
-      <TextField fx:id="userName" layoutX="76.0" layoutY="125.0" promptText="%login.textFiled.userName.promptText" />
-      <TextField fx:id="password" layoutX="76.0" layoutY="166.0" promptText="%login.textFiled.password.promptText" />
-      <Button layoutX="79.0" layoutY="199.0" mnemonicParsing="false" onAction="#doLogin" text="%login.button.login.test" textAlignment="CENTER" />
       <Label fx:id="errorMessage" layoutX="76.0" layoutY="247.0" />
+      <TextField fx:id="userName" layoutX="76.0" layoutY="138.0" promptText="%login.textFiled.userName.promptText" />
+      <PasswordField fx:id="password" layoutX="76.0" layoutY="176.0" promptText="%login.textFiled.password.promptText" />
+      <Button fx:id="login" layoutX="125.0" layoutY="214.0" mnemonicParsing="false" text="%login.button.login.test" />
    </children>
 </AnchorPane>
