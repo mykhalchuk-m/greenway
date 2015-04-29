@@ -94,4 +94,9 @@ public class User {
 		this.roles = roles;
 	}
 
+	@Override
+	public String toString() {
+		return new StringBuilder("[User -> name: ").append(userName).append(", password: ").append(password)
+				.append("]").toString();
+	}
 }

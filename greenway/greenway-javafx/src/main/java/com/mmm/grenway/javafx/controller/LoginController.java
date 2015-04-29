@@ -42,7 +42,7 @@ public class LoginController {
 	@FXML
 	public void initialize() {
 		System.out.println("Login controller");
-		login.setOnKeyPressed(manageEnterPressed());
+		login.setOnAction(event -> doLogin(event));
 		userName.setOnKeyPressed(manageEnterPressed());
 		password.setOnKeyPressed(manageEnterPressed());
 	}
@@ -50,18 +50,20 @@ public class LoginController {
 	@FXML
 	private void doLogin(ActionEvent event) {
 		System.out.println("do Login");
-		String name = userName.getText();
-		String pass = password.getText();
-
-		try {
-			Authentication request = new UsernamePasswordAuthenticationToken(name, pass);
-			Authentication response = authenticationManager.authenticate(request);
-
-			SecurityContextHolder.getContext().setAuthentication(response);
-			screenConfig.loadView(mainController, "MainPane.fxml");
-		} catch (AuthenticationException e) {
-			errorMessage.setText(e.getMessage());
-		}
+		screenConfig.loadView(mainController, "MainPane.fxml");
+		
+//		String name = userName.getText();
+//		String pass = password.getText();
+//
+//		try {
+//			Authentication request = new UsernamePasswordAuthenticationToken(name, pass);
+//			Authentication response = authenticationManager.authenticate(request);
+//
+//			SecurityContextHolder.getContext().setAuthentication(response);
+//			screenConfig.loadView(mainController, "MainPane.fxml");
+//		} catch (AuthenticationException e) {
+//			errorMessage.setText(e.getMessage());
+//		}
 	}
 
 	private EventHandler<KeyEvent> manageEnterPressed() {

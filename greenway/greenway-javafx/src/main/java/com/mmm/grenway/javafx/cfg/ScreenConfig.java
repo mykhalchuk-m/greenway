@@ -21,56 +21,61 @@ import org.springframework.stereotype.Component;
 public class ScreenConfig {
 	private Stage primaryStage;
 	private Scene scene;
-	
+
 	@Autowired
 	private ResourceBundle resourceBundle;
-	
+
 	public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
-	
-    public void preparePrimaryScreen() {
-        primaryStage.setTitle("GreenWay App");
-        primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
+		this.primaryStage = primaryStage;
+	}
 
-        primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent event) {
-                System.exit(0);
-            }
-        });
+	public void preparePrimaryScreen() {
+		primaryStage.setTitle("GreenWay App");
+		primaryStage.setScene(scene);
+		primaryStage.setResizable(false);
 
-        primaryStage.show();
-    }
-    
-    /**
-     * @param node
-     */
-    private void setNode(Node node) {
-    	Scene scene = new Scene((Parent) node);
-    	primaryStage.setScene(scene);
-    }
-    
-    public void loadView(Object controllerInstance, String fxmlFileName) {
-        setNode(getNode(controllerInstance, controllerInstance.getClass().getResource(fxmlFileName)));
-    }
-    
-    private Node getNode(final Object control, URL location) {
-        FXMLLoader loader = new FXMLLoader(location);
-        loader.setResources(resourceBundle);
-        loader.setControllerFactory(new Callback<Class<?>, Object>() {
-            public Object call(Class<?> aClass) {
-                return control;
-            }
-        });
+		primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent event) {
+				System.exit(0);
+			}
+		});
 
-        try {
-            return (Node) loader.load();
-        } catch (Exception e) {
-        	System.out.println("Error casting node");
-//            logger.error("Error casting node", e);
-            return null;
-        }
-    }
+		primaryStage.show();
+	}
+
+	/**
+	 * @param node
+	 */
+	private void setNode(Node node) {
+		Scene scene = new Scene((Parent) node);
+		primaryStage.setScene(scene);
+	}
+
+	public Node getView(Object controllerInstance, String fxmlFileName) {
+		return getNode(controllerInstance, controllerInstance.getClass().getResource(fxmlFileName));
+	}
+
+	public void loadView(Object controllerInstance, String fxmlFileName) {
+		setNode(getNode(controllerInstance, controllerInstance.getClass().getResource(fxmlFileName)));
+	}
+
+	private Node getNode(final Object control, URL location) {
+		FXMLLoader loader = new FXMLLoader(location);
+		loader.setResources(resourceBundle);
+		loader.setControllerFactory(new Callback<Class<?>, Object>() {
+			public Object call(Class<?> aClass) {
+				return control;
+			}
+		});
+
+		try {
+			return loader.load();
+		} catch (Exception e) {
+			System.out.println("Error casting node");
+			System.out.println(control.getClass() + " " + location);
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }
