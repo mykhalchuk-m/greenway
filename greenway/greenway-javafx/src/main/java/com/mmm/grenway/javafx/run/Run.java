@@ -26,7 +26,6 @@ public class Run extends Application {
 		ScreenConfig screenConfig = applicationContext.getBean(ScreenConfig.class);
 		LoginController loginController = applicationContext.getBean(LoginController.class);
 		screenConfig.setPrimaryStage(primaryStage);
-		screenConfig.preparePrimaryScreen();
 		screenConfig.loadView(loginController, "LoginPane.fxml");
 	}
 }

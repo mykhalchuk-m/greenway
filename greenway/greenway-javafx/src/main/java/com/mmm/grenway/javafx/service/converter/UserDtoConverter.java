@@ -11,10 +11,10 @@ public class UserDtoConverter {
 	public static ObservableList<UserDto> convertToObservableList(Iterable<User> users) {
 		ObservableList<UserDto> data = FXCollections.observableArrayList();
 		for (User user : users) {
-			System.out.println(user);
 			data.add(new UserDto(user));
 		}
 		return data;
 	}
+	
 	
 }

@@ -29,7 +29,7 @@ public class User {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"))
 	@Column(name = "role")
-	private Collection<String> roles;
+	private Collection<UserRole> roles;
 
 	public User() {
 		this.accountNonExpired = true;
@@ -86,11 +86,11 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	public Collection<String> getRoles() {
+	public Collection<UserRole> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Collection<String> roles) {
+	public void setRoles(Collection<UserRole> roles) {
 		this.roles = roles;
 	}
 

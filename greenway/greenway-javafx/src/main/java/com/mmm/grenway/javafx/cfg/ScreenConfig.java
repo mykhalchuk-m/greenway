@@ -3,13 +3,11 @@ package com.mmm.grenway.javafx.cfg;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,35 +18,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScreenConfig {
 	private Stage primaryStage;
-	private Scene scene;
 
 	@Autowired
 	private ResourceBundle resourceBundle;
 
 	public void setPrimaryStage(Stage primaryStage) {
 		this.primaryStage = primaryStage;
-	}
-
-	public void preparePrimaryScreen() {
 		primaryStage.setTitle("GreenWay App");
-		primaryStage.setScene(scene);
-		primaryStage.setResizable(false);
-
-		primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
-			public void handle(WindowEvent event) {
-				System.exit(0);
-			}
-		});
-
-		primaryStage.show();
 	}
 
 	/**
 	 * @param node
 	 */
 	private void setNode(Node node) {
-		Scene scene = new Scene((Parent) node);
+		Scene scene = new Scene((Parent) node, 800, 600);
+		scene.getStylesheets().add(ScreenConfig.class.getResource("/css/gw-style.css").toExternalForm());
 		primaryStage.setScene(scene);
+		if (!primaryStage.isShowing()) {
+			primaryStage.show();
+		}
 	}
 
 	public Node getView(Object controllerInstance, String fxmlFileName) {

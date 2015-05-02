@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.mmm.greenway.data.repository.UserRepository;
 import com.mmm.greenway.entity.User;
+import com.mmm.greenway.entity.UserRole;
 
 public class TempUserCreateService {
 
@@ -17,7 +18,7 @@ public class TempUserCreateService {
 		User user = new User();
 		user.setUserName("admin");
 		user.setPassword(passwordEncoder.encode("admin"));
-		user.setRoles(Arrays.asList("ROLE_ADMIN", "ROLE_OPERATION", "ROLE_DOCUMENTATION"));
+		user.setRoles(Arrays.asList(UserRole.ROLE_ADMIN, UserRole.ROLE_DOKUMENTOLOH, UserRole.ROLE_REGISTRATOR));
 		userRepository.save(user);
 	}
 }

@@ -19,6 +19,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	public void save(User user) {
+		userRepository.save(user);
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -61,7 +65,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 				@Override
 				public Collection<? extends GrantedAuthority> getAuthorities() {
-					return user.getRoles().stream().map(r -> new SimpleGrantedAuthority(r))
+					return user.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.toString()))
 							.collect(Collectors.toList());
 				}
 			};

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="createUserPane" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.CreateUserController">
+   <children>
+      <VBox styleClass="gw-formpane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox styleClass="hbox" />
+            <HBox styleClass="hbox">
+               <children>
+                  <GridPane HBox.hgrow="ALWAYS">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="%main.tab.admin.createuser.username.lable" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+                        <TextField fx:id="userName" GridPane.columnIndex="2" />
+                     </children>
+                  </GridPane>
+               </children>
+            </HBox>
+            <HBox styleClass="hbox">
+               <children>
+                  <GridPane HBox.hgrow="ALWAYS">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label styleClass="label" text="%main.tab.admin.createuser.password.lable" GridPane.columnIndex="1" />
+                        <PasswordField fx:id="password" GridPane.columnIndex="2" />
+                     </children>
+                  </GridPane>
+               </children></HBox>
+            <HBox styleClass="hbox">
+               <children>
+                  <GridPane HBox.hgrow="ALWAYS">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label styleClass="label" text="%main.tab.admin.createuser.confirmpassword.lable" GridPane.columnIndex="1" />
+                        <PasswordField fx:id="confirmPassword" GridPane.columnIndex="2">
+                           <tooltip>
+                              <Tooltip fx:id="confirmPasswordTooltip" text="Empty Tooltip" />
+                           </tooltip>
+                        </PasswordField>
+                     </children>
+                  </GridPane>
+               </children></HBox>
+            <HBox styleClass="hbox height150">
+               <children>
+                  <GridPane prefHeight="100.0" HBox.hgrow="ALWAYS">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="%main.tab.admin.createuser.role.lable" GridPane.columnIndex="1" />
+                        <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="2" GridPane.rowSpan="2" />
+                        <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="2" GridPane.rowSpan="2" />
+                     </children>
+                  </GridPane>
+               </children>
+               <styleClass>
+                  <String fx:value="hbox" />
+                  <String fx:value="height150" />
+               </styleClass></HBox>
+            <HBox styleClass="hbox">
+               <children>
+                  <GridPane hgap="10.0" vgap="10.0" HBox.hgrow="ALWAYS">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button fx:id="createUser" mnemonicParsing="false" text="%main.tab.admin.createuser.createuser" GridPane.columnIndex="2">
+                           <contextMenu>
+                              <ContextMenu>
+                                <items>
+                                  <MenuItem mnemonicParsing="false" text="some item" />
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+                        </Button>
+                     </children>
+                  </GridPane>
+               </children></HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
