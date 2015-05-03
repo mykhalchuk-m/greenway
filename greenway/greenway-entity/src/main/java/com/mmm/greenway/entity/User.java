@@ -1,14 +1,10 @@
 package com.mmm.greenway.entity;
 
-import java.util.Collection;
-
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -26,10 +22,8 @@ public class User {
 	private Boolean credentialsNonExpired;
 	@Column
 	private Boolean enabled;
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"))
-	@Column(name = "role")
-	private Collection<UserRole> roles;
+	@Enumerated(EnumType.STRING)
+	private UserRole role;
 
 	public User() {
 		this.accountNonExpired = true;
@@ -86,12 +80,12 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	public Collection<UserRole> getRoles() {
-		return roles;
+	public UserRole getRole() {
+		return role;
 	}
 
-	public void setRoles(Collection<UserRole> roles) {
-		this.roles = roles;
+	public void setRole(UserRole role) {
+		this.role = role;
 	}
 
 	@Override

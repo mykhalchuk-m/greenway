@@ -1,7 +1,7 @@
 package com.mmm.greenway.data.service;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -65,8 +65,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 				@Override
 				public Collection<? extends GrantedAuthority> getAuthorities() {
-					return user.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.toString()))
-							.collect(Collectors.toList());
+					return Arrays.asList(new SimpleGrantedAuthority(user.getRole().toString()));
 				}
 			};
 		}

@@ -11,21 +11,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mmm.greenway.data.repository.UserRepository;
 import com.mmm.greenway.entity.User;
-import com.mmm.grenway.javafx.view.CreateUserForm;
+import com.mmm.grenway.javafx.controller.helper.AdminContentHelper;
 
 public class CreateUserController {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+	@Autowired
+	private AdminContentHelper contentHelper;
+
 	@FXML
 	private BorderPane createUserPane;
 
 	@FXML
 	private void initialize() {
 		System.out.println("CreateUserController");
-		CreateUserForm createUserForm = new CreateUserForm();
-		createUserPane.setCenter(createUserForm.createUserForm(this::swithToShowUsersPane));
+		createUserPane.setCenter(contentHelper.createUserForm(this::swithToShowUsersPane));
 	}
 
 	public void swithToShowUsersPane(ActionEvent event, User user) {

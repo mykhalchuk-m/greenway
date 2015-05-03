@@ -13,6 +13,6 @@ public interface UserRepository extends CrudRepository<User, String> {
 	@Query("select u from User u where upper(u.userName) like :token%")
 	List<User> findByUserNameStartsWith(@Param("token") String token);
 	
-	@Query("select u from User u where :userRole member of u.roles")
+	@Query("select u from User u where u.role = :userRole")
 	List<User> findUsersWithRole(@Param("userRole") UserRole userRole);
 }

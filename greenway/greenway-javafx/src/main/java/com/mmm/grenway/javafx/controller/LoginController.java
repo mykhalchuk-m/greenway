@@ -1,14 +1,20 @@
 package com.mmm.grenway.javafx.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +27,8 @@ import com.mmm.grenway.javafx.cfg.ScreenConfig;
 
 public class LoginController {
 
+	private static final String EMPTY_STRING = "";
+	
 	@Autowired
 	private ScreenConfig screenConfig;
 
@@ -38,32 +46,86 @@ public class LoginController {
 	private Label errorMessage;
 	@FXML
 	private Button login;
+	ContextMenu userNameAlert = new ContextMenu(new MenuItem("User name is required"));
+	ContextMenu passwordAlert = new ContextMenu(new MenuItem("Password is required"));
 
 	@FXML
 	public void initialize() {
 		System.out.println("Login controller");
+		userNameAlert.setAutoHide(false);
+		passwordAlert.setAutoHide(false);
+		
 		login.setOnAction(event -> doLogin(event));
 		userName.setOnKeyPressed(manageEnterPressed());
 		password.setOnKeyPressed(manageEnterPressed());
+		login.setOnKeyPressed(manageEnterPressed());
 	}
 
 	@FXML
 	private void doLogin(ActionEvent event) {
 		System.out.println("do Login");
-		screenConfig.loadView(mainController, "MainPane.fxml");
 		
-//		String name = userName.getText();
-//		String pass = password.getText();
-//
-//		try {
-//			Authentication request = new UsernamePasswordAuthenticationToken(name, pass);
-//			Authentication response = authenticationManager.authenticate(request);
-//
-//			SecurityContextHolder.getContext().setAuthentication(response);
-//			screenConfig.loadView(mainController, "MainPane.fxml");
-//		} catch (AuthenticationException e) {
-//			errorMessage.setText(e.getMessage());
-//		}
+		if (isValid()) {
+			String name = userName.getText();
+			String pass = password.getText();
+			
+			try {
+				Authentication request = new UsernamePasswordAuthenticationToken(name, pass);
+				Authentication response = authenticationManager.authenticate(request);
+				
+				SecurityContextHolder.getContext().setAuthentication(response);
+				screenConfig.loadView(mainController, "MainPane.fxml");
+			} catch (AuthenticationException e) {
+				errorMessage.setText("Invalid user name or password");
+			}
+		}
+	}
+	
+	private boolean isValid() {
+		boolean isValid = true;
+		
+		if (!userNameAlert.isShowing() && EMPTY_STRING.equals(userName.getText())) {
+			isValid = false;
+			userNameAlert.show(userName, Side.RIGHT, 10, 0);
+		}
+		if (!passwordAlert.isShowing() && EMPTY_STRING.equals(password.getText())) {
+			isValid = false;
+			passwordAlert.show(password, Side.RIGHT, 10, 0);
+		}
+		if(EMPTY_STRING.equals(password.getText()) || EMPTY_STRING.equals(userName.getText())) {
+			isValid = false;
+		}
+		
+		userName.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue) {
+					userNameAlert.hide();
+				}
+			}
+		});
+		
+		password.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue) {
+					passwordAlert.hide();
+				}
+			}
+		});
+
+		userName.getScene().addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				userNameAlert.hide();
+				passwordAlert.hide();
+			}
+		});
+		
+		return isValid;
 	}
 
 	private EventHandler<KeyEvent> manageEnterPressed() {

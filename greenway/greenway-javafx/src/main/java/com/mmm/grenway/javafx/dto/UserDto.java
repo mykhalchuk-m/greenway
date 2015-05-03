@@ -27,7 +27,7 @@ public class UserDto {
 		accountNonLocked = new SimpleBooleanProperty(user.getAccountNonLocked());
 		credentialsNonExpired = new SimpleBooleanProperty(user.getCredentialsNonExpired());
 		enabled = new SimpleBooleanProperty(user.getEnabled());
-		roles = new SimpleStringProperty(user.getRoles().toString());
+		roles = new SimpleStringProperty(user.getRole().toString());
 	}
 
 	public StringProperty getUserName() {
