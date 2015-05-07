@@ -24,4 +24,17 @@ public class UserDtoConverter {
 		return FXCollections.observableArrayList(Arrays.asList(UserRole.values()).stream().map(role -> role.toString())
 				.collect(Collectors.toList()));
 	}
+	
+	public static User toUser(UserDto userDto) {
+		User user = new User();
+		user.setUserName(userDto.getUserName().get());
+		user.setPassword(userDto.getPassword().get());
+		user.setRole(UserRole.valueOf(userDto.getRoles().get()));
+		user.setAccountNonExpired(userDto.getAccountNonExpired().get());
+		user.setAccountNonLocked(userDto.getAccountNonLocked().get());
+		user.setCredentialsNonExpired(userDto.getCredentialsNonExpired().get());
+		user.setEnabled(userDto.getEnabled().get());
+		
+		return user;
+	}
 }

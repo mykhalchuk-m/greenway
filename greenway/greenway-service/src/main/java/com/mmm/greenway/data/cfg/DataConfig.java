@@ -12,13 +12,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableTransactionManagement
@@ -26,37 +24,35 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan(basePackages = { "com.mmm.greenway.data", "com.mmm.greenway.entity" })
 @PropertySource("classpath:application.properties")
 public class DataConfig {
-	
-	@Bean(destroyMethod = "close")
+
+	@Bean
 	@Autowired
 	DataSource getDataSource(Environment env) {
-		HikariConfig hikariConfig = new HikariConfig();
-		hikariConfig.setDriverClassName("org.h2.Driver");
-		hikariConfig.setJdbcUrl("jdbc:h2:mem:datajpa");
-		hikariConfig.setUsername("sa");
-		hikariConfig.setPassword("");
-
-		return new HikariDataSource(hikariConfig);
+		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+		dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
+		dataSource.setUrl("jdbc:mysql://localhost:3306/greenway");
+		dataSource.setUsername("root");
+		dataSource.setPassword("");
+		return dataSource;
 	}
-	
+
 	@Bean(name = "entityManagerFactory")
 	LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(DataSource dataSource, Environment env) {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource);
 		entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 		entityManagerFactoryBean.setPackagesToScan("com.mmm.greenway.entity");
-		
+
 		Properties properties = new Properties();
-		properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-        properties.put("hibernate.hbm2ddl.auto", "create-drop");
-        properties.put("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
-        properties.put("hibernate.show_sql", false);
-        properties.put("hibernate.format_sql", true);
-        entityManagerFactoryBean.setJpaProperties(properties);
-        
+		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+		properties.put("hibernate.hbm2ddl.auto", "create-drop");
+		properties.put("hibernate.show_sql", true);
+		properties.put("hibernate.format_sql", true);
+		entityManagerFactoryBean.setJpaProperties(properties);
+
 		return entityManagerFactoryBean;
 	}
-	
+
 	@Bean
 	JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);

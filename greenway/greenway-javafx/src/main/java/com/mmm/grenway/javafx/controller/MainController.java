@@ -1,5 +1,8 @@
 package com.mmm.grenway.javafx.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -8,10 +11,12 @@ import javafx.scene.control.TabPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.entity.UserRole;
 import com.mmm.grenway.javafx.controller.helper.AdminContentHelper;
 
+@Component
 public class MainController {
 
 	@FXML
@@ -27,16 +32,18 @@ public class MainController {
 
 		UserRole userRole = UserRole.valueOf(SecurityContextHolder.getContext().getAuthentication().getAuthorities()
 				.iterator().next().getAuthority());
-
+		List<Tab> tabs = new ArrayList<Tab>();
 		switch (userRole) {
 		case ROLE_ADMIN:
-			tabPane.getTabs().add(adminContentHelper.generateAdminTab());
+			tabs.add(adminContentHelper.generateAdminTab());
 		case ROLE_REGISTRATOR:
-			tabPane.getTabs().add(new Tab("Registrator Tab"));
+			tabs.add(new Tab("Registrator Tab"));
 		case ROLE_DOKUMENTOLOH:
-			tabPane.getTabs().add(new Tab("Docomentolog Tab"));
+			tabs.add(new Tab("Docomentolog Tab"));
 		case ROLE_OPERATOR:
-			tabPane.getTabs().add(new Tab("Operation Tab"));
+			tabs.add(new Tab("Operation Tab"));
 		}
+		Collections.reverse(tabs);
+		tabPane.getTabs().addAll(tabs);
 	}
 }

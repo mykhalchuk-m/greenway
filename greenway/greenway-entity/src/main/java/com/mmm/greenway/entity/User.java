@@ -87,6 +87,64 @@ public class User {
 	public void setRole(UserRole role) {
 		this.role = role;
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 11;
+		result = prime * result + ((accountNonExpired == null) ? 0 : accountNonExpired.hashCode());
+		result = prime * result + ((accountNonLocked == null) ? 0 : accountNonLocked.hashCode());
+		result = prime * result + ((credentialsNonExpired == null) ? 0 : credentialsNonExpired.hashCode());
+		result = prime * result + ((enabled == null) ? 0 : enabled.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (accountNonExpired == null) {
+			if (other.accountNonExpired != null)
+				return false;
+		} else if (!accountNonExpired.equals(other.accountNonExpired))
+			return false;
+		if (accountNonLocked == null) {
+			if (other.accountNonLocked != null)
+				return false;
+		} else if (!accountNonLocked.equals(other.accountNonLocked))
+			return false;
+		if (credentialsNonExpired == null) {
+			if (other.credentialsNonExpired != null)
+				return false;
+		} else if (!credentialsNonExpired.equals(other.credentialsNonExpired))
+			return false;
+		if (enabled == null) {
+			if (other.enabled != null)
+				return false;
+		} else if (!enabled.equals(other.enabled))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (role != other.role)
+			return false;
+		if (userName == null) {
+			if (other.userName != null)
+				return false;
+		} else if (!userName.equals(other.userName))
+			return false;
+		return true;
+	}
 
 	@Override
 	public String toString() {

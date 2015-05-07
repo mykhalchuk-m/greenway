@@ -22,11 +22,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import com.mmm.grenway.javafx.cfg.ScreenConfig;
 
+@Component
+//@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
 public class LoginController {
-
 	private static final String EMPTY_STRING = "";
 	
 	@Autowired
@@ -51,7 +53,6 @@ public class LoginController {
 
 	@FXML
 	public void initialize() {
-		System.out.println("Login controller");
 		userNameAlert.setAutoHide(false);
 		passwordAlert.setAutoHide(false);
 		
@@ -63,8 +64,6 @@ public class LoginController {
 
 	@FXML
 	private void doLogin(ActionEvent event) {
-		System.out.println("do Login");
-		
 		if (isValid()) {
 			String name = userName.getText();
 			String pass = password.getText();

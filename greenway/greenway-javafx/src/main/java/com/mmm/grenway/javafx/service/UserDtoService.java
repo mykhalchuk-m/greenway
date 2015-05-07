@@ -27,4 +27,18 @@ public class UserDtoService {
 	public ObservableList<UserDto> findUsersWithRoles(UserRole userRole) {
 		return UserDtoConverter.convertToObservableList(userRepository.findUsersWithRole(userRole));
 	}
+
+	public ObservableList<UserDto> findUsers(String userName, UserRole userRole) {
+		System.out.println(userName + " " + userRole); 
+		if ((userName == null || userName.isEmpty()) && userRole != null) {
+			return findUsersWithRoles(userRole);
+		} else if (userRole == null && userName != null && !userName.isEmpty()) {
+			return findUsersStartsWithName(userName);
+		} else if (userRole != null && userName != null && !userName.isEmpty()) {
+			return UserDtoConverter.convertToObservableList(userRepository.findUsersWithRoleAndNameStartsWith(userRole,
+					userName));
+		} else {
+			return findUsers();
+		}
+	}
 }

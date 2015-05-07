@@ -8,11 +8,13 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.data.repository.UserRepository;
 import com.mmm.greenway.entity.User;
 import com.mmm.grenway.javafx.controller.helper.AdminContentHelper;
 
+@Component
 public class CreateUserController {
 
 	@Autowired

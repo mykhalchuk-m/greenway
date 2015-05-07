@@ -8,7 +8,7 @@
 
 <BorderPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.LoginController">
    <center>
-      <GridPane alignment="CENTER" maxHeight="150.0" maxWidth="200.0" BorderPane.alignment="CENTER">
+      <GridPane alignment="CENTER" maxHeight="150.0" maxWidth="200.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints />
