@@ -24,7 +24,7 @@
             <PasswordField fx:id="password" promptText="%login.textFiled.password.promptText" GridPane.rowIndex="1" />
             <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                <children>
-                  <Button fx:id="login" mnemonicParsing="false" text="%login.button.login.test" />
+                  <Button fx:id="login" mnemonicParsing="false" text="%login.button.login.text" />
                </children>
             </HBox>
             <Label fx:id="errorMessage" text="" GridPane.columnSpan="2" GridPane.rowIndex="3" />

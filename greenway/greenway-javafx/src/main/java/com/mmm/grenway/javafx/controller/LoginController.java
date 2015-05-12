@@ -1,5 +1,7 @@
 package com.mmm.grenway.javafx.controller;
 
+import java.util.ResourceBundle;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -27,12 +29,15 @@ import org.springframework.stereotype.Component;
 import com.mmm.grenway.javafx.cfg.ScreenConfig;
 
 @Component
-//@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
+// @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
 public class LoginController {
 	private static final String EMPTY_STRING = "";
-	
+
 	@Autowired
 	private ScreenConfig screenConfig;
+
+	@Autowired
+	private ResourceBundle resourceBundle;
 
 	@Autowired
 	private MainController mainController;
@@ -48,14 +53,19 @@ public class LoginController {
 	private Label errorMessage;
 	@FXML
 	private Button login;
-	ContextMenu userNameAlert = new ContextMenu(new MenuItem("User name is required"));
-	ContextMenu passwordAlert = new ContextMenu(new MenuItem("Password is required"));
+	private ContextMenu userNameAlert;
+	private ContextMenu passwordAlert;
 
 	@FXML
 	public void initialize() {
+		userNameAlert = new ContextMenu(new MenuItem(
+				resourceBundle.getString("login.textFiled.userName.alert")));
+		passwordAlert = new ContextMenu(new MenuItem(
+				resourceBundle.getString("login.textFiled.password.alert")));
+		
 		userNameAlert.setAutoHide(false);
 		passwordAlert.setAutoHide(false);
-		
+
 		login.setOnAction(event -> doLogin(event));
 		userName.setOnKeyPressed(manageEnterPressed());
 		password.setOnKeyPressed(manageEnterPressed());
@@ -67,22 +77,22 @@ public class LoginController {
 		if (isValid()) {
 			String name = userName.getText();
 			String pass = password.getText();
-			
+
 			try {
 				Authentication request = new UsernamePasswordAuthenticationToken(name, pass);
 				Authentication response = authenticationManager.authenticate(request);
-				
+
 				SecurityContextHolder.getContext().setAuthentication(response);
 				screenConfig.loadView(mainController, "MainPane.fxml");
 			} catch (AuthenticationException e) {
-				errorMessage.setText("Invalid user name or password");
+				errorMessage.setText(resourceBundle.getString("login.errorMessage.invelidCredetional"));
 			}
 		}
 	}
-	
+
 	private boolean isValid() {
 		boolean isValid = true;
-		
+
 		if (!userNameAlert.isShowing() && EMPTY_STRING.equals(userName.getText())) {
 			isValid = false;
 			userNameAlert.show(userName, Side.RIGHT, 10, 0);
@@ -91,12 +101,12 @@ public class LoginController {
 			isValid = false;
 			passwordAlert.show(password, Side.RIGHT, 10, 0);
 		}
-		if(EMPTY_STRING.equals(password.getText()) || EMPTY_STRING.equals(userName.getText())) {
+		if (EMPTY_STRING.equals(password.getText()) || EMPTY_STRING.equals(userName.getText())) {
 			isValid = false;
 		}
-		
+
 		userName.focusedProperty().addListener(new ChangeListener<Boolean>() {
-			
+
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				if (newValue) {
@@ -104,9 +114,9 @@ public class LoginController {
 				}
 			}
 		});
-		
+
 		password.focusedProperty().addListener(new ChangeListener<Boolean>() {
-			
+
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				if (newValue) {
@@ -123,7 +133,7 @@ public class LoginController {
 				passwordAlert.hide();
 			}
 		});
-		
+
 		return isValid;
 	}
 

@@ -22,17 +22,21 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = { "com.mmm.greenway.data.repository" })
 @ComponentScan(basePackages = { "com.mmm.greenway.data", "com.mmm.greenway.entity" })
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:/application.properties")
 public class DataConfig {
 
+	@Autowired
+    private Environment env;
+	
+	@SuppressWarnings("unchecked")
 	@Bean
 	@Autowired
-	DataSource getDataSource(Environment env) {
+	DataSource getDataSource(Environment env) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
-		dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
-		dataSource.setUrl("jdbc:mysql://localhost:3306/greenway");
-		dataSource.setUsername("root");
-		dataSource.setPassword("");
+		dataSource.setDriverClass((Class<? extends java.sql.Driver>) Class.forName(env.getProperty("db.driver")));
+		dataSource.setUrl(env.getProperty("db.url"));
+		dataSource.setUsername(env.getProperty("db.username"));
+		dataSource.setPassword(env.getProperty("db.password"));
 		return dataSource;
 	}
 
@@ -44,10 +48,10 @@ public class DataConfig {
 		entityManagerFactoryBean.setPackagesToScan("com.mmm.greenway.entity");
 
 		Properties properties = new Properties();
-		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-		properties.put("hibernate.hbm2ddl.auto", "create-drop");
-		properties.put("hibernate.show_sql", true);
-		properties.put("hibernate.format_sql", true);
+		properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+		properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+		properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+		properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
 		entityManagerFactoryBean.setJpaProperties(properties);
 
 		return entityManagerFactoryBean;

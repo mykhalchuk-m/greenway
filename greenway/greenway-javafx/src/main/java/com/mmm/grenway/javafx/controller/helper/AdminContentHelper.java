@@ -214,7 +214,6 @@ public class AdminContentHelper {
 		});
 
 		return gridPane;
-//		return new BorderPane(gridPane);
 	}
 
 }

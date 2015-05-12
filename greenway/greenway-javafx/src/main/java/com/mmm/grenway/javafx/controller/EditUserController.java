@@ -25,7 +25,7 @@ public class EditUserController {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 
 	@FXML
 	private TextField userNameFiled;

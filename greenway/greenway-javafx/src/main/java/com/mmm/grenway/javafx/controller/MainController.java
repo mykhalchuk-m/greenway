@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.entity.UserRole;
 import com.mmm.grenway.javafx.controller.helper.AdminContentHelper;
+import com.mmm.grenway.javafx.controller.helper.OperatorContentHelper;
 
 @Component
 public class MainController {
@@ -25,6 +26,8 @@ public class MainController {
 	private ResourceBundle resourceBundle;
 	@Autowired
 	private AdminContentHelper adminContentHelper;
+	@Autowired
+	private OperatorContentHelper operatorContentHelper;
 
 	@FXML
 	private void initialize() {
@@ -37,11 +40,11 @@ public class MainController {
 		case ROLE_ADMIN:
 			tabs.add(adminContentHelper.generateAdminTab());
 		case ROLE_REGISTRATOR:
-			tabs.add(new Tab("Registrator Tab"));
+			tabs.add(new Tab(resourceBundle.getString("main.tab.registrator.title")));
 		case ROLE_DOKUMENTOLOH:
-			tabs.add(new Tab("Docomentolog Tab"));
+			tabs.add(new Tab(resourceBundle.getString("main.tab.documetoloh.title")));
 		case ROLE_OPERATOR:
-			tabs.add(new Tab("Operation Tab"));
+			tabs.add(operatorContentHelper.generateOperatorTab());
 		}
 		Collections.reverse(tabs);
 		tabPane.getTabs().addAll(tabs);

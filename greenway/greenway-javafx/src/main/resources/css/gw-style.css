@@ -1,25 +1,3 @@
-.gw-formpane {
-	-fx-pref-width: 100%;
-	-fx-pref-height: 100%;
-}
-
-.gw-formpane .hbox {
-	-fx-border-color: #bababa;
-	-fx-border-width: 2px;
-	-fx-border-style: solid;
-	-fx-min-height: 30px;
-	-fx-pref-height: 30px;
-	-fx-max-height: 30px;
-	-fx-pref-width: 100%;
-}
-
-.gw-formpane .height150 {
-	-fx-min-height: 150px;
-	-fx-pref-height: 150px;
-	-fx-max-height: 150px;
-}
-
-.gw-formpane .hbox .label {
-	-fx-padding: 0 10px 0 0;
-	-fx-alignment: top-right;
+#tabPane.tab-pane > .tab-header-area {
+	-fx-padding: 0 0 0 28;
 }
