@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = { "com.mmm.greenway.data.repository" })
-@ComponentScan(basePackages = { "com.mmm.greenway.data", "com.mmm.greenway.entity" })
+@ComponentScan(basePackages = { "com.mmm.greenway.data", "com.mmm.greenway.entity", "com.mmm.greenway.entity.converter"})
 @PropertySource("classpath:/application.properties")
 public class DataConfig {
 

@@ -4,9 +4,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -35,9 +37,17 @@ public class ScreenConfig {
 	 * @param node
 	 */
 	private void setNode(Node node) {
-		Scene scene = new Scene((Parent) node, 1000, 600);
+		Scene scene = new Scene((Parent) node);
 		scene.getStylesheets().add(ScreenConfig.class.getResource("/css/gw-style.css").toExternalForm());
 		primaryStage.setScene(scene);
+		
+		Screen screen = Screen.getPrimary();
+		Rectangle2D bounds = screen.getVisualBounds();
+		primaryStage.setX(bounds.getMinX());
+		primaryStage.setY(bounds.getMinY());
+		primaryStage.setWidth(bounds.getWidth());
+		primaryStage.setHeight(bounds.getHeight());
+
 		if (!primaryStage.isShowing()) {
 			primaryStage.show();
 		}

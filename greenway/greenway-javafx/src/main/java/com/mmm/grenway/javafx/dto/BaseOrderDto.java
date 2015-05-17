@@ -1,83 +1,116 @@
 package com.mmm.grenway.javafx.dto;
 
+import java.time.format.DateTimeFormatter;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import com.mmm.greenway.entity.BaseOrder;
-import com.mmm.grenway.javafx.util.DateUtil;
 
 public class BaseOrderDto {
-	private StringProperty supplierProp;
-	private StringProperty clientNameProp;
-	private StringProperty clientPhoneProp;
-	private StringProperty operatorProp;
-	private StringProperty noteProp;
-	private StringProperty dateProp;
-	private StringProperty statusProp;
+	private StringProperty supplierName;
+	private StringProperty clientName;
+	private StringProperty phoneNumber;
+	private StringProperty operator;
+	private StringProperty note;
+	private StringProperty date;
+	private StringProperty invitation;
+	private StringProperty registration;
+	private StringProperty orderType;
 
 	public BaseOrderDto(BaseOrder baseOrder) {
-		supplierProp = new SimpleStringProperty(baseOrder.getSupplierName());
-		clientNameProp = new SimpleStringProperty(baseOrder.getClientName());
-		clientPhoneProp = new SimpleStringProperty(baseOrder.getPhoneNumber());
-		operatorProp = new SimpleStringProperty(baseOrder.getOperator().getUserName());
-		dateProp = new SimpleStringProperty(DateUtil.format(baseOrder.getDate()));
-		statusProp = new SimpleStringProperty();
-		noteProp = new SimpleStringProperty(baseOrder.getNote());
+		supplierName = new SimpleStringProperty(baseOrder.getSupplierName());
+		clientName = new SimpleStringProperty(baseOrder.getClientName());
+		phoneNumber = new SimpleStringProperty(baseOrder.getPhoneNumber());
+		setOperator(new SimpleStringProperty(baseOrder.getOperator().getUserName()));
+		setDate(new SimpleStringProperty(baseOrder.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))));
+		setInvitation(new SimpleStringProperty(baseOrder.getInvitation().name()));
+		setRegistration(new SimpleStringProperty(baseOrder.getRegistration().name()));
+		note = new SimpleStringProperty(baseOrder.getNote());
+		setOrderType(new SimpleStringProperty(baseOrder.getOrderType().name()));
 	}
 
-	public StringProperty getSupplierProp() {
-		return supplierProp;
+	public BaseOrderDto() {
+		supplierName = new SimpleStringProperty();
+		clientName = new SimpleStringProperty();
+		phoneNumber = new SimpleStringProperty();
+		setOperator(new SimpleStringProperty());
+		setDate(new SimpleStringProperty());
+		setInvitation(new SimpleStringProperty());
+		setRegistration(new SimpleStringProperty());
+		note = new SimpleStringProperty();
+		orderType = new SimpleStringProperty();
 	}
 
-	public void setSupplierProp(StringProperty supplierProp) {
-		this.supplierProp = supplierProp;
+	public StringProperty getSupplierName() {
+		return supplierName;
 	}
 
-	public StringProperty getClientNameProp() {
-		return clientNameProp;
+	public void setSupplierName(StringProperty supplierName) {
+		this.supplierName = supplierName;
 	}
 
-	public void setClientNameProp(StringProperty clientNameProp) {
-		this.clientNameProp = clientNameProp;
+	public StringProperty getClientName() {
+		return clientName;
 	}
 
-	public StringProperty getClientPhoneProp() {
-		return clientPhoneProp;
+	public void setClientName(StringProperty clientName) {
+		this.clientName = clientName;
 	}
 
-	public void setClientPhoneProp(StringProperty clientPhoneProp) {
-		this.clientPhoneProp = clientPhoneProp;
+	public StringProperty getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public StringProperty getOperatorProp() {
-		return operatorProp;
+	public void setPhoneNumber(StringProperty phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
-	public void setOperatorProp(StringProperty operatorProp) {
-		this.operatorProp = operatorProp;
+	public StringProperty getNote() {
+		return note;
 	}
 
-	public StringProperty getNoteProp() {
-		return noteProp;
+	public void setNote(StringProperty note) {
+		this.note = note;
 	}
 
-	public void setNoteProp(StringProperty noteProp) {
-		this.noteProp = noteProp;
+	public StringProperty getOperator() {
+		return operator;
 	}
 
-	public StringProperty getDateProp() {
-		return dateProp;
+	public void setOperator(StringProperty operator) {
+		this.operator = operator;
 	}
 
-	public void setDateProp(StringProperty dateProp) {
-		this.dateProp = dateProp;
+	public StringProperty getDate() {
+		return date;
 	}
 
-	public StringProperty getStatusProp() {
-		return statusProp;
+	public void setDate(StringProperty date) {
+		this.date = date;
 	}
 
-	public void setStatusProp(StringProperty statusProp) {
-		this.statusProp = statusProp;
+	public StringProperty getRegistration() {
+		return registration;
+	}
+
+	public void setRegistration(StringProperty registration) {
+		this.registration = registration;
+	}
+
+	public StringProperty getInvitation() {
+		return invitation;
+	}
+
+	public void setInvitation(StringProperty invitation) {
+		this.invitation = invitation;
+	}
+
+	public StringProperty getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(StringProperty orderType) {
+		this.orderType = orderType;
 	}
 }

@@ -7,15 +7,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "document")
-public class Document {
+@Table(name = "phone_operator_code")
+public class PhoneOperatorCode {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@Column(unique = true)
-	private String name;
 	@Column
-	private double price;
+	private String code;
+
+	public PhoneOperatorCode() {
+	}
+	
+	public PhoneOperatorCode(String code) {
+		this.code = code;
+	}
 
 	public Long getId() {
 		return id;
@@ -25,19 +30,11 @@ public class Document {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getCode() {
+		return code;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
+	public void setCode(String code) {
+		this.code = code;
 	}
 }

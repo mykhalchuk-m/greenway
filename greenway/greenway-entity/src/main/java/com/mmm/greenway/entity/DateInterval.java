@@ -1,6 +1,6 @@
 package com.mmm.greenway.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,24 +17,24 @@ public class DateInterval {
 	private Long id;
 
 	@Column
-	private Date from;
+	private LocalDate fromDate;
 	@Column
-	private Date to;
+	private LocalDate toDate;
 
-	public Date getFrom() {
-		return from;
+	public LocalDate getFromDate() {
+		return fromDate;
 	}
 
-	public void setFrom(Date from) {
-		this.from = from;
+	public void setFromDate(LocalDate from) {
+		this.fromDate = from;
 	}
 
-	public Date getTo() {
-		return to;
+	public LocalDate getToDate() {
+		return toDate;
 	}
 
-	public void setTo(Date to) {
-		this.to = to;
+	public void setToDate(LocalDate to) {
+		this.toDate = to;
 	}
 
 }

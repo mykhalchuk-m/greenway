@@ -2,11 +2,11 @@ package com.mmm.greenway.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -36,16 +36,12 @@ public class DetailedOrder extends BaseOrder {
 
 	@Column
 	private String travelPurpose;
-	@OneToOne
-	private DateInterval sutableInOutDates;
-	@OneToMany
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "sutable_inout_dates_id")
+	private DateInterval suitableInOutDates;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "prev_visa_dates_id")
 	private List<DateInterval> previousVisasDates;
-
-	@Enumerated(EnumType.STRING)
-	private ProcessingStatus invitation;
-	@Enumerated(EnumType.STRING)
-	private ProcessingStatus registration;
 
 	public OrderGeneralInfo getOrderGeneralInfo() {
 		return orderGeneralInfo;
@@ -95,14 +91,6 @@ public class DetailedOrder extends BaseOrder {
 		this.travelPurpose = travelPurpose;
 	}
 
-	public DateInterval getSutableInOutDates() {
-		return sutableInOutDates;
-	}
-
-	public void setSutableInOutDates(DateInterval sutableInOutDates) {
-		this.sutableInOutDates = sutableInOutDates;
-	}
-
 	public List<DateInterval> getPreviousVisasDates() {
 		return previousVisasDates;
 	}
@@ -111,20 +99,12 @@ public class DetailedOrder extends BaseOrder {
 		this.previousVisasDates = previousVisasDates;
 	}
 
-	public ProcessingStatus getInvitation() {
-		return invitation;
+	public DateInterval getSuitableInOutDates() {
+		return suitableInOutDates;
 	}
 
-	public void setInvitation(ProcessingStatus invitation) {
-		this.invitation = invitation;
-	}
-
-	public ProcessingStatus getRegistration() {
-		return registration;
-	}
-
-	public void setRegistration(ProcessingStatus registration) {
-		this.registration = registration;
+	public void setSuitableInOutDates(DateInterval suitableInOutDates) {
+		this.suitableInOutDates = suitableInOutDates;
 	}
 
 }

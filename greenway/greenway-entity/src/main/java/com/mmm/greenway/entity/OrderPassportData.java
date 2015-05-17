@@ -1,6 +1,6 @@
 package com.mmm.greenway.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -12,9 +12,9 @@ public class OrderPassportData {
 	@Column
 	private String foringPassportNumber;
 	@Column
-	private Date foringPassportStartDate;
+	private LocalDate foringPassportStartDate;
 	@Column
-	private String foringPassportExpDate;
+	private LocalDate foringPassportExpDate;
 	@Column
 	private String foringPassportIssuedBy;
 
@@ -34,27 +34,27 @@ public class OrderPassportData {
 		this.foringPassportNumber = foringPassportNumber;
 	}
 
-	public Date getForingPassportStartDate() {
-		return foringPassportStartDate;
-	}
-
-	public void setForingPassportStartDate(Date foringPassportStartDate) {
-		this.foringPassportStartDate = foringPassportStartDate;
-	}
-
-	public String getForingPassportExpDate() {
-		return foringPassportExpDate;
-	}
-
-	public void setForingPassportExpDate(String foringPassportExpDate) {
-		this.foringPassportExpDate = foringPassportExpDate;
-	}
-
 	public String getForingPassportIssuedBy() {
 		return foringPassportIssuedBy;
 	}
 
 	public void setForingPassportIssuedBy(String foringPassportIssuedBy) {
 		this.foringPassportIssuedBy = foringPassportIssuedBy;
+	}
+
+	public LocalDate getForingPassportStartDate() {
+		return foringPassportStartDate;
+	}
+
+	public void setForingPassportStartDate(LocalDate foringPassportStartDate) {
+		this.foringPassportStartDate = foringPassportStartDate;
+	}
+
+	public LocalDate getForingPassportExpDate() {
+		return foringPassportExpDate;
+	}
+
+	public void setForingPassportExpDate(LocalDate foringPassportExpDate) {
+		this.foringPassportExpDate = foringPassportExpDate;
 	}
 }

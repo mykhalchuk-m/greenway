@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class OrderClinetHost {
 	@Column
-	private String histData;
+	private String hostData;
 	@Column
 	private String country;
 	@Column
@@ -19,14 +19,6 @@ public class OrderClinetHost {
 	private String street;
 	@Column
 	private String email;
-
-	public String getHistData() {
-		return histData;
-	}
-
-	public void setHistData(String histData) {
-		this.histData = histData;
-	}
 
 	public String getCountry() {
 		return country;
@@ -74,5 +66,13 @@ public class OrderClinetHost {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getHostData() {
+		return hostData;
+	}
+
+	public void setHostData(String hostData) {
+		this.hostData = hostData;
 	}
 }

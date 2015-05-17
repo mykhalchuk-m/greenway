@@ -12,7 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
+import com.mmm.greenway.data.repository.PhoneOperatorCodeRepository;
 import com.mmm.greenway.data.repository.UserRepository;
+import com.mmm.greenway.data.service.PhoneCodePopulationService;
 import com.mmm.greenway.data.service.TempUserCreateService;
 
 @Configuration
@@ -43,5 +45,11 @@ public class SecurityConfig {
 	@Bean
 	public TempUserCreateService tempUserCreateService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		return new TempUserCreateService(userRepository, passwordEncoder);
+	}
+	
+	@Autowired
+	@Bean(initMethod = "populateDevaultValie")
+	public PhoneCodePopulationService phoneCodePopulationService(PhoneOperatorCodeRepository phoneOperatorCodeRepository) {
+		return new PhoneCodePopulationService(phoneOperatorCodeRepository);
 	}
 }

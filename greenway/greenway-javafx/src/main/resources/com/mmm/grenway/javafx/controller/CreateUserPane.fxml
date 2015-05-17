@@ -5,4 +5,4 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="createUserPane" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.CreateUserController" />
+<BorderPane fx:id="createUserPane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.CreateUserController" />

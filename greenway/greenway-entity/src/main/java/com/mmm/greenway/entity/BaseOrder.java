@@ -1,9 +1,12 @@
 package com.mmm.greenway.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -23,14 +26,21 @@ public class BaseOrder {
 	private String supplierName;
 	@Column
 	private String phoneNumber;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User operator;
 	@Column
 	private String clientName;
 	@Lob
 	private String note;
 	@Column
-	private LocalDate date;
+	private LocalDateTime date;
+	
+	@Enumerated(EnumType.STRING)
+	private ProcessingStatus invitation = ProcessingStatus.NONE;
+	@Enumerated(EnumType.STRING)
+	private ProcessingStatus registration = ProcessingStatus.NONE;
+	@Enumerated(EnumType.STRING)
+	private OrderType orderType = OrderType.CONSULT;
 
 	public Long getId() {
 		return id;
@@ -80,11 +90,35 @@ public class BaseOrder {
 		this.note = note;
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
+	}
+
+	public ProcessingStatus getInvitation() {
+		return invitation;
+	}
+
+	public void setInvitation(ProcessingStatus invitation) {
+		this.invitation = invitation;
+	}
+
+	public ProcessingStatus getRegistration() {
+		return registration;
+	}
+
+	public void setRegistration(ProcessingStatus registration) {
+		this.registration = registration;
+	}
+
+	public OrderType getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(OrderType orderType) {
+		this.orderType = orderType;
 	}
 }

@@ -1,7 +1,6 @@
 package com.mmm.greenway.entity;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -17,9 +16,9 @@ public class OrderGeneralInfo {
 	@Column
 	private String secondNameInLatin;
 	@Column
-	private String naidenName;
+	private String maidenName;
 	@Column
-	private Date birthDay;
+	private LocalDate birthDay;
 	@Column
 	private String birthPlace;
 	@Column
@@ -29,7 +28,7 @@ public class OrderGeneralInfo {
 	@Column
 	private String birthNationality;
 	@Column
-	private String sex;
+	private SexEnum sex;
 	@Column
 	private String martialStatus;
 	@Column
@@ -59,22 +58,6 @@ public class OrderGeneralInfo {
 
 	public void setSecondNameInLatin(String secondNameInLatin) {
 		this.secondNameInLatin = secondNameInLatin;
-	}
-
-	public String getNaidenName() {
-		return naidenName;
-	}
-
-	public void setNaidenName(String naidenName) {
-		this.naidenName = naidenName;
-	}
-
-	public Date getBirthDay() {
-		return birthDay;
-	}
-
-	public void setBirthDay(Date birthDay) {
-		this.birthDay = birthDay;
 	}
 
 	public String getBirthPlace() {
@@ -109,14 +92,6 @@ public class OrderGeneralInfo {
 		this.birthNationality = birthNationality;
 	}
 
-	public String getSex() {
-		return sex;
-	}
-
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
-
 	public String getMartialStatus() {
 		return martialStatus;
 	}
@@ -147,5 +122,29 @@ public class OrderGeneralInfo {
 
 	public void setDestinationCountry(String destinationCountry) {
 		this.destinationCountry = destinationCountry;
+	}
+
+	public LocalDate getBirthDay() {
+		return birthDay;
+	}
+
+	public void setBirthDay(LocalDate birthDay) {
+		this.birthDay = birthDay;
+	}
+
+	public String getMaidenName() {
+		return maidenName;
+	}
+
+	public void setMaidenName(String maidenName) {
+		this.maidenName = maidenName;
+	}
+
+	public SexEnum getSex() {
+		return sex;
+	}
+
+	public void setSex(SexEnum sex) {
+		this.sex = sex;
 	}
 }

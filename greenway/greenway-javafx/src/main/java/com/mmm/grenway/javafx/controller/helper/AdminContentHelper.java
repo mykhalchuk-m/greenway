@@ -31,8 +31,7 @@ import org.springframework.stereotype.Component;
 import com.mmm.greenway.entity.User;
 import com.mmm.greenway.entity.UserRole;
 import com.mmm.grenway.javafx.cfg.ScreenConfig;
-import com.mmm.grenway.javafx.controller.CreateUserController;
-import com.mmm.grenway.javafx.controller.ShowUsersController;
+import com.mmm.grenway.javafx.controller.UsersController;
 import com.mmm.grenway.javafx.service.converter.UserDtoConverter;
 
 @Component
@@ -44,9 +43,7 @@ public class AdminContentHelper {
 	@Autowired
 	private ScreenConfig screenConfig;
 	@Autowired
-	private CreateUserController createUserController;
-	@Autowired
-	private ShowUsersController showUsersController;
+	private UsersController usersController;
 
 	public Tab generateAdminTab() {
 		Tab adminTab = new Tab();
@@ -56,26 +53,21 @@ public class AdminContentHelper {
 		generateReportTab.setText(resourceBundle.getString("main.tab.admin.report.title"));
 		generateReportTab.setClosable(false);
 
-		Tab createUserTab = new Tab();
-		createUserTab.setText(resourceBundle.getString("main.tab.admin.createuser.title"));
-		createUserTab.setClosable(false);
-		createUserTab.setContent(screenConfig.getView(createUserController, "CreateUserPane.fxml"));
-
-		Tab showAllUsersTab = new Tab();
-		showAllUsersTab.setText(resourceBundle.getString("main.tab.admin.showusers.title"));
-		showAllUsersTab.setClosable(false);
-		showAllUsersTab.setOnSelectionChanged(new EventHandler<Event>() {
+		Tab usersTab = new Tab();
+		usersTab.setText(resourceBundle.getString("main.tab.admin.createuser.title"));
+		usersTab.setClosable(false);
+		usersTab.setOnSelectionChanged(new EventHandler<Event>() {
 
 			@Override
 			public void handle(Event event) {
-				if (showAllUsersTab.isSelected()) {
-					showAllUsersTab.setContent(screenConfig.getView(showUsersController, "ShowUsersPane.fxml"));
+				if (usersTab.isSelected()) {
+					usersTab.setContent(screenConfig.getView(usersController, "UsersPane.fxml"));
 				}
 			}
 
 		});
 
-		TabPane adminTabPane = new TabPane(generateReportTab, createUserTab, showAllUsersTab);
+		TabPane adminTabPane = new TabPane(generateReportTab, usersTab);
 		adminTabPane.setId("adminTabPane");
 		adminTabPane.setSide(Side.LEFT);
 		adminTab.setContent(adminTabPane);
@@ -89,7 +81,7 @@ public class AdminContentHelper {
 		gridPane.setHgap(10);
 		gridPane.setVgap(10);
 		gridPane.setPadding(new Insets(20, 20, 20, 20));
-
+		
 		Label userName = new Label("User Name:");
 		gridPane.add(userName, 0, 0);
 

@@ -12,7 +12,7 @@ public class TempUserCreateService {
 
 	public TempUserCreateService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		createAdmin(userRepository, passwordEncoder);
-		fillUsersTable(userRepository, passwordEncoder);
+//		fillUsersTable(userRepository, passwordEncoder);
 		createOperator(userRepository, passwordEncoder);
 		createDocumentoloh(userRepository, passwordEncoder);
 		createRegistrator(userRepository, passwordEncoder);
