@@ -15,8 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.data.repository.UserRepository;
-import com.mmm.greenway.entity.User;
-import com.mmm.greenway.entity.UserRole;
+import com.mmm.grenway.javafx.dto.UserDto;
 import com.mmm.grenway.javafx.service.converter.UserDtoConverter;
 
 @Component
@@ -42,67 +41,50 @@ public class EditUserController {
 	@FXML
 	private CheckBox enabledField;
 
-	private User user;
+	private UserDto internalUserDto;
+	private UserDto userDto = new UserDto();
 	private boolean isUserChanged;
 	private boolean isUserRemoved;
 
 	@FXML
 	private void initialize() {
 		System.out.println("EditUserController");
-		if (user != null) {
-			userNameFiled.setText(user.getUserName());
+		if (internalUserDto != null) {
+			userNameFiled.textProperty().bindBidirectional(userDto.getUserName());
+			userNameFiled.setText(internalUserDto.getUserName().get());
 			userNameFiled.setEditable(false);
-			passwordField.setText(user.getPassword());
-			passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
-				user.setPassword(passwordEncoder.encode(newValue));
-				isUserChanged = true;
-			});
+			passwordField.textProperty().bindBidirectional(userDto.getPassword());
+			passwordField.setText(internalUserDto.getPassword().get());
 			roleField.setItems(UserDtoConverter.getUserRoles());
-			roleField.setValue(user.getRole().name());
-			roleField.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-				user.setRole(UserRole.valueOf(newValue));
-				isUserChanged = true;
-			});
-			accountNonExpiredField.setSelected(user.getAccountNonExpired());
-			accountNonExpiredField.selectedProperty().addListener((observable, oldValue, newValue) -> {
-				user.setAccountNonExpired(newValue);
-				isUserChanged = true;
-			});
-			accountNonLockedField.setSelected(user.getAccountNonLocked());
-			accountNonLockedField.selectedProperty().addListener((observable, oldValue, newValue) -> {
-				user.setAccountNonLocked(newValue);
-				isUserChanged = true;
-			});
-			credentialsNonExpiredField.setSelected(user.getCredentialsNonExpired());
-			credentialsNonExpiredField.selectedProperty().addListener((observable, oldValue, newValue) -> {
-				user.setCredentialsNonExpired(newValue);
-				isUserChanged = true;
-			});
-			enabledField.setSelected(user.getEnabled());
-			enabledField.selectedProperty().addListener((observable, oldValue, newValue) -> {
-				user.setEnabled(newValue);
-				isUserChanged = true;
-			});
+			roleField.valueProperty().bindBidirectional(userDto.getRoles());
+			roleField.setValue(internalUserDto.getRoles().get());
+			accountNonExpiredField.selectedProperty().bindBidirectional(userDto.getAccountNonExpired());
+			accountNonExpiredField.setSelected(internalUserDto.getAccountNonExpired().get());
+			accountNonLockedField.selectedProperty().bindBidirectional(userDto.getAccountNonLocked());
+			accountNonLockedField.setSelected(internalUserDto.getAccountNonLocked().get());
+			credentialsNonExpiredField.selectedProperty().bindBidirectional(userDto.getCredentialsNonExpired());
+			credentialsNonExpiredField.setSelected(internalUserDto.getCredentialsNonExpired().get());
+			enabledField.selectedProperty().bindBidirectional(userDto.getEnabled());
+			enabledField.setSelected(internalUserDto.getEnabled().get());
 		}
 	}
 
 	@FXML
 	private void editUser(ActionEvent event) {
-		if (isUserChanged) {
-			userRepository.save(user);
-		}
+		isUserChanged = true;
 		closeWindow((Node) event.getSource());
 	}
 
 	@FXML
 	private void deleteUser(ActionEvent event) {
-		userRepository.delete(user.getUserName());
 		isUserRemoved = true;
 		closeWindow((Node) event.getSource());
 	}
 
 	@FXML
 	private void cancel(ActionEvent event) {
+		isUserRemoved = false;
+		isUserChanged = false;
 		closeWindow((Node) event.getSource());
 	}
 
@@ -110,18 +92,18 @@ public class EditUserController {
 		node.fireEvent(new WindowEvent(((Stage) node.getScene().getWindow()), WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
 
-	public User getUser() {
-		return user;
+	public UserDto getUser() {
+		return userDto;
 	}
 
-	public boolean isUserChanged() {
-		return isUserChanged;
-	}
-
-	public void setUser(User user) {
+	public void setUser(UserDto userDto) {
 		isUserChanged = false;
 		isUserRemoved = false;
-		this.user = user;
+		this.internalUserDto = userDto;
+	}
+	
+	public boolean isUserChanged() {
+		return isUserChanged;
 	}
 
 	public boolean isUserRemoved() {

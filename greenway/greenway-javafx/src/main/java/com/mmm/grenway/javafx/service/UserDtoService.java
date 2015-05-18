@@ -3,9 +3,11 @@ package com.mmm.grenway.javafx.service;
 import javafx.collections.ObservableList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.data.repository.UserRepository;
+import com.mmm.greenway.entity.User;
 import com.mmm.greenway.entity.UserRole;
 import com.mmm.grenway.javafx.dto.UserDto;
 import com.mmm.grenway.javafx.service.converter.UserDtoConverter;
@@ -14,6 +16,8 @@ import com.mmm.grenway.javafx.service.converter.UserDtoConverter;
 public class UserDtoService {
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public ObservableList<UserDto> findUsers() {
 		return UserDtoConverter.convertToObservableList(userRepository.findAll());
@@ -40,5 +44,14 @@ public class UserDtoService {
 		} else {
 			return findUsers();
 		}
+	}
+	
+	public UserDto save(UserDto userDto) {
+		User user = userRepository.save(UserDtoConverter.toUser(userDto, passwordEncoder));
+		return new UserDto(user);
+	}
+	
+	public void remove(UserDto userDto) {
+		userRepository.delete(userDto.getUserName().get());
 	}
 }

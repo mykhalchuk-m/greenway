@@ -16,7 +16,6 @@ import javafx.stage.WindowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mmm.greenway.entity.User;
 import com.mmm.greenway.entity.UserRole;
 import com.mmm.grenway.javafx.cfg.ScreenConfig;
 import com.mmm.grenway.javafx.dto.UserDto;
@@ -41,14 +40,14 @@ public class ShowUsersController {
 	private TableColumn<UserDto, String> passwordColumn;
 	@FXML
 	private TableColumn<UserDto, String> rolesColumn;
-//	@FXML
-//	private TableColumn<UserDto, Boolean> accountNonExpiredColumn;
-//	@FXML
-//	private TableColumn<UserDto, Boolean> accountNonLockedColumn;
-//	@FXML
-//	private TableColumn<UserDto, Boolean> credentialsNonExpiredColumn;
-//	@FXML
-//	private TableColumn<UserDto, Boolean> enabledColumn;
+	// @FXML
+	// private TableColumn<UserDto, Boolean> accountNonExpiredColumn;
+	// @FXML
+	// private TableColumn<UserDto, Boolean> accountNonLockedColumn;
+	// @FXML
+	// private TableColumn<UserDto, Boolean> credentialsNonExpiredColumn;
+	// @FXML
+	// private TableColumn<UserDto, Boolean> enabledColumn;
 
 	@FXML
 	private TextField userNameFilter;
@@ -70,14 +69,19 @@ public class ShowUsersController {
 		userNameColumn.setCellValueFactory(value -> value.getValue().getUserName());
 		passwordColumn.setCellValueFactory(value -> value.getValue().getPassword());
 		rolesColumn.setCellValueFactory(value -> value.getValue().getRoles());
-//		enabledColumn.setCellValueFactory(value -> value.getValue().getEnabled());
-//		enabledColumn.setCellFactory(new CheckBoxCellFactory());
-//		accountNonExpiredColumn.setCellValueFactory(value -> value.getValue().getAccountNonExpired());
-//		accountNonExpiredColumn.setCellFactory(new CheckBoxCellFactory());
-//		accountNonLockedColumn.setCellValueFactory(value -> value.getValue().getAccountNonLocked());
-//		accountNonLockedColumn.setCellFactory(new CheckBoxCellFactory());
-//		credentialsNonExpiredColumn.setCellValueFactory(value -> value.getValue().getCredentialsNonExpired());
-//		credentialsNonExpiredColumn.setCellFactory(new CheckBoxCellFactory());
+		// enabledColumn.setCellValueFactory(value ->
+		// value.getValue().getEnabled());
+		// enabledColumn.setCellFactory(new CheckBoxCellFactory());
+		// accountNonExpiredColumn.setCellValueFactory(value ->
+		// value.getValue().getAccountNonExpired());
+		// accountNonExpiredColumn.setCellFactory(new CheckBoxCellFactory());
+		// accountNonLockedColumn.setCellValueFactory(value ->
+		// value.getValue().getAccountNonLocked());
+		// accountNonLockedColumn.setCellFactory(new CheckBoxCellFactory());
+		// credentialsNonExpiredColumn.setCellValueFactory(value ->
+		// value.getValue().getCredentialsNonExpired());
+		// credentialsNonExpiredColumn.setCellFactory(new
+		// CheckBoxCellFactory());
 	}
 
 	private void initFiltersListeners() {
@@ -92,14 +96,17 @@ public class ShowUsersController {
 		});
 	}
 
+	public TableView<UserDto> getUsersTable() {
+		return usersTable;
+	}
+
 	private void initPopupWindowForEdit() {
 		usersTable.setRowFactory(tr -> {
 			TableRow<UserDto> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
 				if (event.getClickCount() == 2 && !row.isEmpty()) {
 					UserDto userDto = row.getItem();
-					User user = UserDtoConverter.toUser(userDto);
-					editUserController.setUser(user);
+					editUserController.setUser(userDto);
 					System.out.println(userDto);
 					Stage stage = new Stage();
 					stage.setTitle("Edit Page: ".concat(userDto.getUserName().get()));
@@ -113,9 +120,11 @@ public class ShowUsersController {
 							System.out.println("Close window");
 							if (editUserController.isUserChanged()) {
 								System.out.println("user was editted");
-								userDto.applyChanges(editUserController.getUser());
-							} else if (editUserController.isUserRemoved()){
+								UserDto changedUserDto = userDtoService.save(editUserController.getUser());
+								userDto.applyChanges(changedUserDto);
+							} else if (editUserController.isUserRemoved()) {
 								System.out.println("user was removed");
+								userDtoService.remove(userDto);
 								usersTable.getItems().remove(userDto);
 							}
 						}

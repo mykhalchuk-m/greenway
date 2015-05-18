@@ -1,19 +1,16 @@
 package com.mmm.grenway.javafx.controller;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.layout.AnchorPane;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mmm.greenway.data.repository.UserRepository;
-import com.mmm.greenway.entity.User;
 import com.mmm.grenway.javafx.cfg.ScreenConfig;
 import com.mmm.grenway.javafx.controller.helper.AdminContentHelper;
-
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.AnchorPane;
+import com.mmm.grenway.javafx.dto.UserDto;
+import com.mmm.grenway.javafx.service.UserDtoService;
 
 @Component
 public class UsersController {
@@ -27,7 +24,7 @@ public class UsersController {
 	@Autowired
 	private AdminContentHelper contentHelper;
 	@Autowired
-	private UserRepository userRepository;
+	private UserDtoService userService;
 
 	@FXML
 	private AnchorPane form;
@@ -38,21 +35,13 @@ public class UsersController {
 	private void initialize() {
 		System.out.println("UsersController");
 
-		form.getChildren().add(contentHelper.createUserForm(this::swithToShowUsersPane));
+		form.getChildren().add(contentHelper.createUserForm(this::addUserIntoTable));
 		view.getChildren().add(screenConfig.getView(showUsersController, "ShowUsersPane.fxml"));
 	}
 	
-	public void swithToShowUsersPane(ActionEvent event, User user) {
-		System.out.println(user);
-		userRepository.save(user);
-		System.out.println("in switch to pane action");
-		try {
-			Scene scene = ((Node) event.getTarget()).getScene();
-			TabPane adminTabPane = (TabPane) scene.lookup("#adminTabPane");
-
-			adminTabPane.getSelectionModel().select(2);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void addUserIntoTable(ActionEvent event, UserDto userDto) {
+		UserDto savedUserDto = userService.save(userDto);
+		showUsersController.getUsersTable().getItems().add(savedUserDto);
 	}
+	
 }

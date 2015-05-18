@@ -27,27 +27,27 @@ public class UserDto {
 		accountNonLocked = new SimpleBooleanProperty(user.getAccountNonLocked());
 		credentialsNonExpired = new SimpleBooleanProperty(user.getCredentialsNonExpired());
 		enabled = new SimpleBooleanProperty(user.getEnabled());
-		roles = new SimpleStringProperty(user.getRole().toString());
+		roles = new SimpleStringProperty(user.getRole() == null ? "" : user.getRole().name());
 	}
-	
-	public void applyChanges(User user) {
-		if (!password.get().equals(user.getPassword())) {
-			password.set(user.getPassword());
+
+	public void applyChanges(UserDto userDto) {
+		if (!password.get().equals(userDto.getPassword().get())) {
+			password.set(userDto.getPassword().get());
 		}
-		if (!roles.get().equals(user.getRole().toString())) {
-			roles.setValue(user.getRole().toString());
+		if (!roles.get().equals(userDto.getRoles().get())) {
+			roles.setValue(userDto.getRoles().get());
 		}
-		if (accountNonExpired.get() != user.getAccountNonExpired()) {
-			accountNonExpired.setValue(user.getAccountNonExpired());
+		if (accountNonExpired.get() != userDto.getAccountNonExpired().get()) {
+			accountNonExpired.setValue(userDto.getAccountNonExpired().get());
 		}
-		if (accountNonLocked.get() != user.getAccountNonLocked()) {
-			accountNonLocked.setValue(user.getAccountNonLocked());
+		if (accountNonLocked.get() != userDto.getAccountNonLocked().get()) {
+			accountNonLocked.setValue(userDto.getAccountNonLocked().get());
 		}
-		if (credentialsNonExpired.get() != user.getCredentialsNonExpired()) {
-			credentialsNonExpired.setValue(user.getCredentialsNonExpired());
+		if (credentialsNonExpired.get() != userDto.getCredentialsNonExpired().get()) {
+			credentialsNonExpired.setValue(userDto.getCredentialsNonExpired().get());
 		}
-		if (enabled.get() != user.getEnabled()) {
-			enabled.setValue(user.getEnabled());
+		if (enabled.get() != userDto.getEnabled().get()) {
+			enabled.setValue(userDto.getEnabled().get());
 		}
 	}
 

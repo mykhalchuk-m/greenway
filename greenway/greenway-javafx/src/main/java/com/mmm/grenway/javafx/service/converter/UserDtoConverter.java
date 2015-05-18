@@ -3,6 +3,8 @@ package com.mmm.grenway.javafx.service.converter;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -25,10 +27,10 @@ public class UserDtoConverter {
 				.collect(Collectors.toList()));
 	}
 	
-	public static User toUser(UserDto userDto) {
+	public static User toUser(UserDto userDto, PasswordEncoder passwordEncoder) {
 		User user = new User();
 		user.setUserName(userDto.getUserName().get());
-		user.setPassword(userDto.getPassword().get());
+		user.setPassword(passwordEncoder.encode(userDto.getPassword().get()));
 		user.setRole(UserRole.valueOf(userDto.getRoles().get()));
 		user.setAccountNonExpired(userDto.getAccountNonExpired().get());
 		user.setAccountNonLocked(userDto.getAccountNonLocked().get());

@@ -28,10 +28,9 @@ import javafx.scene.layout.HBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mmm.greenway.entity.User;
-import com.mmm.greenway.entity.UserRole;
 import com.mmm.grenway.javafx.cfg.ScreenConfig;
 import com.mmm.grenway.javafx.controller.UsersController;
+import com.mmm.grenway.javafx.dto.UserDto;
 import com.mmm.grenway.javafx.service.converter.UserDtoConverter;
 
 @Component
@@ -75,7 +74,7 @@ public class AdminContentHelper {
 		return adminTab;
 	}
 	
-	public Node createUserForm(BiConsumer<ActionEvent, User> c) {
+	public Node createUserForm(BiConsumer<ActionEvent, UserDto> c) {
 		GridPane gridPane = new GridPane();
 		gridPane.setAlignment(Pos.TOP_CENTER);
 		gridPane.setHgap(10);
@@ -144,11 +143,15 @@ public class AdminContentHelper {
 				}
 				if (isValid && !userNameAlert.isShowing() && !passwordAlert.isShowing() && !userRoleAlert.isShowing()
 						&& !confirmPasswordAlert.isShowing()) {
-					User user = new User();
-					user.setUserName(userNameField.getText());
-					user.setPassword(passwordField.getText());
-					user.setRole(UserRole.valueOf(roles.getSelectionModel().getSelectedItem()));
-					c.accept(event, user);
+					UserDto userDto = new UserDto();
+					userDto.getUserName().set(userNameField.getText());
+					userDto.getPassword().set(passwordField.getText());
+					userDto.getRoles().set(roles.getSelectionModel().getSelectedItem());
+					c.accept(event, userDto);
+					userNameField.clear();
+					passwordField.clear();
+					confirmPasswordField.clear();
+					roles.getSelectionModel().select("");
 				}
 			}
 		});
