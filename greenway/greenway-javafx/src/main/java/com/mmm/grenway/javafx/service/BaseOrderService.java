@@ -22,12 +22,9 @@ public class BaseOrderService {
 	private UserRepository userRepository;
 
 	public ObservableList<BaseOrderDto> findOrderDetails(BaseOrderFilterDto filterDto) {
-		return BaseOrderConverter.convertToOrderDetailDto(baseOrderRepository.findFilteredBaseOrder(filterDto
-				.getClientNameFilter().get().toUpperCase(), filterDto.getPhoneNumberFilter().get()));
-	}
-
-	public ObservableList<BaseOrderDto> findOrderDetails() {
-		return BaseOrderConverter.convertToOrderDetailDto(baseOrderRepository.findAll());
+		return BaseOrderConverter.convertToOrderDetailDto(baseOrderRepository
+				.findFirst100ByClientNameContainingAndPhoneNumberContainingOrderByDateDesc(filterDto.getClientNameFilter().get()
+						.toUpperCase(), filterDto.getPhoneNumberFilter().get()));
 	}
 
 	public BaseOrder save(BaseOrder baseOrder) {

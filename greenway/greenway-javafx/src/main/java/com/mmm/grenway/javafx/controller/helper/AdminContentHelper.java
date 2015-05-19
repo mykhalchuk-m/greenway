@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mmm.grenway.javafx.cfg.ScreenConfig;
+import com.mmm.grenway.javafx.controller.DocumentController;
 import com.mmm.grenway.javafx.controller.UsersController;
 import com.mmm.grenway.javafx.dto.UserDto;
 import com.mmm.grenway.javafx.service.converter.UserDtoConverter;
@@ -43,6 +44,8 @@ public class AdminContentHelper {
 	private ScreenConfig screenConfig;
 	@Autowired
 	private UsersController usersController;
+	@Autowired
+	private DocumentController documentController;
 
 	public Tab generateAdminTab() {
 		Tab adminTab = new Tab();
@@ -51,6 +54,11 @@ public class AdminContentHelper {
 		Tab generateReportTab = new Tab();
 		generateReportTab.setText(resourceBundle.getString("main.tab.admin.report.title"));
 		generateReportTab.setClosable(false);
+		
+		Tab documentTab = new Tab();
+		documentTab.setText(resourceBundle.getString("main.tab.admin.doc.title"));
+		documentTab.setClosable(false);
+		documentTab.setContent(screenConfig.getView(documentController, "DocumentPane.fxml"));
 
 		Tab usersTab = new Tab();
 		usersTab.setText(resourceBundle.getString("main.tab.admin.createuser.title"));
@@ -66,7 +74,7 @@ public class AdminContentHelper {
 
 		});
 
-		TabPane adminTabPane = new TabPane(generateReportTab, usersTab);
+		TabPane adminTabPane = new TabPane(generateReportTab, documentTab, usersTab);
 		adminTabPane.setId("adminTabPane");
 		adminTabPane.setSide(Side.LEFT);
 		adminTab.setContent(adminTabPane);

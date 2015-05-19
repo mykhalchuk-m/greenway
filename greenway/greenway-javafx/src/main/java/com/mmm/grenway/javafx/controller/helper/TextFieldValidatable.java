@@ -35,7 +35,7 @@ public class TextFieldValidatable extends TextField {
 
 	}
 
-	public void validate() {
+	private void validate() {
 		if (!validationAlert.isShowing()) {
 			isValid = true;
 		}
@@ -58,6 +58,7 @@ public class TextFieldValidatable extends TextField {
 	}
 
 	public boolean isValid() {
+		validate();
 		return isValid;
 	}
 	

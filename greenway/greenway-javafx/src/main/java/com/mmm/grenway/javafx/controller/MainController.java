@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.entity.UserRole;
 import com.mmm.grenway.javafx.controller.helper.AdminContentHelper;
+import com.mmm.grenway.javafx.controller.helper.InivitationContaentHelper;
 import com.mmm.grenway.javafx.controller.helper.OperatorContentHelper;
 
 @Component
@@ -28,6 +29,8 @@ public class MainController {
 	private AdminContentHelper adminContentHelper;
 	@Autowired
 	private OperatorContentHelper operatorContentHelper;
+	@Autowired
+	private InivitationContaentHelper inivitationContaentHelper;
 
 	@FXML
 	private void initialize() {
@@ -39,6 +42,11 @@ public class MainController {
 		switch (userRole) {
 		case ROLE_ADMIN:
 			tabs.add(adminContentHelper.generateAdminTab());
+		case ROLE_INVITATION_DELIVERY:
+			tabs.add(inivitationContaentHelper.genetateInivitationContaent());
+			if (userRole != UserRole.ROLE_ADMIN) {
+				break;
+			}
 		case ROLE_REGISTRATOR:
 			tabs.add(new Tab(resourceBundle.getString("main.tab.registrator.title")));
 		case ROLE_DOKUMENTOLOH:

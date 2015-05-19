@@ -59,6 +59,7 @@ public class RegistrationFormController {
 	}
 
 	public void setBaseOrder(BaseOrder baseOrder) {
+		detailedOrderDto.getId().set(baseOrder.getId());
 		detailedOrderDto.getClientName().set(baseOrder.getClientName());
 		detailedOrderDto.getSupplierName().set(baseOrder.getSupplierName());
 		detailedOrderDto.getPhoneNumber().set(baseOrder.getPhoneNumber());

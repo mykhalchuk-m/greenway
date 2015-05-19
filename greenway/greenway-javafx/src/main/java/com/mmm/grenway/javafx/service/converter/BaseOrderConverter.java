@@ -18,17 +18,18 @@ public class BaseOrderConverter {
 		return result;
 	}
 
-	public static BaseOrder toOrderDetail(BaseOrderDto orderDetailDto, UserRepository userRepository) {
-		BaseOrder orderDetail = new BaseOrder();
-		orderDetail.setClientName(orderDetailDto.getClientName().get());
-		orderDetail.setDate(LocalDateTime.now());
-		orderDetail.setNote(orderDetailDto.getNote().get());
-		orderDetail.setOperator(userRepository.findOne(orderDetailDto.getOperator().get()));
-		orderDetail.setPhoneNumber(orderDetailDto.getPhoneNumber().get());
-		orderDetail.setSupplierName(orderDetailDto.getSupplierName().get());
-		String orderType = orderDetailDto.getOrderType().get();
-		orderDetail.setOrderType(orderType == null ? OrderType.CONSULT : OrderType.valueOf(orderType));
-		return orderDetail;
+	public static BaseOrder toOrderDetail(BaseOrderDto baseOrderDto, UserRepository userRepository) {
+		BaseOrder baseOrder = new BaseOrder();
+		baseOrder.setId(baseOrderDto.getId().get());
+		baseOrder.setClientName(baseOrderDto.getClientName().get());
+		baseOrder.setDate(LocalDateTime.now());
+		baseOrder.setNote(baseOrderDto.getNote().get());
+		baseOrder.setOperator(userRepository.findOne(baseOrderDto.getOperator().get()));
+		baseOrder.setPhoneNumber(baseOrderDto.getPhoneNumber().get());
+		baseOrder.setSupplierName(baseOrderDto.getSupplierName().get());
+		String orderType = baseOrderDto.getOrderType().get();
+		baseOrder.setOrderType(orderType == null ? OrderType.CONSULT : OrderType.valueOf(orderType));
+		return baseOrder;
 	}
 
 	public static void toBaseOrderDto(BaseOrder baseOrder, BaseOrderDto baseOrderDto) {
@@ -40,6 +41,7 @@ public class BaseOrderConverter {
 
 	public static BaseOrderDto getBaseOrderDto(DetailedOrderDto detailedOrderDto) {
 		BaseOrderDto baseOrderDto = new BaseOrderDto();
+		baseOrderDto.getId().set(detailedOrderDto.getId().get());
 		baseOrderDto.getSupplierName().set(detailedOrderDto.getSupplierName().get());
 		baseOrderDto.getClientName().set(detailedOrderDto.getClientName().get());
 		baseOrderDto.getPhoneNumber().set(detailedOrderDto.getPhoneNumber().get());

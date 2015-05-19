@@ -40,14 +40,6 @@ public class ShowUsersController {
 	private TableColumn<UserDto, String> passwordColumn;
 	@FXML
 	private TableColumn<UserDto, String> rolesColumn;
-	// @FXML
-	// private TableColumn<UserDto, Boolean> accountNonExpiredColumn;
-	// @FXML
-	// private TableColumn<UserDto, Boolean> accountNonLockedColumn;
-	// @FXML
-	// private TableColumn<UserDto, Boolean> credentialsNonExpiredColumn;
-	// @FXML
-	// private TableColumn<UserDto, Boolean> enabledColumn;
 
 	@FXML
 	private TextField userNameFilter;
@@ -69,19 +61,6 @@ public class ShowUsersController {
 		userNameColumn.setCellValueFactory(value -> value.getValue().getUserName());
 		passwordColumn.setCellValueFactory(value -> value.getValue().getPassword());
 		rolesColumn.setCellValueFactory(value -> value.getValue().getRoles());
-		// enabledColumn.setCellValueFactory(value ->
-		// value.getValue().getEnabled());
-		// enabledColumn.setCellFactory(new CheckBoxCellFactory());
-		// accountNonExpiredColumn.setCellValueFactory(value ->
-		// value.getValue().getAccountNonExpired());
-		// accountNonExpiredColumn.setCellFactory(new CheckBoxCellFactory());
-		// accountNonLockedColumn.setCellValueFactory(value ->
-		// value.getValue().getAccountNonLocked());
-		// accountNonLockedColumn.setCellFactory(new CheckBoxCellFactory());
-		// credentialsNonExpiredColumn.setCellValueFactory(value ->
-		// value.getValue().getCredentialsNonExpired());
-		// credentialsNonExpiredColumn.setCellFactory(new
-		// CheckBoxCellFactory());
 	}
 
 	private void initFiltersListeners() {
@@ -135,14 +114,5 @@ public class ShowUsersController {
 			return row;
 		});
 	}
-
-//	private class CheckBoxCellFactory implements Callback<TableColumn<UserDto, Boolean>, TableCell<UserDto, Boolean>> {
-//
-//		@Override
-//		public TableCell<UserDto, Boolean> call(TableColumn<UserDto, Boolean> param) {
-//			return new CheckBoxTableCell<UserDto, Boolean>();
-//		}
-//
-//	}
 
 }

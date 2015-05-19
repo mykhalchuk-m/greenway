@@ -11,11 +11,12 @@ import com.mmm.greenway.entity.UserRole;
 public class TempUserCreateService {
 
 	public TempUserCreateService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-		createAdmin(userRepository, passwordEncoder);
+//		createAdmin(userRepository, passwordEncoder);
 //		fillUsersTable(userRepository, passwordEncoder);
-		createOperator(userRepository, passwordEncoder);
-		createDocumentoloh(userRepository, passwordEncoder);
-		createRegistrator(userRepository, passwordEncoder);
+//		createOperator(userRepository, passwordEncoder);
+//		createDocumentoloh(userRepository, passwordEncoder);
+//		createRegistrator(userRepository, passwordEncoder);
+//		createInvitator(userRepository, passwordEncoder);
 	}
 
 	private void createAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -47,6 +48,14 @@ public class TempUserCreateService {
 		user.setUserName("reg");
 		user.setPassword(passwordEncoder.encode("reg"));
 		user.setRole(UserRole.ROLE_REGISTRATOR);
+		userRepository.save(user);
+	}
+	
+	private void createInvitator(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		User user = new User();
+		user.setUserName("inv");
+		user.setPassword(passwordEncoder.encode("inv"));
+		user.setRole(UserRole.ROLE_INVITATION_DELIVERY);
 		userRepository.save(user);
 	}
 

@@ -20,11 +20,7 @@
         <columns>
           <TableColumn fx:id="userNameColumn" editable="false" prefWidth="75.0" text="%main.tab.admin.showusers.table.username" />
           <TableColumn fx:id="passwordColumn" editable="false" prefWidth="75.0" text="%main.tab.admin.showusers.table.password" />
-            <TableColumn fx:id="rolesColumn" editable="false" prefWidth="75.0" text="%main.tab.admin.showusers.table.roles" />
-            <!-- <TableColumn fx:id="accountNonExpiredColumn" editable="false" prefWidth="75.0" text="%main.tab.admin.showusers.table.accountNonExpired" />
-            <TableColumn fx:id="accountNonLockedColumn" editable="false" prefWidth="75.0" text="%main.tab.admin.showusers.table.accountNonLocked" />
-            <TableColumn fx:id="credentialsNonExpiredColumn" editable="false" prefWidth="75.0" text="%main.tab.admin.showusers.table.credentialsNonExpired" />
-            <TableColumn fx:id="enabledColumn" editable="false" prefWidth="75.0" text="%main.tab.admin.showusers.table.enabled" /> -->
+          <TableColumn fx:id="rolesColumn" editable="false" prefWidth="75.0" text="%main.tab.admin.showusers.table.roles" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -2,12 +2,15 @@ package com.mmm.grenway.javafx.dto;
 
 import java.time.format.DateTimeFormatter;
 
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import com.mmm.greenway.entity.BaseOrder;
 
 public class BaseOrderDto {
+	private LongProperty id;
 	private StringProperty supplierName;
 	private StringProperty clientName;
 	private StringProperty phoneNumber;
@@ -19,6 +22,7 @@ public class BaseOrderDto {
 	private StringProperty orderType;
 
 	public BaseOrderDto(BaseOrder baseOrder) {
+		id = new SimpleLongProperty(baseOrder.getId());
 		supplierName = new SimpleStringProperty(baseOrder.getSupplierName());
 		clientName = new SimpleStringProperty(baseOrder.getClientName());
 		phoneNumber = new SimpleStringProperty(baseOrder.getPhoneNumber());
@@ -31,6 +35,7 @@ public class BaseOrderDto {
 	}
 
 	public BaseOrderDto() {
+		id = new SimpleLongProperty();
 		supplierName = new SimpleStringProperty();
 		clientName = new SimpleStringProperty();
 		phoneNumber = new SimpleStringProperty();
@@ -112,5 +117,13 @@ public class BaseOrderDto {
 
 	public void setOrderType(StringProperty orderType) {
 		this.orderType = orderType;
+	}
+
+	public LongProperty getId() {
+		return id;
+	}
+
+	public void setId(LongProperty id) {
+		this.id = id;
 	}
 }

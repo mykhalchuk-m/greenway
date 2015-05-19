@@ -8,8 +8,8 @@ public class BaseOrderFilterDto {
 	private StringProperty phoneNumberFilter;
 	
 	public BaseOrderFilterDto() {
-		setClientNameFilter(new SimpleStringProperty());
-		setPhoneNumberFilter(new SimpleStringProperty());
+		setClientNameFilter(new SimpleStringProperty(""));
+		setPhoneNumberFilter(new SimpleStringProperty(""));
 	}
 
 	public StringProperty getClientNameFilter() {

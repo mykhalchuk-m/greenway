@@ -11,6 +11,7 @@ import com.mmm.grenway.javafx.dto.DetailedOrderDto;
 public class DetailedOrderConverter {
 	public static DetailedOrder toDetailedOrder(DetailedOrderDto detailedOrderDto) {
 		DetailedOrder detailedOrder = new DetailedOrder();
+		detailedOrder.setId(detailedOrderDto.getId().get());
 		detailedOrder.setClientName(detailedOrderDto.getClientName().get());
 		detailedOrder.setDate(LocalDateTime.now());
 		String orderType = detailedOrderDto.getOrderType().get();

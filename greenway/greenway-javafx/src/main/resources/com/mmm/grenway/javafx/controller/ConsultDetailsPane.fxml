@@ -26,8 +26,8 @@
                             <TableColumn text="%main.tab.operator.od.table.clientPhone" fx:id="clientPhoneColumn"/>
                             <TableColumn text="%main.tab.operator.od.table.supplier" fx:id="supplierColumn"/>
 							<TableColumn text="%main.tab.operator.od.table.orderType" fx:id="orderTypeColumn"/>
-                            <TableColumn text="%main.tab.operator.od.table.status" fx:id="invitationColumn"/>
-                            <TableColumn text="%main.tab.operator.od.table.status" fx:id="registrationColumn"/>
+                            <TableColumn text="%main.tab.operator.od.table.docsstatus" fx:id="documentsColumn"/>
+                            <TableColumn text="%main.tab.operator.od.table.regstatus" fx:id="registrationColumn"/>
                             <TableColumn text="%main.tab.operator.od.table.operator" fx:id="operatorColumn"/>
                             <TableColumn text="%main.tab.operator.od.table.note" fx:id="noteColumn"/>
                             <TableColumn text="%main.tab.operator.od.table.date" fx:id="dateColumn"/>
@@ -87,7 +87,7 @@
                               <HBox GridPane.columnIndex="1" GridPane.rowIndex="3" alignment="TOP_LEFT">
                               	<children>
 		                              <TextField fx:id="phoneCountryCode" text="+38" minWidth="40" maxWidth="40" editable="false"/>
-		                              <ComboBox fx:id="phoneCodes" minWidth="70" maxWidth="70"/>
+		                              <TextFieldValidatable fx:id="phoneCodes" minWidth="40" maxWidth="40"/>
 		                              <TextFieldValidatable fx:id="clientPhone" prefWidth="1000"/>
                               	</children>
                               </HBox>
