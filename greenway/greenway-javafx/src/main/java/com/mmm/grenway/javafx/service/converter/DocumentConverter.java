@@ -12,4 +12,12 @@ public class DocumentConverter {
 		documents.forEach(d -> result.add(new DocumentDto(d)));
 		return result;
 	}
+	
+	public static Document toDocument(DocumentDto documentDto) {
+		Document document = new Document();
+		document.setId(documentDto.getDocumentId().get());
+		document.setName(documentDto.getName().get());
+		document.setPrice(documentDto.getPrice().get());
+		return document;
+	}
 }

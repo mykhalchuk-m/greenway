@@ -36,7 +36,7 @@ public class OrderGeneralInfoConverter {
 		orderGeneralInfo.setMartialStatus(orderGeneralInfoDto.getMartialStatus().get());
 		orderGeneralInfo.setSecondNameInLatin(orderGeneralInfoDto.getSecondNameInLatin().get());
 		String sex = orderGeneralInfoDto.getSex().get();
-		orderGeneralInfo.setSex(sex == null ? null : SexEnum.valueOf(sex));
+		orderGeneralInfo.setSex(sex == null || sex.isEmpty() ? null : SexEnum.valueOf(sex));
 		orderGeneralInfo.setStartDocsProviding(orderGeneralInfoDto.getStartDocsProviding().get());
 		orderGeneralInfo.setVisaType(orderGeneralInfoDto.getVisaType().get());
 		return orderGeneralInfo;

@@ -23,8 +23,8 @@ public class BaseOrderService {
 
 	public ObservableList<BaseOrderDto> findOrderDetails(BaseOrderFilterDto filterDto) {
 		return BaseOrderConverter.convertToOrderDetailDto(baseOrderRepository
-				.findFirst100ByClientNameContainingAndPhoneNumberContainingOrderByDateDesc(filterDto.getClientNameFilter().get()
-						.toUpperCase(), filterDto.getPhoneNumberFilter().get()));
+				.findFirst100ByClientNameIgnoreCaseContainingAndPhoneNumberContainingOrderByDateDesc(filterDto
+						.getClientNameFilter().get().toUpperCase(), filterDto.getPhoneNumberFilter().get()));
 	}
 
 	public BaseOrder save(BaseOrder baseOrder) {

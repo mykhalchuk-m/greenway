@@ -1,10 +1,13 @@
 package com.mmm.greenway.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -15,10 +18,13 @@ public class DocumentPerOrder {
 	@GeneratedValue
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Document document;
 	@Enumerated(EnumType.STRING)
-	private ProcessingStatus processingStatus;
+	private ProcessingStatus processingStatus = ProcessingStatus.NONE;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false, name = "order_id")
+	private DetailedOrder order;
 
 	public Document getDocument() {
 		return document;
@@ -42,5 +48,13 @@ public class DocumentPerOrder {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public DetailedOrder getOrder() {
+		return order;
+	}
+
+	public void setOrder(DetailedOrder order) {
+		this.order = order;
 	}
 }

@@ -1,0 +1,153 @@
+package com.mmm.grenway.javafx.controller;
+
+import java.util.ResourceBundle;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.mmm.greenway.entity.ProcessingStatus;
+import com.mmm.grenway.javafx.dto.BaseOrderFilterDto;
+import com.mmm.grenway.javafx.dto.DetailedOrderDto;
+import com.mmm.grenway.javafx.service.DetailedOrderService;
+import com.mmm.grenway.javafx.service.converter.DetailedOrderConverter;
+import com.mmm.grenway.javafx.util.DateUtil;
+
+@Component
+public class RegistratorController {
+
+	@Autowired
+	private DetailedOrderService detailedOrderService;
+	@Autowired
+	protected ResourceBundle resourceBundle;
+	private DetailedOrderDto currentItem = new DetailedOrderDto();
+	private BaseOrderFilterDto orderFilterDto = new BaseOrderFilterDto();
+
+	@FXML
+	private void initialize() {
+		System.out.println("RegistratorController");
+		initTableColumns();
+		initFiltersListeners();
+		initTableRowDoubleClick();
+		registrationStatus.setItems(DetailedOrderConverter.getProcessStatuses());
+		registrationStatus.getSelectionModel().select(0);
+		userName.setEditable(false);
+	}
+
+	@FXML
+	private void doSave() {
+		populateChangedProperties();
+		detailedOrderService.save(currentItem);
+		doCancel();
+	}
+	
+	@FXML
+	private void doCancel() {
+		userName.clear();
+		registrationDate.getEditor().clear();
+		registrationStatus.getSelectionModel().select(0);
+	}
+	
+	private void initFiltersListeners() {
+		clientNameFilter.textProperty().addListener((ob, ov, nv) -> {
+			clientsTable.setItems(getData());
+		});
+
+		phoneFilter.textProperty().addListener((ob, ov, nv) -> {
+			clientsTable.setItems(getData());
+		});
+	}
+
+	private void initTableColumns() {
+		clientsTable.setItems(getData());
+
+		clientNameColumn.setSortable(false);
+		clientNameColumn.setCellValueFactory(value -> value.getValue().getClientName());
+		bithdayColumn.setSortable(false);
+		bithdayColumn.setCellValueFactory(value -> new SimpleStringProperty(DateUtil.format(value.getValue()
+				.getOrderGeneralInfoDto().getBirthDay().get())));
+		phoneColumn.setSortable(false);
+		phoneColumn.setCellValueFactory(value -> value.getValue().getPhoneNumber());
+		registrationStatusColumn.setSortable(false);
+		registrationStatusColumn.setCellValueFactory(value -> value.getValue().getRegistration());
+		passportExpDateColumn.setSortable(false);
+		passportExpDateColumn.setCellValueFactory(value -> new SimpleStringProperty(DateUtil.format(value.getValue()
+				.getOrderPassportDataDto().getForingPassportExpDate().get())));
+		passportNumberColumn.setSortable(false);
+		passportNumberColumn.setCellValueFactory(value -> value.getValue().getOrderPassportDataDto()
+				.getForingPassportNumber());
+		dateProvidingColumn.setSortable(false);
+		startDateColumn.setSortable(false);
+		startDateColumn.setCellValueFactory(value -> new SimpleStringProperty(DateUtil.format(value.getValue()
+				.getOrderGeneralInfoDto().getStartDocsProviding().get())));
+		endDateColumn.setSortable(false);
+		endDateColumn.setCellValueFactory(value -> new SimpleStringProperty(DateUtil.format(value.getValue()
+				.getOrderGeneralInfoDto().getEndDateProviding().get())));
+	}
+
+	private void initTableRowDoubleClick() {
+		clientsTable.setRowFactory(tr -> {
+			TableRow<DetailedOrderDto> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && !row.isEmpty()) {
+					currentItem = row.getItem();
+					userName.setText(currentItem.getClientName().get());
+					registrationDate.setValue(currentItem.getRegistrationDate().get());
+					registrationStatus.setValue(currentItem.getRegistration().get());
+				}
+			});
+			return row;
+		});
+	}
+
+	private void populateChangedProperties() {
+		currentItem.getRegistration().set(
+				registrationStatus.getValue() != "" ? ProcessingStatus.valueOf(registrationStatus.getValue()).name()
+						: ProcessingStatus.NONE.name());
+		currentItem.getRegistrationDate().set(registrationDate.getValue());
+	}
+
+	private ObservableList<DetailedOrderDto> getData() {
+		return detailedOrderService.findDetailedOrdersForRegistrator(orderFilterDto);
+	}
+
+	@FXML
+	private TextField clientNameFilter;
+	@FXML
+	private TextField phoneFilter;
+	@FXML
+	private TableView<DetailedOrderDto> clientsTable;
+	@FXML
+	private TableColumn<DetailedOrderDto, String> clientNameColumn;
+	@FXML
+	private TableColumn<DetailedOrderDto, String> bithdayColumn;
+	@FXML
+	private TableColumn<DetailedOrderDto, String> phoneColumn;
+	@FXML
+	private TableColumn<DetailedOrderDto, String> registrationStatusColumn;
+	@FXML
+	private TableColumn<DetailedOrderDto, String> passportExpDateColumn;
+	@FXML
+	private TableColumn<DetailedOrderDto, String> passportNumberColumn;
+	@FXML
+	private TableColumn<DetailedOrderDto, String> dateProvidingColumn;
+	@FXML
+	private TableColumn<DetailedOrderDto, String> startDateColumn;
+	@FXML
+	private TableColumn<DetailedOrderDto, String> endDateColumn;
+	@FXML
+	private TextField userName;
+	@FXML
+	private DatePicker registrationDate;
+	@FXML
+	private ComboBox<String> registrationStatus;
+}

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TableColumn?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.RegistratorController">
+	<children>
+		<SplitPane dividerPositions="0.75" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+			AnchorPane.topAnchor="0.0">
+			<items>
+				<AnchorPane SplitPane.resizableWithParent="false">
+					<children>
+						<BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+							<center>
+								<TableView fx:id="clientsTable" BorderPane.alignment="CENTER">
+									<columns>
+										<TableColumn fx:id="clientNameColumn" text="%main.tab.registrator.col.name" />
+										<TableColumn fx:id="bithdayColumn" text="%main.tab.registrator.col.birthday" />
+										<TableColumn fx:id="phoneColumn" text="%main.tab.registrator.col.phone" />
+										<TableColumn fx:id="registrationStatusColumn" text="%main.tab.registrator.col.regstatus" />
+										<TableColumn fx:id="passportExpDateColumn" text="%main.tab.registrator.col.passportexpdate" />
+										<TableColumn fx:id="passportNumberColumn" text="%main.tab.registrator.col.passportnumber" />
+										<TableColumn fx:id="dateProvidingColumn" text="%main.tab.registrator.col.dateProviding">
+											<columns>
+												<TableColumn fx:id="startDateColumn" prefWidth="75.0" text="%main.tab.registrator.col.startDate" />
+												<TableColumn fx:id="endDateColumn" prefWidth="75.0" text="%main.tab.registrator.col.endDate" />
+											</columns>
+										</TableColumn>
+									</columns>
+									<columnResizePolicy>
+										<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+									</columnResizePolicy>
+								</TableView>
+							</center>
+							<top>
+								<HBox spacing="10.0" BorderPane.alignment="CENTER">
+									<children>
+										<TextField fx:id="clientNameFilter" promptText="%main.tab.registrator.filter.clinetname" />
+										<TextField fx:id="phoneFilter" promptText="%main.tab.registrator.filter.phone" />
+									</children>
+									<padding>
+										<Insets bottom="10.0" />
+									</padding>
+								</HBox>
+							</top>
+							<padding>
+								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+							</padding>
+						</BorderPane>
+					</children>
+				</AnchorPane>
+				<ScrollPane fitToWidth="true" SplitPane.resizableWithParent="false">
+					<content>
+						<AnchorPane>
+							<children>
+								<VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+									<children>
+										<GridPane hgap="10.0" vgap="5.0">
+											<columnConstraints>
+												<ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
+												<ColumnConstraints hgrow="SOMETIMES" />
+											</columnConstraints>
+											<rowConstraints>
+												<RowConstraints vgrow="SOMETIMES" />
+												<RowConstraints vgrow="SOMETIMES" />
+												<RowConstraints vgrow="SOMETIMES" />
+											</rowConstraints>
+											<children>
+												<Label text="%main.tab.registrator.form.username" />
+												<Label text="%main.tab.registrator.form.regdate" GridPane.rowIndex="1" />
+												<Label text="%main.tab.registrator.form.status" GridPane.rowIndex="2" />
+												<TextField fx:id="userName" editable="false" GridPane.columnIndex="1" />
+												<DatePicker fx:id="registrationDate" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+												<ComboBox fx:id="registrationStatus" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+											</children>
+										</GridPane>
+										<HBox alignment="TOP_RIGHT" spacing="10.0">
+											<children>
+												<Button mnemonicParsing="false" text="%main.tab.registrator.button.save" onAction="#doSave"/>
+												<Button mnemonicParsing="false" text="%main.tab.registrator.button.cancel" onAction="#doCancel"/>
+											</children>
+											<VBox.margin>
+												<Insets top="20.0" />
+											</VBox.margin>
+										</HBox>
+									</children>
+									<padding>
+										<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+									</padding>
+								</VBox>
+							</children>
+						</AnchorPane>
+					</content>
+				</ScrollPane>
+			</items>
+		</SplitPane>
+	</children>
+</AnchorPane>

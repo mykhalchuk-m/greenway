@@ -1,9 +1,12 @@
 package com.mmm.grenway.javafx.dto;
 
+import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 import com.mmm.greenway.entity.DetailedOrder;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -18,8 +21,12 @@ public class DetailedOrderDto extends BaseOrderDto {
 	private StringProperty travelPurpose;
 	private DateIntervalDto suitableInOutDatesDto;
 	private ObservableList<DateIntervalDto> previousVisasDates;
+	private ObservableList<DocumentPerOrderDto> documentPerOrder;
+	private DocumentPerOrderDto invitationDocument;
+	private ObjectProperty<LocalDate> registrationDate;
 
 	public DetailedOrderDto() {
+		super();
 		orderGeneralInfoDto = new OrderGeneralInfoDto();
 		orderPassportDataDto = new OrderPassportDataDto();
 		orderClientAddressDto = new OrderClientAddressDto();
@@ -28,9 +35,13 @@ public class DetailedOrderDto extends BaseOrderDto {
 		travelPurpose = new SimpleStringProperty();
 		suitableInOutDatesDto = new DateIntervalDto();
 		previousVisasDates = FXCollections.observableArrayList();
+		documentPerOrder = FXCollections.observableArrayList();
+		invitationDocument = new DocumentPerOrderDto();
+		registrationDate = new SimpleObjectProperty<LocalDate>();
 	}
 
 	public DetailedOrderDto(DetailedOrder detailedOrder) {
+		super(detailedOrder);
 		orderGeneralInfoDto = new OrderGeneralInfoDto(detailedOrder.getOrderGeneralInfo());
 		orderPassportDataDto = new OrderPassportDataDto(detailedOrder.getOrderPassportData());
 		orderClientAddressDto = new OrderClientAddressDto(detailedOrder.getOrderClientAddress());
@@ -40,6 +51,11 @@ public class DetailedOrderDto extends BaseOrderDto {
 		suitableInOutDatesDto = new DateIntervalDto(detailedOrder.getSuitableInOutDates());
 		previousVisasDates = FXCollections.observableArrayList(detailedOrder.getPreviousVisasDates().stream()
 				.map(e -> new DateIntervalDto(e)).collect(Collectors.toList()));
+		documentPerOrder = FXCollections.observableArrayList();
+		detailedOrder.getDocumentPerOrders().forEach(d -> documentPerOrder.add(new DocumentPerOrderDto(d)));
+		invitationDocument = detailedOrder.getInvitationDocument() == null ? new DocumentPerOrderDto()
+				: new DocumentPerOrderDto(detailedOrder.getInvitationDocument());
+		registrationDate = new SimpleObjectProperty<LocalDate>(detailedOrder.getRegistrationDate());
 	}
 
 	public OrderGeneralInfoDto getOrderGeneralInfoDto() {
@@ -104,5 +120,29 @@ public class DetailedOrderDto extends BaseOrderDto {
 
 	public void setPreviousVisasDates(ObservableList<DateIntervalDto> previousVisasDates) {
 		this.previousVisasDates = previousVisasDates;
+	}
+
+	public ObservableList<DocumentPerOrderDto> getDocumentPerOrder() {
+		return documentPerOrder;
+	}
+
+	public void setDocumentPerOrder(ObservableList<DocumentPerOrderDto> documentPerOrder) {
+		this.documentPerOrder = documentPerOrder;
+	}
+
+	public DocumentPerOrderDto getInvitationDocument() {
+		return invitationDocument;
+	}
+
+	public void setInvitationDocument(DocumentPerOrderDto invitationDocument) {
+		this.invitationDocument = invitationDocument;
+	}
+
+	public ObjectProperty<LocalDate> getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(ObjectProperty<LocalDate> registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 }

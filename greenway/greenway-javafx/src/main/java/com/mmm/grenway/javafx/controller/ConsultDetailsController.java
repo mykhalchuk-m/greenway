@@ -3,6 +3,7 @@ package com.mmm.grenway.javafx.controller;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -21,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -32,6 +34,7 @@ import com.mmm.grenway.javafx.dto.BaseOrderFilterDto;
 import com.mmm.grenway.javafx.service.BaseOrderService;
 
 @Component
+@Scope("prototype")
 public class ConsultDetailsController {
 
 	private static final String OFFICE_VALUE = "office";
@@ -39,12 +42,16 @@ public class ConsultDetailsController {
 	private Long currentItemId = null;
 
 	@Autowired
-	private ResourceBundle resourceBundle;
+	protected RegistrationFormController registrationFormController;
 	@Autowired
-	private BaseOrderService baseOrderService;
+	protected BaseOrderService baseOrderService;
 	@Autowired
-	private RegistrationFormController registrationFormController;
+	protected ResourceBundle resourceBundle;
 
+	protected ObservableList<BaseOrderDto> getData() {
+		return baseOrderService.findOrderDetails(baseOrderFilterDto);
+	}
+	
 	@FXML
 	private void initialize() {
 		System.out.println("ConsultDetailsController");
@@ -90,12 +97,8 @@ public class ConsultDetailsController {
 		initFiltersListeners();
 	}
 
-	public void refreshTable() {
-		baseOrderTab.setItems(baseOrderService.findOrderDetails(baseOrderFilterDto));
-	}
-
 	@FXML
-	private void doConsulting(ActionEvent event) {
+	protected void doConsulting(ActionEvent event) {
 		if (isFormValid()) {
 			baseOrderService.save(prepateOrderDetail());
 			refreshTable();
@@ -104,7 +107,7 @@ public class ConsultDetailsController {
 	}
 
 	@FXML
-	private void doRegistration(ActionEvent event) {
+	protected void doRegistration(ActionEvent event) {
 		if (isFormValid()) {
 			registrationFormController.setBaseOrder(prepateOrderDetail());
 			Scene scene = ((Node) event.getTarget()).getScene();
@@ -115,7 +118,7 @@ public class ConsultDetailsController {
 	}
 
 	@FXML
-	private void doCancel() {
+	protected void doCancel() {
 		supplierField.clear();
 		supplierCheckBox.setSelected(false);
 		clientName.clear();
@@ -126,35 +129,12 @@ public class ConsultDetailsController {
 		currentItemId = null;
 	}
 
-	private void setDefaultOperator() {
+	protected void setDefaultOperator() {
 		operatorField.setText(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
 				.getUsername());
 	}
 
-	private void initTableColumns() {
-		baseOrderTab.setItems(baseOrderService.findOrderDetails(baseOrderFilterDto));
-
-		clientNameColumn.setCellValueFactory(value -> value.getValue().getClientName());
-		clientNameColumn.setSortable(false);
-		clientPhoneColumn.setCellValueFactory(value -> value.getValue().getPhoneNumber());
-		clientPhoneColumn.setSortable(false);
-		supplierColumn.setCellValueFactory(value -> value.getValue().getSupplierName());
-		supplierColumn.setSortable(false);
-		dateColumn.setCellValueFactory(value -> value.getValue().getDate());
-		dateColumn.setSortable(false);
-		orderTypeColumn.setCellValueFactory(value -> value.getValue().getOrderType());
-		orderTypeColumn.setSortable(false);
-		documentsColumn.setCellValueFactory(value -> value.getValue().getInvitation());
-		documentsColumn.setSortable(false);
-		registrationColumn.setCellValueFactory(value -> value.getValue().getRegistration());
-		registrationColumn.setSortable(false);
-		operatorColumn.setCellValueFactory(value -> value.getValue().getOperator());
-		operatorColumn.setSortable(false);
-		noteColumn.setCellValueFactory(value -> value.getValue().getNote());
-		noteColumn.setSortable(false);
-	}
-
-	private void initTableRowDoubleClick() {
+	protected void initTableRowDoubleClick() {
 		baseOrderTab.setRowFactory(tr -> {
 			TableRow<BaseOrderDto> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
@@ -179,7 +159,7 @@ public class ConsultDetailsController {
 		});
 	}
 
-	private BaseOrder prepateOrderDetail() {
+	protected BaseOrder prepateOrderDetail() {
 		BaseOrder baseOrder = new BaseOrder();
 		if (currentItemId != null) {
 			baseOrder.setId(currentItemId);
@@ -197,66 +177,94 @@ public class ConsultDetailsController {
 		return baseOrder;
 	}
 
-	private boolean isFormValid() {
+	protected boolean isFormValid() {
 		return supplierField.isValid() && clientName.isValid() && phoneCodes.isValid() && clientPhone.isValid();
 	}
+	
+	public void refreshTable() {
+		baseOrderTab.setItems(getData());
+	}
 
-	private void initFiltersListeners() {
+	protected void initTableColumns() {
+		baseOrderTab.setItems(getData());
+
+		clientNameColumn.setCellValueFactory(value -> value.getValue().getClientName());
+		clientNameColumn.setSortable(false);
+		clientPhoneColumn.setCellValueFactory(value -> value.getValue().getPhoneNumber());
+		clientPhoneColumn.setSortable(false);
+		supplierColumn.setCellValueFactory(value -> value.getValue().getSupplierName());
+		supplierColumn.setSortable(false);
+		dateColumn.setCellValueFactory(value -> value.getValue().getDate());
+		dateColumn.setSortable(false);
+		orderTypeColumn.setCellValueFactory(value -> value.getValue().getOrderType());
+		orderTypeColumn.setSortable(false);
+		documentsColumn.setCellValueFactory(value -> value.getValue().getInvitation());
+		documentsColumn.setSortable(false);
+		registrationColumn.setCellValueFactory(value -> value.getValue().getRegistration());
+		registrationColumn.setSortable(false);
+		operatorColumn.setCellValueFactory(value -> value.getValue().getOperator());
+		operatorColumn.setSortable(false);
+		noteColumn.setCellValueFactory(value -> value.getValue().getNote());
+		noteColumn.setSortable(false);
+	}
+
+	protected void initFiltersListeners() {
 		filterClientName.textProperty().addListener((ob, ov, nv) -> {
-			baseOrderTab.setItems(baseOrderService.findOrderDetails(baseOrderFilterDto));
+			baseOrderTab.setItems(getData());
 		});
 
 		filterPhone.textProperty().addListener((ob, ov, nv) -> {
-			baseOrderTab.setItems(baseOrderService.findOrderDetails(baseOrderFilterDto));
+			baseOrderTab.setItems(getData());
 		});
 	}
 
 	@FXML
-	private TextField filterClientName;
+	protected TextField filterClientName;
 	@FXML
-	private TextField filterPhone;
+	protected TextField filterPhone;
 	@FXML
-	private TableView<BaseOrderDto> baseOrderTab;
+	protected TableView<BaseOrderDto> baseOrderTab;
 	@FXML
-	private TextFieldValidatable supplierField;
+	protected TableColumn<BaseOrderDto, String> clientNameColumn;
 	@FXML
-	private CheckBox supplierCheckBox;
+	protected TableColumn<BaseOrderDto, String> clientPhoneColumn;
 	@FXML
-	private TextFieldValidatable clientName;
+	protected TableColumn<BaseOrderDto, String> supplierColumn;
 	@FXML
-	private TextFieldValidatable clientPhone;
+	protected TableColumn<BaseOrderDto, String> dateColumn;
 	@FXML
-	private TextField operatorField;
+	protected TableColumn<BaseOrderDto, String> documentsColumn;
 	@FXML
-	private TextArea noteArea;
+	protected TableColumn<BaseOrderDto, String> registrationColumn;
 	@FXML
-	private Button buttonCancel;
+	protected TableColumn<BaseOrderDto, String> operatorColumn;
 	@FXML
-	private Button registerButton;
+	protected TableColumn<BaseOrderDto, String> noteColumn;
 	@FXML
-	private Button consultBuppon;
+	protected TableColumn<BaseOrderDto, String> orderTypeColumn;
+
 	@FXML
-	private AnchorPane root;
+	protected TextFieldValidatable supplierField;
 	@FXML
-	private TableColumn<BaseOrderDto, String> clientNameColumn;
+	protected CheckBox supplierCheckBox;
 	@FXML
-	private TableColumn<BaseOrderDto, String> clientPhoneColumn;
+	protected TextFieldValidatable clientName;
 	@FXML
-	private TableColumn<BaseOrderDto, String> supplierColumn;
+	protected TextFieldValidatable clientPhone;
 	@FXML
-	private TableColumn<BaseOrderDto, String> dateColumn;
+	protected TextField operatorField;
 	@FXML
-	private TableColumn<BaseOrderDto, String> documentsColumn;
+	protected TextArea noteArea;
 	@FXML
-	private TableColumn<BaseOrderDto, String> registrationColumn;
+	protected Button buttonCancel;
 	@FXML
-	private TableColumn<BaseOrderDto, String> operatorColumn;
+	protected Button registerButton;
 	@FXML
-	private TableColumn<BaseOrderDto, String> noteColumn;
+	protected Button consultBuppon;
 	@FXML
-	private TableColumn<BaseOrderDto, String> orderTypeColumn;
+	protected AnchorPane root;
 	@FXML
-	private TextFieldValidatable phoneCodes;
+	protected TextFieldValidatable phoneCodes;
 	@FXML
-	private TextField phoneCountryCode;
+	protected TextField phoneCountryCode;
 }

@@ -55,7 +55,7 @@ public class OrderGeneralInfoDto {
 		birthCountry = new SimpleStringProperty(orderGeneralInfo.getBirthCountry());
 		currentNationality = new SimpleStringProperty(orderGeneralInfo.getCurrentNationality());
 		birthNationality = new SimpleStringProperty(orderGeneralInfo.getBirthNationality());
-		sex = new SimpleStringProperty(orderGeneralInfo.getSex().name());
+		sex = new SimpleStringProperty(orderGeneralInfo.getSex() == null ? "" : orderGeneralInfo.getSex().name());
 		martialStatus = new SimpleStringProperty(orderGeneralInfo.getMartialStatus());
 		startDocsProviding = new SimpleObjectProperty<>(orderGeneralInfo.getStartDocsProviding());
 		endDateProviding = new SimpleObjectProperty<>(orderGeneralInfo.getEndDateProviding());

@@ -46,6 +46,7 @@ public class RegistrationFormController {
 		operator.textProperty().set(
 				((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
 		date.valueProperty().set(LocalDate.now());
+		System.out.println("sexmail.getUserData().toString() -> " + sexmail.getUserData());
 		sexmail.selectedProperty().addListener((obv, ov, nw) -> {
 			if (nw) {
 				detailedOrderDto.getOrderGeneralInfoDto().getSex().set(sexmail.getUserData().toString());
@@ -58,8 +59,11 @@ public class RegistrationFormController {
 		});
 	}
 
+	// TODO: change it to use DTO
 	public void setBaseOrder(BaseOrder baseOrder) {
-		detailedOrderDto.getId().set(baseOrder.getId());
+		if (baseOrder.getId() != null) {
+			detailedOrderDto.getId().set(baseOrder.getId());
+		}
 		detailedOrderDto.getClientName().set(baseOrder.getClientName());
 		detailedOrderDto.getSupplierName().set(baseOrder.getSupplierName());
 		detailedOrderDto.getPhoneNumber().set(baseOrder.getPhoneNumber());

@@ -15,8 +15,10 @@ import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.entity.UserRole;
 import com.mmm.grenway.javafx.controller.helper.AdminContentHelper;
+import com.mmm.grenway.javafx.controller.helper.DocumentolohContentHelper;
 import com.mmm.grenway.javafx.controller.helper.InivitationContaentHelper;
 import com.mmm.grenway.javafx.controller.helper.OperatorContentHelper;
+import com.mmm.grenway.javafx.controller.helper.RegistratorContentHelper;
 
 @Component
 public class MainController {
@@ -31,6 +33,10 @@ public class MainController {
 	private OperatorContentHelper operatorContentHelper;
 	@Autowired
 	private InivitationContaentHelper inivitationContaentHelper;
+	@Autowired
+	private DocumentolohContentHelper documentolohContentHelper;
+	@Autowired
+	private RegistratorContentHelper registratorContentHelper;
 
 	@FXML
 	private void initialize() {
@@ -43,14 +49,14 @@ public class MainController {
 		case ROLE_ADMIN:
 			tabs.add(adminContentHelper.generateAdminTab());
 		case ROLE_INVITATION_DELIVERY:
-			tabs.add(inivitationContaentHelper.genetateInivitationContaent());
+			tabs.add(inivitationContaentHelper.genetateInivitationContent());
 			if (userRole != UserRole.ROLE_ADMIN) {
 				break;
 			}
 		case ROLE_REGISTRATOR:
-			tabs.add(new Tab(resourceBundle.getString("main.tab.registrator.title")));
+			tabs.add(registratorContentHelper.genetateRegistratorContent());
 		case ROLE_DOKUMENTOLOH:
-			tabs.add(new Tab(resourceBundle.getString("main.tab.documetoloh.title")));
+			tabs.add(documentolohContentHelper.genetateDocumentolohContent());
 		case ROLE_OPERATOR:
 			tabs.add(operatorContentHelper.generateOperatorTab());
 		}
