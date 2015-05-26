@@ -5,7 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
@@ -14,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.entity.UserRole;
+import com.mmm.grenway.javafx.cfg.ScreenConfig;
 import com.mmm.grenway.javafx.controller.helper.AdminContentHelper;
 import com.mmm.grenway.javafx.controller.helper.DocumentolohContentHelper;
 import com.mmm.grenway.javafx.controller.helper.InivitationContaentHelper;
@@ -25,6 +31,11 @@ public class MainController {
 
 	@FXML
 	private TabPane tabPane;
+	@FXML
+	private MenuBar mainMenuBar;
+
+	@Autowired
+	private ScreenConfig screenConfig;
 	@Autowired
 	private ResourceBundle resourceBundle;
 	@Autowired
@@ -37,6 +48,8 @@ public class MainController {
 	private DocumentolohContentHelper documentolohContentHelper;
 	@Autowired
 	private RegistratorContentHelper registratorContentHelper;
+	@Autowired
+	private LoginController loginController;
 
 	@FXML
 	private void initialize() {
@@ -62,5 +75,26 @@ public class MainController {
 		}
 		Collections.reverse(tabs);
 		tabPane.getTabs().addAll(tabs);
+	}
+
+	@FXML
+	private void onLogOut() {
+		SecurityContextHolder.clearContext();
+		screenConfig.loadView(loginController, "LoginPane.fxml");
+	}
+
+	@FXML
+	private void onExit(ActionEvent e) {
+		Platform.exit();
+	}
+
+	@FXML
+	private void onAbout() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("About");
+		alert.setHeaderText(null);
+		alert.setContentText("This is the most anazinest program you have ever seen!");
+
+		alert.showAndWait();
 	}
 }
