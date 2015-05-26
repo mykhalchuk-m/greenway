@@ -11,7 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -45,9 +44,10 @@ public class DetailedOrder extends BaseOrder {
 	@JoinColumn(name = "prev_visa_dates_id")
 	private List<DateInterval> previousVisasDates;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	private DocumentPerOrder invitationDocument;
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
+	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@JoinColumn(name = "invitation_id")
+	private Invitation invitationDocument;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order", orphanRemoval = true)
 	private List<DocumentPerOrder> documentPerOrders;
 	@Column
 	private LocalDate registrationDate;
@@ -124,19 +124,19 @@ public class DetailedOrder extends BaseOrder {
 		this.documentPerOrders = documentPerOrders;
 	}
 
-	public DocumentPerOrder getInvitationDocument() {
-		return invitationDocument;
-	}
-
-	public void setInvitationDocument(DocumentPerOrder invitationDocument) {
-		this.invitationDocument = invitationDocument;
-	}
-
 	public LocalDate getRegistrationDate() {
 		return registrationDate;
 	}
 
 	public void setRegistrationDate(LocalDate registrationDate) {
 		this.registrationDate = registrationDate;
+	}
+
+	public Invitation getInvitationDocument() {
+		return invitationDocument;
+	}
+
+	public void setInvitationDocument(Invitation invitationDocument) {
+		this.invitationDocument = invitationDocument;
 	}
 }

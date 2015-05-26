@@ -80,8 +80,8 @@
 										</GridPane>
 										<HBox alignment="TOP_RIGHT" spacing="10.0">
 											<children>
-												<Button mnemonicParsing="false" text="%main.tab.registrator.button.save" onAction="#doSave"/>
-												<Button mnemonicParsing="false" text="%main.tab.registrator.button.cancel" onAction="#doCancel"/>
+												<Button mnemonicParsing="false" text="%main.tab.registrator.button.save" onAction="#doSave" />
+												<Button mnemonicParsing="false" text="%main.tab.registrator.button.cancel" onAction="#doCancel" />
 											</children>
 											<VBox.margin>
 												<Insets top="20.0" />

@@ -2,9 +2,12 @@ package com.mmm.grenway.javafx.controller;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,14 +17,16 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.mmm.greenway.entity.BaseOrder;
 import com.mmm.greenway.entity.OrderType;
+import com.mmm.grenway.javafx.dto.BaseOrderDto;
 import com.mmm.grenway.javafx.dto.DetailedOrderDto;
 import com.mmm.grenway.javafx.service.BaseOrderService;
 import com.mmm.grenway.javafx.service.DetailedOrderService;
@@ -34,6 +39,8 @@ public class RegistrationFormController {
 	private DetailedOrderService detailedOrderService;
 	@Autowired
 	private BaseOrderService baseOrderService;
+	@Autowired
+	private ResourceBundle resourceBundle;
 
 	private DetailedOrderDto detailedOrderDto = new DetailedOrderDto();
 
@@ -46,9 +53,10 @@ public class RegistrationFormController {
 		operator.textProperty().set(
 				((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
 		date.valueProperty().set(LocalDate.now());
-		System.out.println("sexmail.getUserData().toString() -> " + sexmail.getUserData());
+
 		sexmail.selectedProperty().addListener((obv, ov, nw) -> {
 			if (nw) {
+				// TODO: prevent NPE
 				detailedOrderDto.getOrderGeneralInfoDto().getSex().set(sexmail.getUserData().toString());
 			}
 		});
@@ -58,17 +66,52 @@ public class RegistrationFormController {
 			}
 		});
 	}
+	
+	public void initOperatorButtonBar() {
+		HBox hBox = new HBox(10);
+		hBox.setPadding(new Insets(20, 0, 0, 0));
+		hBox.setAlignment(Pos.TOP_RIGHT);
+		
+		Button saveConsulting = new Button(resourceBundle.getString("main.tab.operator.reg.form.button.saveConsulting"));
+		saveConsulting.setOnAction(v -> doSaveConsulting(v));
+		
+		Button saveRegistration = new Button(resourceBundle.getString("main.tab.operator.reg.form.button.save"));
+		saveRegistration.setOnAction(v -> doSaveRegistration(v));
+		
+		hBox.getChildren().addAll(saveRegistration, saveConsulting);
+		root.setBottom(hBox);
+	}
+	
+	public void initDocumentolohButtonBar() {
+		HBox hBox = new HBox(10);
+		hBox.setPadding(new Insets(20, 0, 0, 0));
+		hBox.setAlignment(Pos.TOP_RIGHT);
+		
+		Button save = new Button("Edit...");
+		save.setOnAction(v -> doSaveConsulting(v));
+		
+		Button cancel = new Button("Cancel...");
+		cancel.setOnAction(v -> doSaveConsulting(v));
+		
+		hBox.getChildren().addAll(save, cancel);
+		root.setBottom(hBox);
+	}
 
 	// TODO: change it to use DTO
-	public void setBaseOrder(BaseOrder baseOrder) {
-		if (baseOrder.getId() != null) {
-			detailedOrderDto.getId().set(baseOrder.getId());
+	public void setOrder(BaseOrderDto baseOrder) {
+		if (baseOrder.getId().get() != 0) {
+			detailedOrderService.findById(baseOrder.getId().get(), detailedOrderDto);
+		} else {
+			detailedOrderDto.getClientName().set(baseOrder.getClientName().get());
+			detailedOrderDto.getSupplierName().set(baseOrder.getSupplierName().get());
+			detailedOrderDto.getPhoneNumber().set(baseOrder.getPhoneNumber().get());
+			detailedOrderDto.getNote().set(baseOrder.getNote().get());
 		}
-		detailedOrderDto.getClientName().set(baseOrder.getClientName());
-		detailedOrderDto.getSupplierName().set(baseOrder.getSupplierName());
-		detailedOrderDto.getPhoneNumber().set(baseOrder.getPhoneNumber());
-		detailedOrderDto.getNote().set(baseOrder.getNote());
 	}
+	
+	public void clearForm() {
+		doCancel();
+	}	
 
 	private void preparePropertiesBindings() {
 		bindBaseOrder();
@@ -206,6 +249,7 @@ public class RegistrationFormController {
 	}
 	
 	private void doCancel() {
+		detailedOrderDto.getId().setValue(null);
 		for (Field field : getClass().getDeclaredFields()) {
 			if (field.isAnnotationPresent(FXML.class)) {
 				field.setAccessible(true);
@@ -233,9 +277,7 @@ public class RegistrationFormController {
 	}
 
 	@FXML
-	private Button saveConsulting;
-	@FXML
-	private Button saveRegistration;
+	private BorderPane root;
 
 	@FXML
 	private TextField supplier;

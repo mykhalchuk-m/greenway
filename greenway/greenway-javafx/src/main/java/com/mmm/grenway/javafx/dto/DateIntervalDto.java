@@ -12,13 +12,13 @@ public class DateIntervalDto {
 	private ObjectProperty<LocalDate> to;
 
 	public DateIntervalDto() {
-		setFrom(new SimpleObjectProperty<>());
-		setTo(new SimpleObjectProperty<>());
+		from = new SimpleObjectProperty<>();
+		to = new SimpleObjectProperty<>();
 	}
 
 	public DateIntervalDto(DateInterval dateInterval) {
-		setFrom(new SimpleObjectProperty<>(dateInterval.getFromDate()));
-		setTo(new SimpleObjectProperty<>(dateInterval.getToDate()));
+		from = new SimpleObjectProperty<>(dateInterval.getFromDate());
+		to = new SimpleObjectProperty<>(dateInterval.getToDate());
 	}
 
 	public ObjectProperty<LocalDate> getFrom() {

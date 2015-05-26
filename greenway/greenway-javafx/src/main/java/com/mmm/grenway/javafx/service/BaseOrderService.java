@@ -3,8 +3,6 @@ package com.mmm.grenway.javafx.service;
 import javafx.collections.ObservableList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.mmm.greenway.data.repository.BaseOrderRepository;
@@ -21,17 +19,26 @@ public class BaseOrderService {
 	@Autowired
 	private UserRepository userRepository;
 
+	public BaseOrderDto findById(Long id) {
+		BaseOrder baseOrder = baseOrderRepository.findOne(id);
+		if (baseOrder != null) {
+			return new BaseOrderDto(baseOrder);
+		} else {
+			return null;
+		}
+	}
+	
 	public ObservableList<BaseOrderDto> findOrderDetails(BaseOrderFilterDto filterDto) {
 		return BaseOrderConverter.convertToOrderDetailDto(baseOrderRepository
 				.findFirst100ByClientNameIgnoreCaseContainingAndPhoneNumberContainingOrderByDateDesc(filterDto
 						.getClientNameFilter().get().toUpperCase(), filterDto.getPhoneNumberFilter().get()));
 	}
 
-	public BaseOrder save(BaseOrder baseOrder) {
-		baseOrder.setOperator(userRepository.findOne(((UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal()).getUsername()));
-		return baseOrderRepository.save(baseOrder);
-	}
+//	public BaseOrder save(BaseOrder baseOrder) {
+//		baseOrder.setOperator(userRepository.findOne(((UserDetails) SecurityContextHolder.getContext()
+//				.getAuthentication().getPrincipal()).getUsername()));
+//		return baseOrderRepository.save(baseOrder);
+//	}
 
 	public void save(BaseOrderDto orderDetailDto) {
 		baseOrderRepository.save(BaseOrderConverter.toOrderDetail(orderDetailDto, userRepository));

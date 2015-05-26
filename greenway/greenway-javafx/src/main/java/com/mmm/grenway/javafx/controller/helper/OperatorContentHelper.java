@@ -45,12 +45,23 @@ public class OperatorContentHelper {
 		registration.setText("Registration");
 		registration.setClosable(false);
 		registration.setContent(screenConfig.getView(registrationFormController, "RegistrationFormPane.fxml"));
+		registration.selectedProperty().addListener((ob, ov, nv) -> {
+			if (ov && !nv) {
+				registrationFormController.clearForm();
+			}
+		});
+		registrationFormController.initOperatorButtonBar();
 
 		TabPane operatorTabPane = new TabPane(orderDetail, registration);
 		operatorTabPane.setId("operatorTabPane");
 		operatorTabPane.setSide(Side.LEFT);
 
 		operatorTab.setContent(operatorTabPane);
+		operatorTab.selectedProperty().addListener((ob, ov, nv) -> {
+			if (nv) {
+				operatorTabPane.getSelectionModel().select(0);
+			}
+		});
 
 		return operatorTab;
 	}

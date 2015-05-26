@@ -18,7 +18,7 @@ public class DocumentPerOrder {
 	@GeneratedValue
 	private Long id;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.REFRESH)
 	private Document document;
 	@Enumerated(EnumType.STRING)
 	private ProcessingStatus processingStatus = ProcessingStatus.NONE;

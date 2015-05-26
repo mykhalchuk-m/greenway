@@ -10,6 +10,9 @@ public class DateIntervalConverter {
 	}
 	
 	public static DateInterval toDateInterval(DateIntervalDto dateIntervalDto) {
+		if (dateIntervalDto.getFrom().get() == null && dateIntervalDto.getTo().get() == null) {
+			return null;
+		}
 		DateInterval dateInterval = new DateInterval();
 		dateInterval.setFromDate(dateIntervalDto.getFrom().get());
 		dateInterval.setToDate(dateIntervalDto.getTo().get());

@@ -27,11 +27,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.mmm.greenway.entity.BaseOrder;
 import com.mmm.grenway.javafx.controller.helper.TextFieldValidatable;
 import com.mmm.grenway.javafx.dto.BaseOrderDto;
 import com.mmm.grenway.javafx.dto.BaseOrderFilterDto;
 import com.mmm.grenway.javafx.service.BaseOrderService;
+import com.mmm.grenway.javafx.util.DateUtil;
 
 @Component
 @Scope("prototype")
@@ -109,7 +109,7 @@ public class ConsultDetailsController {
 	@FXML
 	protected void doRegistration(ActionEvent event) {
 		if (isFormValid()) {
-			registrationFormController.setBaseOrder(prepateOrderDetail());
+			registrationFormController.setOrder(prepateOrderDetail());
 			Scene scene = ((Node) event.getTarget()).getScene();
 			TabPane operatorTabPane = (TabPane) scene.lookup("#operatorTabPane");
 			operatorTabPane.getSelectionModel().select(1);
@@ -159,22 +159,22 @@ public class ConsultDetailsController {
 		});
 	}
 
-	protected BaseOrder prepateOrderDetail() {
-		BaseOrder baseOrder = new BaseOrder();
-		if (currentItemId != null) {
-			baseOrder.setId(currentItemId);
+	protected BaseOrderDto prepateOrderDetail() {
+		BaseOrderDto baseOrderDto = new BaseOrderDto();
+		if (currentItemId != null && currentItemId != 0) {
+			baseOrderDto.getId().set(currentItemId);
 		}
-		baseOrder.setClientName(clientName.getText());
+		baseOrderDto.getClientName().set(clientName.getText());
 		if (supplierCheckBox.isSelected()) {
-			baseOrder.setSupplierName(OFFICE_VALUE);
+			baseOrderDto.getSupplierName().set(OFFICE_VALUE);
 		} else {
-			baseOrder.setSupplierName(supplierField.getText());
+			baseOrderDto.getSupplierName().set(supplierField.getText());
 		}
-		baseOrder.setPhoneNumber(new StringBuilder(phoneCountryCode.getText()).append("(").append(phoneCodes.getText())
+		baseOrderDto.getPhoneNumber().set(new StringBuilder(phoneCountryCode.getText()).append("(").append(phoneCodes.getText())
 				.append(")").append(clientPhone.getText()).toString());
-		baseOrder.setNote(noteArea.getText());
-		baseOrder.setDate(LocalDateTime.now());
-		return baseOrder;
+		baseOrderDto.getNote().set(noteArea.getText());
+		baseOrderDto.getDate().set(DateUtil.format(LocalDateTime.now()));
+		return baseOrderDto;
 	}
 
 	protected boolean isFormValid() {
@@ -198,7 +198,7 @@ public class ConsultDetailsController {
 		dateColumn.setSortable(false);
 		orderTypeColumn.setCellValueFactory(value -> value.getValue().getOrderType());
 		orderTypeColumn.setSortable(false);
-		documentsColumn.setCellValueFactory(value -> value.getValue().getInvitation());
+		documentsColumn.setCellValueFactory(value -> value.getValue().getDocumnentsStatus());
 		documentsColumn.setSortable(false);
 		registrationColumn.setCellValueFactory(value -> value.getValue().getRegistration());
 		registrationColumn.setSortable(false);

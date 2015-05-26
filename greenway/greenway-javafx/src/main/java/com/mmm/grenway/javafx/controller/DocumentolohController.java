@@ -3,11 +3,16 @@ package com.mmm.grenway.javafx.controller;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -16,6 +21,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -34,6 +40,7 @@ import com.mmm.grenway.javafx.dto.BaseOrderFilterDto;
 import com.mmm.grenway.javafx.dto.DetailedOrderDto;
 import com.mmm.grenway.javafx.dto.DocumentDto;
 import com.mmm.grenway.javafx.dto.DocumentPerOrderDto;
+import com.mmm.grenway.javafx.dto.InvitationDto;
 import com.mmm.grenway.javafx.service.DetailedOrderService;
 import com.mmm.grenway.javafx.service.DocumentService;
 import com.mmm.grenway.javafx.service.converter.DetailedOrderConverter;
@@ -48,7 +55,10 @@ public class DocumentolohController {
 	private DetailedOrderService detailedOrderService;
 	@Autowired
 	protected ResourceBundle resourceBundle;
+	@Autowired
+	private RegistrationFormController registrationFormController;
 	private DetailedOrderDto currentItem = new DetailedOrderDto();
+	private DocumentDto invDocDto = new DocumentDto();
 	private BaseOrderFilterDto orderFilterDto = new BaseOrderFilterDto();
 
 	@FXML
@@ -88,14 +98,18 @@ public class DocumentolohController {
 
 	@FXML
 	private void doSendToInvitationDelivery() {
-		if (currentItem.getInvitation().get().equals(ProcessingStatus.NONE.name())) {
-			currentItem.getInvitation().set(ProcessingStatus.NEW.name());
+		if (currentItem.getDocumnentsStatus().get().equals(ProcessingStatus.NONE.name())) {
+			populateChangedProperties();
+			InvitationDto invitationDocument = new InvitationDto();
+			invitationDocument.getTitle().set(resourceBundle.getString("main.tab.admin.doc.invdocname"));
+			invitationDocument.getStatus().set(ProcessingStatus.NEW.name());
+			currentItem.setInvitationDocument(invitationDocument);
 			doSave();
 		} else {
 			// TODO: show info alert
 		}
 	}
-	
+
 	@FXML
 	private void doSendToRegistrator() {
 		if (currentItem.getRegistration().get().equals(ProcessingStatus.NONE.name())) {
@@ -105,7 +119,7 @@ public class DocumentolohController {
 			// TODO: show info alert
 		}
 	}
-	
+
 	@FXML
 	private void doAddDocumentToTheOrder() {
 		List<DocumentDto> toRemove = allDocuments.getSelectionModel().getSelectedItems();
@@ -138,9 +152,33 @@ public class DocumentolohController {
 	@FXML
 	private void doSave() {
 		populateChangedProperties();
+		if (currentItem.getDocumentPerOrder() != null && currentItem.getDocumentPerOrder().size() != 0) {
+			List<String> statuses = currentItem.getDocumentPerOrder().stream().map(f -> f.getProcessingStatus().get())
+					.collect(Collectors.toList());
+			if (statuses.contains(ProcessingStatus.IN_PROGRESS.name())) {
+				currentItem.getDocumnentsStatus().set(ProcessingStatus.IN_PROGRESS.name());
+			} else {
+				statuses.sort((str1, str2) -> {
+					return str1.compareTo(str2) * (-1);
+				});
+
+				currentItem.getDocumnentsStatus().set(statuses.get(0));
+			}
+		}
 		detailedOrderService.save(currentItem);
 		doCancel();
 		refreshTable();
+	}
+
+	@FXML
+	private void doEdit(ActionEvent event) {
+		if (currentItem.getId().get() != 0) {
+			registrationFormController.setOrder(currentItem);
+			Scene scene = ((Node) event.getTarget()).getScene();
+			TabPane decumentolohTabPane = (TabPane) scene.lookup("#decumentolohTabPane");
+			decumentolohTabPane.getSelectionModel().select(1);
+			doCancel();
+		}
 	}
 
 	@FXML
@@ -152,8 +190,10 @@ public class DocumentolohController {
 						e -> {
 							currentItem.getDocumentPerOrder().removeIf(
 									d -> d.getDocument().getDocumentId().get() == e.getDocumentId().get());
-							allDocuments.getItems().add(e);
 							selecterDocument.getItems().remove(e);
+							if (e != invDocDto) {
+								allDocuments.getItems().add(e);
+							}
 						});
 	}
 
@@ -168,50 +208,92 @@ public class DocumentolohController {
 	}
 
 	private void initSelectedDocumentsProcessing() {
-		selecterDocument.setOnMouseClicked(event -> {
-			DocumentDto selectedDocument = selecterDocument.getSelectionModel().getSelectedItem();
-			if (event.getClickCount() == 2 && selectedDocument != null) {
-				Dialog<Pair<DocumentDto, ProcessingStatus>> dialog = new Dialog<>();
-				dialog.setTitle("Change Document Status");
-				dialog.setHeaderText("Select new status for curent document");
-
-				GridPane dialogContent = new GridPane();
-				dialogContent.setVgap(10);
-				dialogContent.setHgap(10);
-				dialogContent.setPadding(new Insets(20, 20, 10, 10));
-
-				TextField docName = new TextField(selectedDocument.getName().get());
-				docName.setEditable(false);
-				docName.setPrefWidth(400);
-				dialogContent.add(new Label("Document name"), 0, 0);
-				dialogContent.add(docName, 1, 0);
-
-				ComboBox<String> processingStatus = new ComboBox<>(DetailedOrderConverter.getProcessStatuses());
-				processingStatus.getSelectionModel().select(0);
-				dialogContent.add(new Label("Status"), 0, 1);
-				dialogContent.add(processingStatus, 1, 1);
-
-				ButtonType changeButtonType = new ButtonType("Change", ButtonData.OK_DONE);
-				dialog.getDialogPane().getButtonTypes().addAll(changeButtonType, ButtonType.CANCEL);
-
-				dialog.getDialogPane().setContent(dialogContent);
-				dialog.setResultConverter(dialogButton -> {
-					if (dialogButton == changeButtonType) {
-						return new Pair<DocumentDto, ProcessingStatus>(selectedDocument, ProcessingStatus
-								.valueOf(processingStatus.getSelectionModel().getSelectedItem()));
+		selecterDocument
+				.setOnMouseClicked(event -> {
+					DocumentDto selectedDocument = selecterDocument.getSelectionModel().getSelectedItem();
+					if (selectedDocument == null) {
+						return;
 					}
-					return null;
-				});
+					DocumentPerOrderDto selectedDocumentPerOrder = null;
+					String processingStatus = "";
+					if (currentItem.getDocumentPerOrder() != null && currentItem.getDocumentPerOrder().size() != 0) {
+						FilteredList<DocumentPerOrderDto> fl = currentItem.getDocumentPerOrder().filtered(
+								p -> p.getDocument().getDocumentId() == selectedDocument.getDocumentId());
+						if (fl.size() != 0) {
+							selectedDocumentPerOrder = fl.get(0);
+						}
+					}
+					if (selectedDocumentPerOrder != null) {
+						processingStatus = currentItem.getDocumentPerOrder()
+								.filtered(p -> p.getDocument().getDocumentId() == selectedDocument.getDocumentId())
+								.get(0).getProcessingStatus().get();
+					} else {
+						processingStatus = currentItem.getDocumnentsStatus().get();
+					}
+					if (event.getClickCount() == 2 && selectedDocument != null) {
+						Dialog<Pair<DocumentDto, ProcessingStatus>> dialog = new Dialog<>();
+						dialog.setTitle("Change Document Status");
+						dialog.setHeaderText("Select new status for curent document");
+						ButtonType changeButtonType = new ButtonType("Change", ButtonData.OK_DONE);
+						dialog.getDialogPane().getButtonTypes().addAll(changeButtonType, ButtonType.CANCEL);
 
-				Optional<Pair<DocumentDto, ProcessingStatus>> result = dialog.showAndWait();
-				result.ifPresent(r -> {
-					System.out.println(r.getKey() + " = " + r.getValue());
+						GridPane dialogContent = new GridPane();
+						dialogContent.setVgap(10);
+						dialogContent.setHgap(10);
+						dialogContent.setPadding(new Insets(20, 20, 10, 10));
+
+						TextField docName = new TextField(selectedDocument.getName().get());
+						docName.setEditable(false);
+						docName.setPrefWidth(400);
+						dialogContent.add(new Label("Document name"), 0, 0);
+						dialogContent.add(docName, 1, 0);
+
+						dialogContent.add(new Label("Status"), 0, 1);
+						if (selectedDocumentPerOrder != null) {
+							ComboBox<String> processingStatusNode = new ComboBox<>(DetailedOrderConverter
+									.getProcessStatuses());
+							processingStatusNode.getSelectionModel().select(processingStatus);
+							dialogContent.add(processingStatusNode, 1, 1);
+
+							dialog.setResultConverter(dialogButton -> {
+								if (dialogButton == changeButtonType) {
+									return new Pair<DocumentDto, ProcessingStatus>(selectedDocument, ProcessingStatus
+											.valueOf(processingStatusNode.getSelectionModel().getSelectedItem()));
+								}
+								return null;
+							});
+						} else {
+							TextField processingStatusNode = new TextField(processingStatus);
+							processingStatusNode.setEditable(false);
+							dialogContent.add(processingStatusNode, 1, 1);
+							dialog.setResultConverter(dialogButton -> {
+								return null;
+							});
+						}
+
+						dialog.getDialogPane().setContent(dialogContent);
+
+						Optional<Pair<DocumentDto, ProcessingStatus>> result = dialog.showAndWait();
+
+						if (result.isPresent()) {
+							Pair<DocumentDto, ProcessingStatus> res = result.get();
+							if (res.getValue().equals(ProcessingStatus.NONE)) {
+								DocumentDto selectedDoc = res.getKey();
+								currentItem.getDocumentPerOrder()
+										.removeIf(
+												d -> d.getDocument().getDocumentId().get() == selectedDoc
+														.getDocumentId().get());
+								selecterDocument.getItems().remove(selectedDoc);
+								if (selectedDoc != invDocDto) {
+									allDocuments.getItems().add(selectedDoc);
+								}
+							}
+							selectedDocumentPerOrder.getProcessingStatus().set(res.getValue().name());
+						}
+					}
 				});
-			}
-		});
 	}
 
-	
 	public void refreshTable() {
 		baseOrderTab.setItems(getData());
 	}
@@ -227,7 +309,7 @@ public class DocumentolohController {
 		supplierColumn.setSortable(false);
 		dateColumn.setCellValueFactory(value -> value.getValue().getDate());
 		dateColumn.setSortable(false);
-		documentsColumn.setCellValueFactory(value -> value.getValue().getInvitation());
+		documentsColumn.setCellValueFactory(value -> value.getValue().getDocumnentsStatus());
 		documentsColumn.setSortable(false);
 		registrationColumn.setCellValueFactory(value -> value.getValue().getRegistration());
 		registrationColumn.setSortable(false);
@@ -263,6 +345,11 @@ public class DocumentolohController {
 					ObservableList<DocumentDto> currentItemDocs = FXCollections.observableArrayList();
 					currentItem.getDocumentPerOrder().forEach(d -> currentItemDocs.add(d.getDocument()));
 					selecterDocument.setItems(currentItemDocs);
+					if (currentItem.isInvitationPresent()) {
+						invDocDto.getName().bind(currentItem.getInvitationDocument().getTitle());
+						// invDocDto.getName().set(currentItem.getInvitationDocument().getTitle().get());
+						selecterDocument.getItems().add(invDocDto);
+					}
 					allDocuments.getItems().removeAll(currentItemDocs);
 					addDocumentLink.setDisable(false);
 				}

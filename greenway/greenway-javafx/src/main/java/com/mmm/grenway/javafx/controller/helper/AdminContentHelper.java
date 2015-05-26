@@ -6,7 +6,6 @@ import java.util.function.BiConsumer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -37,7 +36,7 @@ import com.mmm.grenway.javafx.service.converter.UserDtoConverter;
 @Component
 public class AdminContentHelper {
 	private static final String EMPTY_STRING = "";
-	
+
 	@Autowired
 	private ResourceBundle resourceBundle;
 	@Autowired
@@ -54,24 +53,23 @@ public class AdminContentHelper {
 		Tab generateReportTab = new Tab();
 		generateReportTab.setText(resourceBundle.getString("main.tab.admin.report.title"));
 		generateReportTab.setClosable(false);
-		
+
 		Tab documentTab = new Tab();
 		documentTab.setText(resourceBundle.getString("main.tab.admin.doc.title"));
 		documentTab.setClosable(false);
-		documentTab.setContent(screenConfig.getView(documentController, "DocumentPane.fxml"));
+		documentTab.selectedProperty().addListener((ob, ov, nv) -> {
+			if (nv) {
+				documentTab.setContent(screenConfig.getView(documentController, "DocumentPane.fxml"));
+			}
+		});
 
 		Tab usersTab = new Tab();
 		usersTab.setText(resourceBundle.getString("main.tab.admin.createuser.title"));
 		usersTab.setClosable(false);
-		usersTab.setOnSelectionChanged(new EventHandler<Event>() {
-
-			@Override
-			public void handle(Event event) {
-				if (usersTab.isSelected()) {
-					usersTab.setContent(screenConfig.getView(usersController, "UsersPane.fxml"));
-				}
+		usersTab.selectedProperty().addListener((ob, ov, nv) -> {
+			if (nv) {
+				usersTab.setContent(screenConfig.getView(usersController, "UsersPane.fxml"));
 			}
-
 		});
 
 		TabPane adminTabPane = new TabPane(generateReportTab, documentTab, usersTab);
@@ -81,14 +79,14 @@ public class AdminContentHelper {
 
 		return adminTab;
 	}
-	
+
 	public Node createUserForm(BiConsumer<ActionEvent, UserDto> c) {
 		GridPane gridPane = new GridPane();
 		gridPane.setAlignment(Pos.TOP_CENTER);
 		gridPane.setHgap(10);
 		gridPane.setVgap(10);
 		gridPane.setPadding(new Insets(20, 20, 20, 20));
-		
+
 		Label userName = new Label("User Name:");
 		gridPane.add(userName, 0, 0);
 
@@ -183,7 +181,7 @@ public class AdminContentHelper {
 				}
 			}
 		});
-		
+
 		confirmPasswordField.focusedProperty().addListener(new ChangeListener<Boolean>() {
 
 			@Override
@@ -202,9 +200,9 @@ public class AdminContentHelper {
 					userRoleAlert.hide();
 				}
 			}
-			
+
 		});
-		
+
 		gridPane.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
 
 			@Override

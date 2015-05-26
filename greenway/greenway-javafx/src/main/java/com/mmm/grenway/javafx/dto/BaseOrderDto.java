@@ -1,13 +1,12 @@
 package com.mmm.grenway.javafx.dto;
 
-import java.time.format.DateTimeFormatter;
-
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import com.mmm.greenway.entity.BaseOrder;
+import com.mmm.grenway.javafx.util.DateUtil;
 
 public class BaseOrderDto {
 	private LongProperty id;
@@ -17,7 +16,7 @@ public class BaseOrderDto {
 	private StringProperty operator;
 	private StringProperty note;
 	private StringProperty date;
-	private StringProperty invitation;
+	private StringProperty documnentsStatus;
 	private StringProperty registration;
 	private StringProperty orderType;
 
@@ -27,8 +26,8 @@ public class BaseOrderDto {
 		clientName = new SimpleStringProperty(baseOrder.getClientName());
 		phoneNumber = new SimpleStringProperty(baseOrder.getPhoneNumber());
 		setOperator(new SimpleStringProperty(baseOrder.getOperator().getUserName()));
-		setDate(new SimpleStringProperty(baseOrder.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))));
-		setInvitation(new SimpleStringProperty(baseOrder.getInvitation().name()));
+		setDate(new SimpleStringProperty(DateUtil.format(baseOrder.getDate())));
+		documnentsStatus = new SimpleStringProperty(baseOrder.getDocumentsStatus().name());
 		setRegistration(new SimpleStringProperty(baseOrder.getRegistration().name()));
 		note = new SimpleStringProperty(baseOrder.getNote());
 		setOrderType(new SimpleStringProperty(baseOrder.getOrderType().name()));
@@ -41,7 +40,7 @@ public class BaseOrderDto {
 		phoneNumber = new SimpleStringProperty();
 		setOperator(new SimpleStringProperty());
 		setDate(new SimpleStringProperty());
-		setInvitation(new SimpleStringProperty());
+		documnentsStatus = new SimpleStringProperty();
 		setRegistration(new SimpleStringProperty());
 		note = new SimpleStringProperty();
 		orderType = new SimpleStringProperty();
@@ -103,14 +102,6 @@ public class BaseOrderDto {
 		this.registration = registration;
 	}
 
-	public StringProperty getInvitation() {
-		return invitation;
-	}
-
-	public void setInvitation(StringProperty invitation) {
-		this.invitation = invitation;
-	}
-
 	public StringProperty getOrderType() {
 		return orderType;
 	}
@@ -125,5 +116,13 @@ public class BaseOrderDto {
 
 	public void setId(LongProperty id) {
 		this.id = id;
+	}
+
+	public StringProperty getDocumnentsStatus() {
+		return documnentsStatus;
+	}
+
+	public void setDocumnentsStatus(StringProperty documnentsStatus) {
+		this.documnentsStatus = documnentsStatus;
 	}
 }

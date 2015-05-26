@@ -22,7 +22,7 @@ public class DetailedOrderDto extends BaseOrderDto {
 	private DateIntervalDto suitableInOutDatesDto;
 	private ObservableList<DateIntervalDto> previousVisasDates;
 	private ObservableList<DocumentPerOrderDto> documentPerOrder;
-	private DocumentPerOrderDto invitationDocument;
+	private InvitationDto invitationDocument;
 	private ObjectProperty<LocalDate> registrationDate;
 
 	public DetailedOrderDto() {
@@ -36,7 +36,7 @@ public class DetailedOrderDto extends BaseOrderDto {
 		suitableInOutDatesDto = new DateIntervalDto();
 		previousVisasDates = FXCollections.observableArrayList();
 		documentPerOrder = FXCollections.observableArrayList();
-		invitationDocument = new DocumentPerOrderDto();
+		invitationDocument = new InvitationDto();
 		registrationDate = new SimpleObjectProperty<LocalDate>();
 	}
 
@@ -48,14 +48,19 @@ public class DetailedOrderDto extends BaseOrderDto {
 		orderClientWorkingPlaceDto = new OrderClientWorkingPlaceDto(detailedOrder.getOrderClientWorkingPlace());
 		orderClinetHostDto = new OrderClinetHostDto(detailedOrder.getOrderClinetHost());
 		travelPurpose = new SimpleStringProperty(detailedOrder.getTravelPurpose());
-		suitableInOutDatesDto = new DateIntervalDto(detailedOrder.getSuitableInOutDates());
+		suitableInOutDatesDto = detailedOrder.getSuitableInOutDates() == null ? new DateIntervalDto()
+				: new DateIntervalDto(detailedOrder.getSuitableInOutDates());
 		previousVisasDates = FXCollections.observableArrayList(detailedOrder.getPreviousVisasDates().stream()
 				.map(e -> new DateIntervalDto(e)).collect(Collectors.toList()));
 		documentPerOrder = FXCollections.observableArrayList();
 		detailedOrder.getDocumentPerOrders().forEach(d -> documentPerOrder.add(new DocumentPerOrderDto(d)));
-		invitationDocument = detailedOrder.getInvitationDocument() == null ? new DocumentPerOrderDto()
-				: new DocumentPerOrderDto(detailedOrder.getInvitationDocument());
+		invitationDocument = detailedOrder.getInvitationDocument() == null ? null : new InvitationDto(
+				detailedOrder.getInvitationDocument());
 		registrationDate = new SimpleObjectProperty<LocalDate>(detailedOrder.getRegistrationDate());
+	}
+
+	public boolean isInvitationPresent() {
+		return !(invitationDocument == null || invitationDocument.getId().get() == 0);
 	}
 
 	public OrderGeneralInfoDto getOrderGeneralInfoDto() {
@@ -130,11 +135,11 @@ public class DetailedOrderDto extends BaseOrderDto {
 		this.documentPerOrder = documentPerOrder;
 	}
 
-	public DocumentPerOrderDto getInvitationDocument() {
+	public InvitationDto getInvitationDocument() {
 		return invitationDocument;
 	}
 
-	public void setInvitationDocument(DocumentPerOrderDto invitationDocument) {
+	public void setInvitationDocument(InvitationDto invitationDocument) {
 		this.invitationDocument = invitationDocument;
 	}
 

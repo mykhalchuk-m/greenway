@@ -36,7 +36,7 @@ public class BaseOrder {
 	private LocalDateTime date;
 	
 	@Enumerated(EnumType.STRING)
-	private ProcessingStatus invitation = ProcessingStatus.NONE;
+	private ProcessingStatus documentsStatus = ProcessingStatus.NONE;
 	@Enumerated(EnumType.STRING)
 	private ProcessingStatus registration = ProcessingStatus.NONE;
 	@Enumerated(EnumType.STRING)
@@ -98,14 +98,6 @@ public class BaseOrder {
 		this.date = date;
 	}
 
-	public ProcessingStatus getInvitation() {
-		return invitation;
-	}
-
-	public void setInvitation(ProcessingStatus invitation) {
-		this.invitation = invitation;
-	}
-
 	public ProcessingStatus getRegistration() {
 		return registration;
 	}
@@ -120,5 +112,13 @@ public class BaseOrder {
 
 	public void setOrderType(OrderType orderType) {
 		this.orderType = orderType;
+	}
+
+	public ProcessingStatus getDocumentsStatus() {
+		return documentsStatus;
+	}
+
+	public void setDocumentsStatus(ProcessingStatus documentsStatus) {
+		this.documentsStatus = documentsStatus;
 	}
 }

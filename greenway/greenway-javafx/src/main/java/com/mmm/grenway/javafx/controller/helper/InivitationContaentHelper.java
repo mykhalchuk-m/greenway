@@ -18,11 +18,17 @@ public class InivitationContaentHelper {
 	private ScreenConfig screenConfig;
 	@Autowired
 	private InvitationDeliveryController invitationDeliveryController;
-	
+
 	public Tab genetateInivitationContent() {
 		Tab inivitationTab = new Tab(resourceBundle.getString("main.tab.inv.title"));
 		inivitationTab.setClosable(false);
-		inivitationTab.setContent(screenConfig.getView(invitationDeliveryController, "InvitationDeliveryPane.fxml"));
+		inivitationTab.selectedProperty().addListener(
+				(ob, ov, nv) -> {
+					if (nv) {
+						inivitationTab.setContent(screenConfig.getView(invitationDeliveryController,
+								"InvitationDeliveryPane.fxml"));
+					}
+				});
 		return inivitationTab;
 	}
 }

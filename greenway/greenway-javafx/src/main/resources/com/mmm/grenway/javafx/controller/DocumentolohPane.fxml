@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.ComboBox?>
 <?import com.mmm.grenway.javafx.controller.helper.TextFieldValidatable?>
+<?import javafx.scene.control.Button?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.DocumentolohController">
 	<children>
@@ -116,6 +117,7 @@
 								</VBox>
 								<HBox alignment="CENTER_RIGHT" spacing="10.0">
 									<children>
+										<Button text="%main.tab.documetoloh.button.edit" onAction="#doEdit" />
 										<Button mnemonicParsing="false" text="%main.tab.documetoloh.button.sendtoreg" onAction="#doSendToRegistrator"/>
 										<Button mnemonicParsing="false" text="%main.tab.documetoloh.button.sendtoinv" onAction="#doSendToInvitationDelivery"/>
 										<Button mnemonicParsing="false" text="%main.tab.documetoloh.button.save" onAction="#doSave" />
