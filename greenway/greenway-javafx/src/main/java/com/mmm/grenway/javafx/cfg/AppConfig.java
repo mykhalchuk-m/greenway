@@ -16,9 +16,14 @@ import com.mmm.greenway.data.cfg.SecurityConfig;
 @Import({ ScreenConfig.class, ControllerConfig.class, DataConfig.class, SecurityConfig.class })
 public class AppConfig {
 	
-	@Bean
+	@Bean(name = "resourceBundle")
 	public ResourceBundle resourceBundle() {
 		return ResourceBundle.getBundle("lang", new Locale("ua", "UA"));
+	}
+	
+	@Bean(name = "enumBundle")
+	public ResourceBundle enumBundle() {
+		return ResourceBundle.getBundle("enum", new Locale("ua", "UA"));
 	}
 	
 }

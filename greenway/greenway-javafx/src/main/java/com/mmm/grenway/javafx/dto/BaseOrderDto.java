@@ -25,12 +25,12 @@ public class BaseOrderDto {
 		supplierName = new SimpleStringProperty(baseOrder.getSupplierName());
 		clientName = new SimpleStringProperty(baseOrder.getClientName());
 		phoneNumber = new SimpleStringProperty(baseOrder.getPhoneNumber());
-		setOperator(new SimpleStringProperty(baseOrder.getOperator().getUserName()));
-		setDate(new SimpleStringProperty(DateUtil.format(baseOrder.getDate())));
+		operator = new SimpleStringProperty(baseOrder.getOperator().getUserName());
+		date = new SimpleStringProperty(DateUtil.format(baseOrder.getDate()));
 		documnentsStatus = new SimpleStringProperty(baseOrder.getDocumentsStatus().name());
-		setRegistration(new SimpleStringProperty(baseOrder.getRegistration().name()));
+		registration = new SimpleStringProperty(baseOrder.getRegistration().name());
 		note = new SimpleStringProperty(baseOrder.getNote());
-		setOrderType(new SimpleStringProperty(baseOrder.getOrderType().name()));
+		orderType = new SimpleStringProperty(baseOrder.getOrderType().name());
 	}
 
 	public BaseOrderDto() {

@@ -13,6 +13,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +23,7 @@ import com.mmm.greenway.entity.UserRole;
 import com.mmm.grenway.javafx.cfg.ScreenConfig;
 import com.mmm.grenway.javafx.controller.helper.AdminContentHelper;
 import com.mmm.grenway.javafx.controller.helper.DocumentolohContentHelper;
-import com.mmm.grenway.javafx.controller.helper.InivitationContaentHelper;
+import com.mmm.grenway.javafx.controller.helper.InivitationContentHelper;
 import com.mmm.grenway.javafx.controller.helper.OperatorContentHelper;
 import com.mmm.grenway.javafx.controller.helper.RegistratorContentHelper;
 
@@ -30,7 +31,7 @@ import com.mmm.grenway.javafx.controller.helper.RegistratorContentHelper;
 public class MainController {
 
 	@FXML
-	private TabPane tabPane;
+	private AnchorPane mainContent;
 	@FXML
 	private MenuBar mainMenuBar;
 
@@ -43,7 +44,7 @@ public class MainController {
 	@Autowired
 	private OperatorContentHelper operatorContentHelper;
 	@Autowired
-	private InivitationContaentHelper inivitationContaentHelper;
+	private InivitationContentHelper inivitationContaentHelper;
 	@Autowired
 	private DocumentolohContentHelper documentolohContentHelper;
 	@Autowired
@@ -61,20 +62,32 @@ public class MainController {
 		switch (userRole) {
 		case ROLE_ADMIN:
 			tabs.add(adminContentHelper.generateAdminTab());
-		case ROLE_INVITATION_DELIVERY:
-			tabs.add(inivitationContaentHelper.genetateInivitationContent());
-			if (userRole != UserRole.ROLE_ADMIN) {
-				break;
-			}
-		case ROLE_REGISTRATOR:
-			tabs.add(registratorContentHelper.genetateRegistratorContent());
-		case ROLE_DOKUMENTOLOH:
-			tabs.add(documentolohContentHelper.genetateDocumentolohContent());
-		case ROLE_OPERATOR:
+			tabs.add(inivitationContaentHelper.genetateInivitationTab());
+			tabs.add(registratorContentHelper.genetateRegistratorTab());
+			tabs.add(documentolohContentHelper.genetateDocumentolohTab());
 			tabs.add(operatorContentHelper.generateOperatorTab());
+			Collections.reverse(tabs);
+			TabPane tabPane = new TabPane();
+			tabPane.getTabs().addAll(tabs);
+			AnchorPane.setTopAnchor(tabPane, 0.0);
+			AnchorPane.setLeftAnchor(tabPane, 0.0);
+			AnchorPane.setBottomAnchor(tabPane, 0.0);
+			AnchorPane.setRightAnchor(tabPane, 0.0);
+			mainContent.getChildren().add(tabPane);
+			break;
+		case ROLE_INVITATION_DELIVERY:
+			mainContent.getChildren().add(inivitationContaentHelper.genetateInivitationContent());
+			break;
+		case ROLE_REGISTRATOR:
+			mainContent.getChildren().add(registratorContentHelper.genetateRegistratorContent());
+			break;
+		case ROLE_DOKUMENTOLOH:
+			mainContent.getChildren().add(documentolohContentHelper.genetateDocumentolohContent());
+			break;
+		case ROLE_OPERATOR:
+			mainContent.getChildren().add(operatorContentHelper.generateOperatorContent());
 		}
-		Collections.reverse(tabs);
-		tabPane.getTabs().addAll(tabs);
+
 	}
 
 	@FXML

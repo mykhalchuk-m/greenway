@@ -4,10 +4,11 @@
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.MainController">
 	<center>
-		<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="mainContent" />
 	</center>
 	<top>
 		<MenuBar fx:id="mainMenuBar" BorderPane.alignment="CENTER">

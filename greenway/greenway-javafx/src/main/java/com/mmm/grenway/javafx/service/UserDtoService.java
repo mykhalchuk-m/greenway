@@ -1,8 +1,12 @@
 package com.mmm.grenway.javafx.service;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +23,11 @@ public class UserDtoService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	public StringProperty getCurentUserName() {
+		return new SimpleStringProperty(((UserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal()).getUsername());
+	}
+
 	public ObservableList<UserDto> findUsers() {
 		return UserDtoConverter.convertToObservableList(userRepository.findAll());
 	}
@@ -33,7 +42,7 @@ public class UserDtoService {
 	}
 
 	public ObservableList<UserDto> findUsers(String userName, UserRole userRole) {
-		System.out.println(userName + " " + userRole); 
+		System.out.println(userName + " " + userRole);
 		if ((userName == null || userName.isEmpty()) && userRole != null) {
 			return findUsersWithRoles(userRole);
 		} else if (userRole == null && userName != null && !userName.isEmpty()) {
@@ -45,12 +54,12 @@ public class UserDtoService {
 			return findUsers();
 		}
 	}
-	
+
 	public UserDto save(UserDto userDto) {
 		User user = userRepository.save(UserDtoConverter.toUser(userDto, passwordEncoder));
 		return new UserDto(user);
 	}
-	
+
 	public void remove(UserDto userDto) {
 		userRepository.delete(userDto.getUserName().get());
 	}

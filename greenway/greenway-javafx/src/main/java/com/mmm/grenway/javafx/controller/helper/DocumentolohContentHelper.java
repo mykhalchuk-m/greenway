@@ -3,8 +3,10 @@ package com.mmm.grenway.javafx.controller.helper;
 import java.util.ResourceBundle;
 
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,9 +26,25 @@ public class DocumentolohContentHelper {
 	@Autowired
 	private RegistrationFormController registrationFormController;
 
-	public Tab genetateDocumentolohContent() {
+	public Tab genetateDocumentolohTab() {
 		Tab docTab = new Tab("Documentoloh's Tab");
 
+		docTab.setContent(generatreTabPane());
+		docTab.setClosable(false);
+
+		return docTab;
+	}
+
+	public Node genetateDocumentolohContent() {
+		Node node = generatreTabPane();
+		AnchorPane.setTopAnchor(node, 0.0);
+		AnchorPane.setLeftAnchor(node, 0.0);
+		AnchorPane.setBottomAnchor(node, 0.0);
+		AnchorPane.setRightAnchor(node, 0.0);
+		return node;
+	}
+
+	private TabPane generatreTabPane() {
 		Tab docsListTab = new Tab(resourceBundle.getString("main.tab.documetoloh.title"));
 		docsListTab.setClosable(false);
 		docsListTab.selectedProperty().addListener((ob, ov, nv) -> {
@@ -51,8 +69,6 @@ public class DocumentolohContentHelper {
 		tabPane.setId("decumentolohTabPane");
 		tabPane.setSide(Side.LEFT);
 
-		docTab.setContent(tabPane);
-
-		return docTab;
+		return tabPane;
 	}
 }

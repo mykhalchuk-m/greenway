@@ -54,7 +54,9 @@ public class DocumentolohController {
 	@Autowired
 	private DetailedOrderService detailedOrderService;
 	@Autowired
-	protected ResourceBundle resourceBundle;
+	private ResourceBundle resourceBundle;
+	@Autowired
+	private ResourceBundle enumBundle;
 	@Autowired
 	private RegistrationFormController registrationFormController;
 	private DetailedOrderDto currentItem = new DetailedOrderDto();
@@ -70,11 +72,16 @@ public class DocumentolohController {
 		allDocuments.setItems(documentService.findAll());
 		allDocuments.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		allDocuments.setDisable(true);
+
 		addDocumentLink.setOnAction(event -> {
-			allDocuments.setDisable(false);
-			allDocuments.setPrefHeight(200);
+			if (allDocuments.isDisable()) {
+				allDocuments.setDisable(false);
+				allDocuments.setPrefHeight(200);
+			} else {
+				allDocuments.setDisable(true);
+				allDocuments.setPrefHeight(50);
+			}
 		});
-		addDocumentLink.setDisable(true);
 		initSelectedDocumentsProcessing();
 
 		supplierField.initValidator(resourceBundle.getString("main.tab.operator.od.supplier.validation"));
@@ -228,7 +235,7 @@ public class DocumentolohController {
 								.filtered(p -> p.getDocument().getDocumentId() == selectedDocument.getDocumentId())
 								.get(0).getProcessingStatus().get();
 					} else {
-						processingStatus = currentItem.getDocumnentsStatus().get();
+						processingStatus = currentItem.getInvitationDocument().getStatus().get();
 					}
 					if (event.getClickCount() == 2 && selectedDocument != null) {
 						Dialog<Pair<DocumentDto, ProcessingStatus>> dialog = new Dialog<>();
@@ -347,7 +354,6 @@ public class DocumentolohController {
 					selecterDocument.setItems(currentItemDocs);
 					if (currentItem.isInvitationPresent()) {
 						invDocDto.getName().bind(currentItem.getInvitationDocument().getTitle());
-						// invDocDto.getName().set(currentItem.getInvitationDocument().getTitle().get());
 						selecterDocument.getItems().add(invDocDto);
 					}
 					allDocuments.getItems().removeAll(currentItemDocs);

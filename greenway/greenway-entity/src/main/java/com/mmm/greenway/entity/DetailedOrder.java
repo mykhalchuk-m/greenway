@@ -40,8 +40,8 @@ public class DetailedOrder extends BaseOrder {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "sutable_inout_dates_id")
 	private DateInterval suitableInOutDates;
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "prev_visa_dates_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinColumn(name = "prev_visa_dates_id", referencedColumnName = "id")
 	private List<DateInterval> previousVisasDates;
 
 	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)

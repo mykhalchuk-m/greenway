@@ -165,6 +165,7 @@ public class ConsultDetailsController {
 			baseOrderDto.getId().set(currentItemId);
 		}
 		baseOrderDto.getClientName().set(clientName.getText());
+		baseOrderDto.getOperator().set(operatorField.getText());
 		if (supplierCheckBox.isSelected()) {
 			baseOrderDto.getSupplierName().set(OFFICE_VALUE);
 		} else {

@@ -6,8 +6,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 
 import com.mmm.greenway.entity.BaseOrder;
 import com.mmm.greenway.entity.DetailedOrder;
@@ -15,6 +17,7 @@ import com.mmm.greenway.entity.DocumentPerOrder;
 import com.mmm.greenway.entity.Invitation;
 import com.mmm.greenway.entity.OrderType;
 import com.mmm.greenway.entity.ProcessingStatus;
+import com.mmm.grenway.javafx.dto.DateIntervalDto;
 import com.mmm.grenway.javafx.dto.DetailedOrderDto;
 
 public class DetailedOrderConverter {
@@ -60,17 +63,18 @@ public class DetailedOrderConverter {
 					documentsPerOrder.add(documentPerOrder);
 				});
 		detailedOrder.setDocumentPerOrders(documentsPerOrder);
-		if (detailedOrderDto.getInvitationDocument() != null) {
+		
+		if (detailedOrderDto.getInvitationDocument().getTitle().getValue() != null) {
 			Invitation invitationDocument = new Invitation();
-			if (detailedOrderDto.getId().getValue() != null) {
-				invitationDocument.setId(detailedOrderDto.getId().get());
+			if (detailedOrderDto.getInvitationDocument().getId().getValue() != null) {
+				invitationDocument.setId(detailedOrderDto.getInvitationDocument().getId().get());
 			}
 			invitationDocument.setTitle(detailedOrderDto.getInvitationDocument().getTitle().get());
 			invitationDocument.setPrice(detailedOrderDto.getInvitationDocument().getPrice().get());
 			String invitationDocumentProcessStatus = detailedOrderDto.getInvitationDocument().getStatus().get();
 			if (invitationDocumentProcessStatus != null && !invitationDocumentProcessStatus.isEmpty()) {
 				invitationDocument.setProcessingStatus(ProcessingStatus.valueOf(invitationDocumentProcessStatus));
-			}
+			} 
 			detailedOrder.setInvitationDocument(invitationDocument);
 		}
 		if (detailedOrderDto.getRegistrationDate().get() != null) {
@@ -184,7 +188,10 @@ public class DetailedOrderConverter {
 					.set(detailedOrder.getSuitableInOutDates().getFromDate());
 			detailedOrderDto.getSuitableInOutDatesDto().getTo().set(detailedOrder.getSuitableInOutDates().getToDate());
 		}
-		// TODO: add enriching of previous visas date
+		
+		detailedOrder.getPreviousVisasDates().forEach(e -> {
+			detailedOrderDto.getPreviousVisasDates().add(new DateIntervalDto(e));
+		});
 	}
 
 	public static ObservableList<String> getProcessStatuses() {

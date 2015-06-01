@@ -10,7 +10,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.RegistrationFormController" fx:id="root">
+<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.RegistrationFormController">
 	<padding>
 		<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
 	</padding>
@@ -101,8 +101,8 @@
 														<Label text="%main.tab.operator.reg.form.birthnationality" GridPane.rowIndex="10" />
 														<Label text="%main.tab.operator.reg.form.sex" GridPane.rowIndex="11" />
 														<Label text="%main.tab.operator.reg.form.maritalstatus" GridPane.rowIndex="12" />
-														<Label text="%main.tab.operator.reg.form.endDateProviding" GridPane.rowIndex="13" />
-														<Label text="%main.tab.operator.reg.form.startDateProviding" GridPane.rowIndex="14" />
+														<Label text="%main.tab.operator.reg.form.startDateProviding" GridPane.rowIndex="13" />
+														<Label text="%main.tab.operator.reg.form.endDateProviding" GridPane.rowIndex="14" />
 														<TextField fx:id="destinationCounty" GridPane.columnIndex="1" />
 														<TextField fx:id="visaType" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 														<CheckBox fx:id="isrefavailable" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -125,8 +125,8 @@
 															</children>
 														</HBox>
 														<TextField fx:id="maritalstatus" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-														<DatePicker fx:id="endDateProviding" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-														<DatePicker fx:id="startDateProviding" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+														<DatePicker fx:id="startDateProviding" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+														<DatePicker fx:id="endDateProviding" GridPane.columnIndex="1" GridPane.rowIndex="14" />
 													</children>
 												</GridPane>
 											</children>
@@ -320,61 +320,30 @@
 																<Label text="%main.tab.operator.reg.form.sutableInDate" GridPane.rowIndex="1" />
 																<Label text="%main.tab.operator.reg.form.sutableOutDate" GridPane.rowIndex="2" />
 																<TextField fx:id="travelPurpose" GridPane.columnIndex="1" />
-																<DatePicker fx:id="sutableInDate" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-																<DatePicker fx:id="sutableOutDate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+																<DatePicker fx:id="sutableInDate" prefWidth="1000.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+																<DatePicker fx:id="sutableOutDate" prefWidth="1000.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 															</children>
 														</GridPane>
-														<GridPane>
-															<columnConstraints>
-																<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-																<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-															</columnConstraints>
-															<rowConstraints>
-																<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-																<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-																<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-																<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-															</rowConstraints>
+														<Label text="%main.tab.operator.reg.form.prevVisa" GridPane.columnSpan="2">
+															<VBox.margin>
+																<Insets bottom="10.0" top="15.0" />
+															</VBox.margin>
+														</Label>
+														<VBox spacing="5.0" fx:id="prevVisasBox">
 															<children>
-																<Label text="%main.tab.operator.reg.form.prevVisa" GridPane.columnSpan="2" />
-																<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="1">
+																<HBox alignment="CENTER_LEFT" spacing="10.0">
 																	<children>
 																		<Label alignment="CENTER" text="%main.tab.operator.reg.form.prevVisaFrom" />
-																		<DatePicker fx:id="prevVisaFrom1" />
-																	</children>
-																</HBox>
-																<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-																	<children>
+																		<DatePicker fx:id="prevVisaFrom0" />
 																		<Label alignment="CENTER" text="%main.tab.operator.reg.form.prevVisaTo" />
-																		<DatePicker fx:id="prevVisaTo1" />
-																	</children>
-																</HBox>
-																<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="2">
-																	<children>
-																		<Label alignment="CENTER" text="%main.tab.operator.reg.form.prevVisaFrom" />
-																		<DatePicker fx:id="prevVisaFrom2" />
-																	</children>
-																</HBox>
-																<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-																	<children>
-																		<Label alignment="CENTER" text="%main.tab.operator.reg.form.prevVisaTo" />
-																		<DatePicker fx:id="prevVisaTo2" />
-																	</children>
-																</HBox>
-																<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="3">
-																	<children>
-																		<Label alignment="CENTER" text="%main.tab.operator.reg.form.prevVisaFrom" />
-																		<DatePicker fx:id="prevVisaFrom3" />
-																	</children>
-																</HBox>
-																<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-																	<children>
-																		<Label alignment="CENTER" text="%main.tab.operator.reg.form.prevVisaTo" />
-																		<DatePicker fx:id="prevVisaTo3" />
+																		<DatePicker fx:id="prevVisaTo0" />
 																	</children>
 																</HBox>
 															</children>
-														</GridPane>
+															<VBox.margin>
+																<Insets />
+															</VBox.margin>
+														</VBox>
 													</children>
 												</VBox>
 											</children>

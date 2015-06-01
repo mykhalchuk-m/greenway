@@ -3,8 +3,10 @@ package com.mmm.grenway.javafx.controller.helper;
 import java.util.ResourceBundle;
 
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,29 @@ public class OperatorContentHelper {
 		Tab operatorTab = new Tab();
 		operatorTab.setText(resourceBundle.getString("main.tab.operator.title"));
 
+		TabPane operatorTabPane = generateTabPane();
+
+		operatorTab.setContent(operatorTabPane);
+		operatorTab.selectedProperty().addListener((ob, ov, nv) -> {
+			if (nv) {
+				operatorTabPane.getSelectionModel().select(0);
+			}
+		});
+		operatorTab.setClosable(false);
+
+		return operatorTab;
+	}
+
+	public Node generateOperatorContent() {
+		Node node = generateTabPane();
+		AnchorPane.setTopAnchor(node, 0.0);
+		AnchorPane.setLeftAnchor(node, 0.0);
+		AnchorPane.setBottomAnchor(node, 0.0);
+		AnchorPane.setRightAnchor(node, 0.0);
+		return node;
+	}
+
+	private TabPane generateTabPane() {
 		Tab orderDetail = new Tab();
 		orderDetail.setText("Order Details");
 		orderDetail.setClosable(false);
@@ -56,13 +81,6 @@ public class OperatorContentHelper {
 		operatorTabPane.setId("operatorTabPane");
 		operatorTabPane.setSide(Side.LEFT);
 
-		operatorTab.setContent(operatorTabPane);
-		operatorTab.selectedProperty().addListener((ob, ov, nv) -> {
-			if (nv) {
-				operatorTabPane.getSelectionModel().select(0);
-			}
-		});
-
-		return operatorTab;
+		return operatorTabPane;
 	}
 }
