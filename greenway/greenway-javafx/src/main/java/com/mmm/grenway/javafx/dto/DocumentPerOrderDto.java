@@ -1,33 +1,33 @@
 package com.mmm.grenway.javafx.dto;
 
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
 import com.mmm.greenway.entity.DocumentPerOrder;
 import com.mmm.greenway.entity.ProcessingStatus;
-
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 public class DocumentPerOrderDto {
 	private LongProperty id;
 	private DocumentDto document;
-	private StringProperty processingStatus;
+	private ObjectProperty<ProcessingStatus> processingStatus;
 
 	public DocumentPerOrderDto() {
 		id = new SimpleLongProperty();
 		document = new DocumentDto();
-		processingStatus = new SimpleStringProperty();
+		processingStatus = new SimpleObjectProperty<ProcessingStatus>();
 	}
 	
 	public DocumentPerOrderDto(DocumentPerOrder documentPerOrder) {
 		id = new SimpleLongProperty(documentPerOrder.getId());
 		document = new DocumentDto(documentPerOrder.getDocument());
-		processingStatus = new SimpleStringProperty(documentPerOrder.getProcessingStatus().name());
+		processingStatus = new SimpleObjectProperty<ProcessingStatus>(documentPerOrder.getProcessingStatus());
 	}
 	
 	public DocumentPerOrderDto(DocumentDto documentDto) {
 		document = documentDto;
-		processingStatus = new SimpleStringProperty(ProcessingStatus.NEW.name());
+		processingStatus = new SimpleObjectProperty<ProcessingStatus>(ProcessingStatus.NEW);
 	}	
 	
 	public DocumentDto getDocument() {
@@ -38,11 +38,11 @@ public class DocumentPerOrderDto {
 		this.document = document;
 	}
 
-	public StringProperty getProcessingStatus() {
+	public ObjectProperty<ProcessingStatus> getProcessingStatus() {
 		return processingStatus;
 	}
 
-	public void setProcessingStatus(StringProperty processingStatus) {
+	public void setProcessingStatus(ObjectProperty<ProcessingStatus> processingStatus) {
 		this.processingStatus = processingStatus;
 	}
 

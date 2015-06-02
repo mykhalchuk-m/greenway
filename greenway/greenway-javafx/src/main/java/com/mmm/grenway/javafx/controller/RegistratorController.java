@@ -3,6 +3,7 @@ package com.mmm.grenway.javafx.controller;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -16,10 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.entity.ProcessingStatus;
+import com.mmm.grenway.javafx.controller.converter.ProcessingStatusConverter;
 import com.mmm.grenway.javafx.dto.BaseOrderFilterDto;
 import com.mmm.grenway.javafx.dto.DetailedOrderDto;
 import com.mmm.grenway.javafx.service.DetailedOrderService;
-import com.mmm.grenway.javafx.service.converter.DetailedOrderConverter;
 import com.mmm.grenway.javafx.util.DateUtil;
 
 @Component
@@ -29,6 +30,8 @@ public class RegistratorController {
 	private DetailedOrderService detailedOrderService;
 	@Autowired
 	protected ResourceBundle resourceBundle;
+	@Autowired
+	protected ResourceBundle enumBundle;
 	private DetailedOrderDto currentItem = new DetailedOrderDto();
 	private BaseOrderFilterDto orderFilterDto = new BaseOrderFilterDto();
 
@@ -38,8 +41,9 @@ public class RegistratorController {
 		initTableColumns();
 		initFiltersListeners();
 		initTableRowDoubleClick();
-		registrationStatus.setItems(DetailedOrderConverter.getProcessStatuses());
+		registrationStatus.setItems(FXCollections.observableArrayList(ProcessingStatus.values()));
 		registrationStatus.getSelectionModel().select(0);
+		registrationStatus.setConverter(new ProcessingStatusConverter(enumBundle));
 		userName.setEditable(false);
 	}
 
@@ -49,14 +53,14 @@ public class RegistratorController {
 		detailedOrderService.save(currentItem);
 		doCancel();
 	}
-	
+
 	@FXML
 	private void doCancel() {
 		userName.clear();
 		registrationDate.getEditor().clear();
 		registrationStatus.getSelectionModel().select(0);
 	}
-	
+
 	private void initFiltersListeners() {
 		clientNameFilter.textProperty().addListener((ob, ov, nv) -> {
 			clientsTable.setItems(getData());
@@ -78,7 +82,8 @@ public class RegistratorController {
 		phoneColumn.setSortable(false);
 		phoneColumn.setCellValueFactory(value -> value.getValue().getPhoneNumber());
 		registrationStatusColumn.setSortable(false);
-		registrationStatusColumn.setCellValueFactory(value -> value.getValue().getRegistration());
+		registrationStatusColumn.setCellValueFactory(value -> new SimpleStringProperty(enumBundle.getString(value
+				.getValue().getRegistration().get().name())));
 		passportExpDateColumn.setSortable(false);
 		passportExpDateColumn.setCellValueFactory(value -> new SimpleStringProperty(DateUtil.format(value.getValue()
 				.getOrderPassportDataDto().getForingPassportExpDate().get())));
@@ -110,9 +115,8 @@ public class RegistratorController {
 	}
 
 	private void populateChangedProperties() {
-		currentItem.getRegistration().set(
-				registrationStatus.getValue() != "" ? ProcessingStatus.valueOf(registrationStatus.getValue()).name()
-						: ProcessingStatus.NONE.name());
+		ProcessingStatus processingStatus = registrationStatus.getValue();
+		currentItem.getRegistration().set(processingStatus != null ? processingStatus : ProcessingStatus.NONE);
 		currentItem.getRegistrationDate().set(registrationDate.getValue());
 	}
 
@@ -149,5 +153,5 @@ public class RegistratorController {
 	@FXML
 	private DatePicker registrationDate;
 	@FXML
-	private ComboBox<String> registrationStatus;
+	private ComboBox<ProcessingStatus> registrationStatus;
 }

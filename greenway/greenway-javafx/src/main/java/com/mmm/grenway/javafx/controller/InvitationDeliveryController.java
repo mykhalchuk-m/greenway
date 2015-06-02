@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -16,10 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.entity.ProcessingStatus;
+import com.mmm.grenway.javafx.controller.converter.ProcessingStatusConverter;
 import com.mmm.grenway.javafx.dto.BaseOrderFilterDto;
 import com.mmm.grenway.javafx.dto.DetailedOrderDto;
 import com.mmm.grenway.javafx.service.DetailedOrderService;
-import com.mmm.grenway.javafx.service.converter.DetailedOrderConverter;
 
 @Component
 public class InvitationDeliveryController {
@@ -28,6 +30,8 @@ public class InvitationDeliveryController {
 	private DetailedOrderService detailedOrderService;
 	@Autowired
 	protected ResourceBundle resourceBundle;
+	@Autowired
+	protected ResourceBundle enumBundle;
 	private DetailedOrderDto currentItem = new DetailedOrderDto();
 	private BaseOrderFilterDto orderFilterDto = new BaseOrderFilterDto();
 
@@ -37,16 +41,17 @@ public class InvitationDeliveryController {
 		initTableData();
 		initTableRowDoubleClick();
 		initFiltersListeners();
-		invitationStatus.setItems(DetailedOrderConverter.getProcessStatuses());
+		invitationStatus.setItems(FXCollections.observableArrayList(ProcessingStatus.values()));
 		invitationStatus.getSelectionModel().select(0);
+		invitationStatus.setConverter(new ProcessingStatusConverter(enumBundle));
 		clientNameField.setEditable(false);
-
 	}
 
 	@FXML
 	private void doSave() {
 		populateChangedProperties();
 		detailedOrderService.save(currentItem);
+		refreshTable();
 		doCancel();
 	}
 
@@ -65,7 +70,7 @@ public class InvitationDeliveryController {
 				}
 			}
 		}
-		invitationStatus.setValue(ProcessingStatus.NONE.name());
+		invitationStatus.setValue(ProcessingStatus.NONE);
 	}
 
 	private void initTableRowDoubleClick() {
@@ -102,14 +107,17 @@ public class InvitationDeliveryController {
 		});
 	}
 
+	public void refreshTable() {
+		usersTable.setItems(getData());
+	}
+	
 	private ObservableList<DetailedOrderDto> getData() {
 		return detailedOrderService.findDetailedOrdersForInvitator(orderFilterDto);
 	}
 
 	private void populateChangedProperties() {
 		currentItem.getClientName().set(clientNameField.getText());
-		currentItem.getInvitationDocument().getPrice()
-				.set(Double.parseDouble(invitationPriceField.getText()));
+		currentItem.getInvitationDocument().getPrice().set(Double.parseDouble(invitationPriceField.getText()));
 		currentItem.getOrderClinetHostDto().getHostData().set(issuerField.getText());
 		currentItem.getOrderClinetHostDto().getCountry().set(countryField.getText());
 		currentItem.getOrderClinetHostDto().getLocality().set(localityField.getText());
@@ -129,7 +137,12 @@ public class InvitationDeliveryController {
 				.getForingPassportNumber());
 		regionColumn.setCellValueFactory(value -> value.getValue().getOrderClientAddressDto().getRegion());
 		registrationDateColumn.setCellValueFactory(value -> value.getValue().getRegistrationDate());
-		statusColumn.setCellValueFactory(value -> value.getValue().getInvitationDocument().getStatus());
+		statusColumn.setCellValueFactory(value -> new SimpleStringProperty(getEnumStringValue(value.getValue()
+				.getInvitationDocument().getStatus().get())));
+	}
+
+	private String getEnumStringValue(ProcessingStatus processingStatus) {
+		return enumBundle.getString(processingStatus.name());
 	}
 
 	@FXML
@@ -155,7 +168,7 @@ public class InvitationDeliveryController {
 	@FXML
 	private TextField filterPhoneNumber;
 	@FXML
-	private ComboBox<String> invitationStatus;
+	private ComboBox<ProcessingStatus> invitationStatus;
 	@FXML
 	private TableView<DetailedOrderDto> usersTable;
 	@FXML

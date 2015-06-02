@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -13,6 +14,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -35,6 +38,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.entity.ProcessingStatus;
+import com.mmm.grenway.javafx.controller.converter.ProcessingStatusConverter;
 import com.mmm.grenway.javafx.controller.helper.TextFieldValidatable;
 import com.mmm.grenway.javafx.dto.BaseOrderFilterDto;
 import com.mmm.grenway.javafx.dto.DetailedOrderDto;
@@ -43,7 +47,6 @@ import com.mmm.grenway.javafx.dto.DocumentPerOrderDto;
 import com.mmm.grenway.javafx.dto.InvitationDto;
 import com.mmm.grenway.javafx.service.DetailedOrderService;
 import com.mmm.grenway.javafx.service.DocumentService;
-import com.mmm.grenway.javafx.service.converter.DetailedOrderConverter;
 
 @Component
 @Scope("prototype")
@@ -82,6 +85,7 @@ public class DocumentolohController {
 				allDocuments.setPrefHeight(50);
 			}
 		});
+		addDocumentLink.setDisable(true);
 		initSelectedDocumentsProcessing();
 
 		supplierField.initValidator(resourceBundle.getString("main.tab.operator.od.supplier.validation"));
@@ -105,22 +109,26 @@ public class DocumentolohController {
 
 	@FXML
 	private void doSendToInvitationDelivery() {
-		if (currentItem.getDocumnentsStatus().get().equals(ProcessingStatus.NONE.name())) {
+		if (currentItem.getDocumnentsStatus().get().equals(ProcessingStatus.NONE)) {
 			populateChangedProperties();
 			InvitationDto invitationDocument = new InvitationDto();
 			invitationDocument.getTitle().set(resourceBundle.getString("main.tab.admin.doc.invdocname"));
-			invitationDocument.getStatus().set(ProcessingStatus.NEW.name());
+			invitationDocument.getStatus().set(ProcessingStatus.NEW);
 			currentItem.setInvitationDocument(invitationDocument);
 			doSave();
 		} else {
-			// TODO: show info alert
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setHeaderText("Same order can't be send to intitator more then once");
+			alert.setContentText("Select another document ot check invitation status in the table");
+			alert.showAndWait();
 		}
 	}
 
 	@FXML
 	private void doSendToRegistrator() {
-		if (currentItem.getRegistration().get().equals(ProcessingStatus.NONE.name())) {
-			currentItem.getRegistration().set(ProcessingStatus.NEW.name());
+		if (currentItem.getRegistration().get().equals(ProcessingStatus.NONE)) {
+			currentItem.getRegistration().set(ProcessingStatus.NEW);
 			doSave();
 		} else {
 			// TODO: show info alert
@@ -160,16 +168,16 @@ public class DocumentolohController {
 	private void doSave() {
 		populateChangedProperties();
 		if (currentItem.getDocumentPerOrder() != null && currentItem.getDocumentPerOrder().size() != 0) {
-			List<String> statuses = currentItem.getDocumentPerOrder().stream().map(f -> f.getProcessingStatus().get())
-					.collect(Collectors.toList());
+			List<String> statuses = currentItem.getDocumentPerOrder().stream()
+					.map(f -> f.getProcessingStatus().get().name()).collect(Collectors.toList());
 			if (statuses.contains(ProcessingStatus.IN_PROGRESS.name())) {
-				currentItem.getDocumnentsStatus().set(ProcessingStatus.IN_PROGRESS.name());
+				currentItem.getDocumnentsStatus().set(ProcessingStatus.IN_PROGRESS);
 			} else {
 				statuses.sort((str1, str2) -> {
 					return str1.compareTo(str2) * (-1);
 				});
 
-				currentItem.getDocumnentsStatus().set(statuses.get(0));
+				currentItem.getDocumnentsStatus().set(ProcessingStatus.valueOf(statuses.get(0)));
 			}
 		}
 		detailedOrderService.save(currentItem);
@@ -215,90 +223,89 @@ public class DocumentolohController {
 	}
 
 	private void initSelectedDocumentsProcessing() {
-		selecterDocument
-				.setOnMouseClicked(event -> {
-					DocumentDto selectedDocument = selecterDocument.getSelectionModel().getSelectedItem();
-					if (selectedDocument == null) {
-						return;
-					}
-					DocumentPerOrderDto selectedDocumentPerOrder = null;
-					String processingStatus = "";
-					if (currentItem.getDocumentPerOrder() != null && currentItem.getDocumentPerOrder().size() != 0) {
-						FilteredList<DocumentPerOrderDto> fl = currentItem.getDocumentPerOrder().filtered(
-								p -> p.getDocument().getDocumentId() == selectedDocument.getDocumentId());
-						if (fl.size() != 0) {
-							selectedDocumentPerOrder = fl.get(0);
+		selecterDocument.setOnMouseClicked(event -> {
+			DocumentDto selectedDocument = selecterDocument.getSelectionModel().getSelectedItem();
+			if (selectedDocument == null) {
+				return;
+			}
+			DocumentPerOrderDto selectedDocumentPerOrder = null;
+			ProcessingStatus processingStatus = null;
+			if (currentItem.getDocumentPerOrder() != null && currentItem.getDocumentPerOrder().size() != 0) {
+				FilteredList<DocumentPerOrderDto> fl = currentItem.getDocumentPerOrder().filtered(
+						p -> p.getDocument().getDocumentId() == selectedDocument.getDocumentId());
+				if (fl.size() != 0) {
+					selectedDocumentPerOrder = fl.get(0);
+				}
+			}
+			if (selectedDocumentPerOrder != null) {
+				processingStatus = currentItem.getDocumentPerOrder()
+						.filtered(p -> p.getDocument().getDocumentId() == selectedDocument.getDocumentId()).get(0)
+						.getProcessingStatus().get();
+			} else {
+				processingStatus = currentItem.getInvitationDocument().getStatus().get();
+			}
+			if (event.getClickCount() == 2 && selectedDocument != null) {
+				Dialog<Pair<DocumentDto, ProcessingStatus>> dialog = new Dialog<>();
+				dialog.setTitle("Change Document Status");
+				dialog.setHeaderText("Select new status for curent document");
+				ButtonType changeButtonType = new ButtonType("Change", ButtonData.OK_DONE);
+				dialog.getDialogPane().getButtonTypes().addAll(changeButtonType, ButtonType.CANCEL);
+
+				GridPane dialogContent = new GridPane();
+				dialogContent.setVgap(10);
+				dialogContent.setHgap(10);
+				dialogContent.setPadding(new Insets(20, 20, 10, 10));
+
+				TextField docName = new TextField(selectedDocument.getName().get());
+				docName.setEditable(false);
+				docName.setPrefWidth(400);
+				dialogContent.add(new Label("Document name"), 0, 0);
+				dialogContent.add(docName, 1, 0);
+
+				dialogContent.add(new Label("Status"), 0, 1);
+				if (selectedDocumentPerOrder != null) {
+					ComboBox<ProcessingStatus> processingStatusNode = new ComboBox<>(FXCollections
+							.observableArrayList(ProcessingStatus.values()));
+					processingStatusNode.setVisibleRowCount(ProcessingStatus.values().length + 1);
+					processingStatusNode.setConverter(new ProcessingStatusConverter(enumBundle));
+					processingStatusNode.getSelectionModel().select(processingStatus);
+					dialogContent.add(processingStatusNode, 1, 1);
+
+					dialog.setResultConverter(dialogButton -> {
+						if (dialogButton == changeButtonType) {
+							return new Pair<DocumentDto, ProcessingStatus>(selectedDocument, processingStatusNode
+									.getSelectionModel().getSelectedItem());
+						}
+						return null;
+					});
+				} else {
+					TextField processingStatusNode = new TextField(enumBundle.getString(processingStatus.name()));
+					processingStatusNode.setEditable(false);
+					dialogContent.add(processingStatusNode, 1, 1);
+					dialog.setResultConverter(dialogButton -> {
+						return null;
+					});
+				}
+
+				dialog.getDialogPane().setContent(dialogContent);
+
+				Optional<Pair<DocumentDto, ProcessingStatus>> result = dialog.showAndWait();
+
+				if (result.isPresent()) {
+					Pair<DocumentDto, ProcessingStatus> res = result.get();
+					if (res.getValue().equals(ProcessingStatus.NONE)) {
+						DocumentDto selectedDoc = res.getKey();
+						currentItem.getDocumentPerOrder().removeIf(
+								d -> d.getDocument().getDocumentId().get() == selectedDoc.getDocumentId().get());
+						selecterDocument.getItems().remove(selectedDoc);
+						if (selectedDoc != invDocDto) {
+							allDocuments.getItems().add(selectedDoc);
 						}
 					}
-					if (selectedDocumentPerOrder != null) {
-						processingStatus = currentItem.getDocumentPerOrder()
-								.filtered(p -> p.getDocument().getDocumentId() == selectedDocument.getDocumentId())
-								.get(0).getProcessingStatus().get();
-					} else {
-						processingStatus = currentItem.getInvitationDocument().getStatus().get();
-					}
-					if (event.getClickCount() == 2 && selectedDocument != null) {
-						Dialog<Pair<DocumentDto, ProcessingStatus>> dialog = new Dialog<>();
-						dialog.setTitle("Change Document Status");
-						dialog.setHeaderText("Select new status for curent document");
-						ButtonType changeButtonType = new ButtonType("Change", ButtonData.OK_DONE);
-						dialog.getDialogPane().getButtonTypes().addAll(changeButtonType, ButtonType.CANCEL);
-
-						GridPane dialogContent = new GridPane();
-						dialogContent.setVgap(10);
-						dialogContent.setHgap(10);
-						dialogContent.setPadding(new Insets(20, 20, 10, 10));
-
-						TextField docName = new TextField(selectedDocument.getName().get());
-						docName.setEditable(false);
-						docName.setPrefWidth(400);
-						dialogContent.add(new Label("Document name"), 0, 0);
-						dialogContent.add(docName, 1, 0);
-
-						dialogContent.add(new Label("Status"), 0, 1);
-						if (selectedDocumentPerOrder != null) {
-							ComboBox<String> processingStatusNode = new ComboBox<>(DetailedOrderConverter
-									.getProcessStatuses());
-							processingStatusNode.getSelectionModel().select(processingStatus);
-							dialogContent.add(processingStatusNode, 1, 1);
-
-							dialog.setResultConverter(dialogButton -> {
-								if (dialogButton == changeButtonType) {
-									return new Pair<DocumentDto, ProcessingStatus>(selectedDocument, ProcessingStatus
-											.valueOf(processingStatusNode.getSelectionModel().getSelectedItem()));
-								}
-								return null;
-							});
-						} else {
-							TextField processingStatusNode = new TextField(processingStatus);
-							processingStatusNode.setEditable(false);
-							dialogContent.add(processingStatusNode, 1, 1);
-							dialog.setResultConverter(dialogButton -> {
-								return null;
-							});
-						}
-
-						dialog.getDialogPane().setContent(dialogContent);
-
-						Optional<Pair<DocumentDto, ProcessingStatus>> result = dialog.showAndWait();
-
-						if (result.isPresent()) {
-							Pair<DocumentDto, ProcessingStatus> res = result.get();
-							if (res.getValue().equals(ProcessingStatus.NONE)) {
-								DocumentDto selectedDoc = res.getKey();
-								currentItem.getDocumentPerOrder()
-										.removeIf(
-												d -> d.getDocument().getDocumentId().get() == selectedDoc
-														.getDocumentId().get());
-								selecterDocument.getItems().remove(selectedDoc);
-								if (selectedDoc != invDocDto) {
-									allDocuments.getItems().add(selectedDoc);
-								}
-							}
-							selectedDocumentPerOrder.getProcessingStatus().set(res.getValue().name());
-						}
-					}
-				});
+					selectedDocumentPerOrder.getProcessingStatus().set(res.getValue());
+				}
+			}
+		});
 	}
 
 	public void refreshTable() {
@@ -316,9 +323,11 @@ public class DocumentolohController {
 		supplierColumn.setSortable(false);
 		dateColumn.setCellValueFactory(value -> value.getValue().getDate());
 		dateColumn.setSortable(false);
-		documentsColumn.setCellValueFactory(value -> value.getValue().getDocumnentsStatus());
+		documentsColumn.setCellValueFactory(value -> new SimpleStringProperty(enumBundle.getString(value.getValue()
+				.getDocumnentsStatus().get().name())));
 		documentsColumn.setSortable(false);
-		registrationColumn.setCellValueFactory(value -> value.getValue().getRegistration());
+		registrationColumn.setCellValueFactory(value -> new SimpleStringProperty(enumBundle.getString(value.getValue()
+				.getRegistration().get().name())));
 		registrationColumn.setSortable(false);
 		operatorColumn.setCellValueFactory(value -> value.getValue().getOperator());
 		operatorColumn.setSortable(false);

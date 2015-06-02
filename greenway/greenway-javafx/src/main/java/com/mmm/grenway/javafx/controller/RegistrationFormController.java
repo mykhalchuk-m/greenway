@@ -237,7 +237,7 @@ public class RegistrationFormController {
 
 	@FXML
 	private void doSaveRegistration(ActionEvent event) {
-		detailedOrderDto.getOrderType().set(OrderType.REGISTER.name());
+		detailedOrderDto.getOrderType().set(OrderType.REGISTER);
 		readPrevVisasFields();
 		detailedOrderService.save(detailedOrderDto);
 		clearAndGoToListPane(event);
@@ -245,7 +245,7 @@ public class RegistrationFormController {
 
 	@FXML
 	private void doSaveConsulting(ActionEvent event) {
-		detailedOrderDto.getOrderType().set(OrderType.CONSULT.name());
+		detailedOrderDto.getOrderType().set(OrderType.CONSULT);
 		baseOrderService.save(BaseOrderConverter.getBaseOrderDto(detailedOrderDto));
 		clearAndGoToListPane(event);
 	}

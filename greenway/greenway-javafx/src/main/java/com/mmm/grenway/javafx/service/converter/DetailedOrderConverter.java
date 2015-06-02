@@ -4,18 +4,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 
 import com.mmm.greenway.entity.BaseOrder;
 import com.mmm.greenway.entity.DetailedOrder;
 import com.mmm.greenway.entity.DocumentPerOrder;
 import com.mmm.greenway.entity.Invitation;
-import com.mmm.greenway.entity.OrderType;
 import com.mmm.greenway.entity.ProcessingStatus;
 import com.mmm.grenway.javafx.dto.DateIntervalDto;
 import com.mmm.grenway.javafx.dto.DetailedOrderDto;
@@ -26,16 +24,13 @@ public class DetailedOrderConverter {
 		detailedOrder.setId(detailedOrderDto.getId().get());
 		detailedOrder.setClientName(detailedOrderDto.getClientName().get());
 		detailedOrder.setDate(LocalDateTime.now());
-		String orderType = detailedOrderDto.getOrderType().get();
-		detailedOrder.setOrderType(orderType == null ? OrderType.CONSULT : OrderType.valueOf(orderType));
-		String documentsStatus = detailedOrderDto.getDocumnentsStatus().get();
-		detailedOrder.setDocumentsStatus(documentsStatus == null ? ProcessingStatus.NONE : ProcessingStatus
-				.valueOf(documentsStatus));
+		detailedOrder.setOrderType(detailedOrderDto.getOrderType().get());
+		ProcessingStatus documentsStatus = detailedOrderDto.getDocumnentsStatus().get();
+		detailedOrder.setDocumentsStatus(documentsStatus == null ? ProcessingStatus.NONE : documentsStatus);
 		detailedOrder.setNote(detailedOrderDto.getNote().get());
 		detailedOrder.setPhoneNumber(detailedOrderDto.getPhoneNumber().get());
-		String registration = detailedOrderDto.getRegistration().get();
-		detailedOrder.setRegistration(registration == null ? ProcessingStatus.NONE : ProcessingStatus
-				.valueOf(registration));
+		ProcessingStatus registration = detailedOrderDto.getRegistration().get();
+		detailedOrder.setRegistration(registration == null ? ProcessingStatus.NONE : registration);
 		detailedOrder.setSupplierName(detailedOrderDto.getSupplierName().get());
 		detailedOrder.setOrderClientAddress(OrderClientAddressConverter.toOrderClientAddress(detailedOrderDto
 				.getOrderClientAddressDto()));
@@ -57,13 +52,14 @@ public class DetailedOrderConverter {
 				e -> {
 					DocumentPerOrder documentPerOrder = new DocumentPerOrder();
 					documentPerOrder.setId(e.getId() == null ? null : e.getId().get());
-					documentPerOrder.setProcessingStatus(!e.getProcessingStatus().get().isEmpty() ? ProcessingStatus
-							.valueOf(e.getProcessingStatus().get()) : ProcessingStatus.NONE);
+					ProcessingStatus docProcessingStatus = e.getProcessingStatus().get();
+					documentPerOrder.setProcessingStatus(docProcessingStatus != null ? docProcessingStatus
+							: ProcessingStatus.NONE);
 					documentPerOrder.setDocument(DocumentConverter.toDocument(e.getDocument()));
 					documentsPerOrder.add(documentPerOrder);
 				});
 		detailedOrder.setDocumentPerOrders(documentsPerOrder);
-		
+
 		if (detailedOrderDto.getInvitationDocument().getTitle().getValue() != null) {
 			Invitation invitationDocument = new Invitation();
 			if (detailedOrderDto.getInvitationDocument().getId().getValue() != null) {
@@ -71,10 +67,11 @@ public class DetailedOrderConverter {
 			}
 			invitationDocument.setTitle(detailedOrderDto.getInvitationDocument().getTitle().get());
 			invitationDocument.setPrice(detailedOrderDto.getInvitationDocument().getPrice().get());
-			String invitationDocumentProcessStatus = detailedOrderDto.getInvitationDocument().getStatus().get();
-			if (invitationDocumentProcessStatus != null && !invitationDocumentProcessStatus.isEmpty()) {
-				invitationDocument.setProcessingStatus(ProcessingStatus.valueOf(invitationDocumentProcessStatus));
-			} 
+			ProcessingStatus invitationDocumentProcessStatus = detailedOrderDto.getInvitationDocument().getStatus()
+					.get();
+			invitationDocument
+					.setProcessingStatus(invitationDocumentProcessStatus != null ? invitationDocumentProcessStatus
+							: ProcessingStatus.NONE);
 			detailedOrder.setInvitationDocument(invitationDocument);
 		}
 		if (detailedOrderDto.getRegistrationDate().get() != null) {
@@ -82,7 +79,7 @@ public class DetailedOrderConverter {
 		}
 		return detailedOrder;
 	}
-	
+
 	public static void enrichWithBaseOrder(DetailedOrderDto detailedOrderDto, BaseOrder baseOrder) {
 		detailedOrderDto.getId().set(baseOrder.getId());
 		detailedOrderDto.getClientName().set(baseOrder.getClientName());
@@ -188,15 +185,15 @@ public class DetailedOrderConverter {
 					.set(detailedOrder.getSuitableInOutDates().getFromDate());
 			detailedOrderDto.getSuitableInOutDatesDto().getTo().set(detailedOrder.getSuitableInOutDates().getToDate());
 		}
-		
+
 		detailedOrder.getPreviousVisasDates().forEach(e -> {
 			detailedOrderDto.getPreviousVisasDates().add(new DateIntervalDto(e));
 		});
 	}
 
-	public static ObservableList<String> getProcessStatuses() {
+	public static ObservableList<String> getProcessStatuses(ResourceBundle enumBundle) {
 		return FXCollections.observableArrayList(Arrays.asList(ProcessingStatus.values()).stream()
-				.map(role -> role.toString()).collect(Collectors.toList()));
+				.map(role -> enumBundle.getString(role.name())).collect(Collectors.toList()));
 	}
 
 	public static ObservableList<DetailedOrderDto> convertToDetailedOrderDto(List<DetailedOrder> list) {

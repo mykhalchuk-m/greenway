@@ -24,13 +24,12 @@ public class InivitationContentHelper {
 	public Tab genetateInivitationTab() {
 		Tab inivitationTab = new Tab(resourceBundle.getString("main.tab.inv.title"));
 		inivitationTab.setClosable(false);
-		inivitationTab.selectedProperty().addListener(
-				(ob, ov, nv) -> {
-					if (nv) {
-						inivitationTab.setContent(screenConfig.getView(invitationDeliveryController,
-								"InvitationDeliveryPane.fxml"));
-					}
-				});
+		inivitationTab.setContent(screenConfig.getView(invitationDeliveryController, "InvitationDeliveryPane.fxml"));
+		inivitationTab.selectedProperty().addListener((ob, ov, nv) -> {
+			if (nv) {
+				invitationDeliveryController.refreshTable();
+			}
+		});
 		return inivitationTab;
 	}
 

@@ -1,11 +1,15 @@
 package com.mmm.grenway.javafx.dto;
 
 import javafx.beans.property.LongProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import com.mmm.greenway.entity.BaseOrder;
+import com.mmm.greenway.entity.OrderType;
+import com.mmm.greenway.entity.ProcessingStatus;
 import com.mmm.grenway.javafx.util.DateUtil;
 
 public class BaseOrderDto {
@@ -16,9 +20,9 @@ public class BaseOrderDto {
 	private StringProperty operator;
 	private StringProperty note;
 	private StringProperty date;
-	private StringProperty documnentsStatus;
-	private StringProperty registration;
-	private StringProperty orderType;
+	private ObjectProperty<ProcessingStatus> documnentsStatus;
+	private ObjectProperty<ProcessingStatus> registration;
+	private ObjectProperty<OrderType> orderType;
 
 	public BaseOrderDto(BaseOrder baseOrder) {
 		id = new SimpleLongProperty(baseOrder.getId());
@@ -27,10 +31,10 @@ public class BaseOrderDto {
 		phoneNumber = new SimpleStringProperty(baseOrder.getPhoneNumber());
 		operator = new SimpleStringProperty(baseOrder.getOperator().getUserName());
 		date = new SimpleStringProperty(DateUtil.format(baseOrder.getDate()));
-		documnentsStatus = new SimpleStringProperty(baseOrder.getDocumentsStatus().name());
-		registration = new SimpleStringProperty(baseOrder.getRegistration().name());
+		documnentsStatus = new SimpleObjectProperty<ProcessingStatus>(baseOrder.getDocumentsStatus());
+		registration = new SimpleObjectProperty<ProcessingStatus>(baseOrder.getRegistration());
 		note = new SimpleStringProperty(baseOrder.getNote());
-		orderType = new SimpleStringProperty(baseOrder.getOrderType().name());
+		orderType = new SimpleObjectProperty<OrderType>(baseOrder.getOrderType());
 	}
 
 	public BaseOrderDto() {
@@ -40,10 +44,10 @@ public class BaseOrderDto {
 		phoneNumber = new SimpleStringProperty();
 		setOperator(new SimpleStringProperty());
 		setDate(new SimpleStringProperty());
-		documnentsStatus = new SimpleStringProperty();
-		setRegistration(new SimpleStringProperty());
+		documnentsStatus = new SimpleObjectProperty<ProcessingStatus>();
+		registration = new SimpleObjectProperty<ProcessingStatus>();
 		note = new SimpleStringProperty();
-		orderType = new SimpleStringProperty();
+		orderType = new SimpleObjectProperty<OrderType>();
 	}
 
 	public StringProperty getSupplierName() {
@@ -94,19 +98,19 @@ public class BaseOrderDto {
 		this.date = date;
 	}
 
-	public StringProperty getRegistration() {
+	public ObjectProperty<ProcessingStatus> getRegistration() {
 		return registration;
 	}
 
-	public void setRegistration(StringProperty registration) {
+	public void setRegistration(ObjectProperty<ProcessingStatus> registration) {
 		this.registration = registration;
 	}
 
-	public StringProperty getOrderType() {
+	public ObjectProperty<OrderType> getOrderType() {
 		return orderType;
 	}
 
-	public void setOrderType(StringProperty orderType) {
+	public void setOrderType(ObjectProperty<OrderType> orderType) {
 		this.orderType = orderType;
 	}
 
@@ -118,11 +122,11 @@ public class BaseOrderDto {
 		this.id = id;
 	}
 
-	public StringProperty getDocumnentsStatus() {
+	public ObjectProperty<ProcessingStatus> getDocumnentsStatus() {
 		return documnentsStatus;
 	}
 
-	public void setDocumnentsStatus(StringProperty documnentsStatus) {
+	public void setDocumnentsStatus(ObjectProperty<ProcessingStatus> documnentsStatus) {
 		this.documnentsStatus = documnentsStatus;
 	}
 }

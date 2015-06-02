@@ -3,6 +3,7 @@ package com.mmm.grenway.javafx.controller;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -27,6 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.mmm.greenway.entity.OrderType;
 import com.mmm.grenway.javafx.controller.helper.TextFieldValidatable;
 import com.mmm.grenway.javafx.dto.BaseOrderDto;
 import com.mmm.grenway.javafx.dto.BaseOrderFilterDto;
@@ -47,11 +49,13 @@ public class ConsultDetailsController {
 	protected BaseOrderService baseOrderService;
 	@Autowired
 	protected ResourceBundle resourceBundle;
+	@Autowired
+	protected ResourceBundle enumBundle;
 
 	protected ObservableList<BaseOrderDto> getData() {
 		return baseOrderService.findOrderDetails(baseOrderFilterDto);
 	}
-	
+
 	@FXML
 	private void initialize() {
 		System.out.println("ConsultDetailsController");
@@ -171,17 +175,19 @@ public class ConsultDetailsController {
 		} else {
 			baseOrderDto.getSupplierName().set(supplierField.getText());
 		}
-		baseOrderDto.getPhoneNumber().set(new StringBuilder(phoneCountryCode.getText()).append("(").append(phoneCodes.getText())
-				.append(")").append(clientPhone.getText()).toString());
+		baseOrderDto.getPhoneNumber().set(
+				new StringBuilder(phoneCountryCode.getText()).append("(").append(phoneCodes.getText()).append(")")
+						.append(clientPhone.getText()).toString());
 		baseOrderDto.getNote().set(noteArea.getText());
 		baseOrderDto.getDate().set(DateUtil.format(LocalDateTime.now()));
+		baseOrderDto.getOrderType().set(OrderType.CONSULT);
 		return baseOrderDto;
 	}
 
 	protected boolean isFormValid() {
 		return supplierField.isValid() && clientName.isValid() && phoneCodes.isValid() && clientPhone.isValid();
 	}
-	
+
 	public void refreshTable() {
 		baseOrderTab.setItems(getData());
 	}
@@ -197,11 +203,14 @@ public class ConsultDetailsController {
 		supplierColumn.setSortable(false);
 		dateColumn.setCellValueFactory(value -> value.getValue().getDate());
 		dateColumn.setSortable(false);
-		orderTypeColumn.setCellValueFactory(value -> value.getValue().getOrderType());
+		orderTypeColumn.setCellValueFactory(value -> new SimpleStringProperty(enumBundle.getString(value.getValue()
+				.getOrderType().get().name())));
 		orderTypeColumn.setSortable(false);
-		documentsColumn.setCellValueFactory(value -> value.getValue().getDocumnentsStatus());
+		documentsColumn.setCellValueFactory(value -> new SimpleStringProperty(enumBundle.getString(value.getValue()
+				.getDocumnentsStatus().get().name())));
 		documentsColumn.setSortable(false);
-		registrationColumn.setCellValueFactory(value -> value.getValue().getRegistration());
+		registrationColumn.setCellValueFactory(value -> new SimpleStringProperty(enumBundle.getString(value.getValue()
+				.getRegistration().get().name())));
 		registrationColumn.setSortable(false);
 		operatorColumn.setCellValueFactory(value -> value.getValue().getOperator());
 		operatorColumn.setSortable(false);

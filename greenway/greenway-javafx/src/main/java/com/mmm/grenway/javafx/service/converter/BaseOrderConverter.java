@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 
 import com.mmm.greenway.data.repository.UserRepository;
 import com.mmm.greenway.entity.BaseOrder;
-import com.mmm.greenway.entity.OrderType;
 import com.mmm.grenway.javafx.dto.BaseOrderDto;
 import com.mmm.grenway.javafx.dto.DetailedOrderDto;
 
@@ -27,8 +26,7 @@ public class BaseOrderConverter {
 		baseOrder.setOperator(userRepository.findOne(baseOrderDto.getOperator().get()));
 		baseOrder.setPhoneNumber(baseOrderDto.getPhoneNumber().get());
 		baseOrder.setSupplierName(baseOrderDto.getSupplierName().get());
-		String orderType = baseOrderDto.getOrderType().get();
-		baseOrder.setOrderType(orderType == null ? OrderType.CONSULT : OrderType.valueOf(orderType));
+		baseOrder.setOrderType(baseOrderDto.getOrderType().get());
 		return baseOrder;
 	}
 
