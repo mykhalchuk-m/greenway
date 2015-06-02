@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.entity.ProcessingStatus;
 import com.mmm.grenway.javafx.controller.converter.ProcessingStatusConverter;
+import com.mmm.grenway.javafx.controller.utils.DocumentsUtils;
 import com.mmm.grenway.javafx.dto.BaseOrderFilterDto;
 import com.mmm.grenway.javafx.dto.DetailedOrderDto;
 import com.mmm.grenway.javafx.service.DetailedOrderService;
@@ -50,6 +51,7 @@ public class InvitationDeliveryController {
 	@FXML
 	private void doSave() {
 		populateChangedProperties();
+		DocumentsUtils.calculateDocumentsStatus(currentItem);
 		detailedOrderService.save(currentItem);
 		refreshTable();
 		doCancel();

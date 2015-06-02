@@ -29,7 +29,11 @@ public class DocumentolohContentHelper {
 	public Tab genetateDocumentolohTab() {
 		Tab docTab = new Tab(resourceBundle.getString("main.tab.documetoloh.general.title"));
 
-		docTab.setContent(generatreTabPane());
+		docTab.selectedProperty().addListener((ob, ov, nv) -> {
+			if (nv) {
+				docTab.setContent(generatreTabPane());
+			}
+		});
 		docTab.setClosable(false);
 
 		return docTab;

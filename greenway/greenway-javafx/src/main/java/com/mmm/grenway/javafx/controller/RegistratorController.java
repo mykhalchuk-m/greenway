@@ -51,6 +51,7 @@ public class RegistratorController {
 	private void doSave() {
 		populateChangedProperties();
 		detailedOrderService.save(currentItem);
+		clientsTable.setItems(getData());
 		doCancel();
 	}
 

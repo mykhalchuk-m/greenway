@@ -3,7 +3,6 @@ package com.mmm.grenway.javafx.controller;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -40,6 +39,7 @@ import org.springframework.stereotype.Component;
 import com.mmm.greenway.entity.ProcessingStatus;
 import com.mmm.grenway.javafx.controller.converter.ProcessingStatusConverter;
 import com.mmm.grenway.javafx.controller.helper.TextFieldValidatable;
+import com.mmm.grenway.javafx.controller.utils.DocumentsUtils;
 import com.mmm.grenway.javafx.dto.BaseOrderFilterDto;
 import com.mmm.grenway.javafx.dto.DetailedOrderDto;
 import com.mmm.grenway.javafx.dto.DocumentDto;
@@ -109,7 +109,8 @@ public class DocumentolohController {
 
 	@FXML
 	private void doSendToInvitationDelivery() {
-		if (currentItem.getDocumnentsStatus().get().equals(ProcessingStatus.NONE)) {
+		if (currentItem.getInvitationDocument() == null
+				|| currentItem.getInvitationDocument().getStatus().get().equals(ProcessingStatus.NONE)) {
 			populateChangedProperties();
 			InvitationDto invitationDocument = new InvitationDto();
 			invitationDocument.getTitle().set(resourceBundle.getString("main.tab.admin.doc.invdocname"));
@@ -171,19 +172,7 @@ public class DocumentolohController {
 	@FXML
 	private void doSave() {
 		populateChangedProperties();
-		if (currentItem.getDocumentPerOrder() != null && currentItem.getDocumentPerOrder().size() != 0) {
-			List<String> statuses = currentItem.getDocumentPerOrder().stream()
-					.map(f -> f.getProcessingStatus().get().name()).collect(Collectors.toList());
-			if (statuses.contains(ProcessingStatus.IN_PROGRESS.name())) {
-				currentItem.getDocumnentsStatus().set(ProcessingStatus.IN_PROGRESS);
-			} else {
-				statuses.sort((str1, str2) -> {
-					return str1.compareTo(str2) * (-1);
-				});
-
-				currentItem.getDocumnentsStatus().set(ProcessingStatus.valueOf(statuses.get(0)));
-			}
-		}
+		DocumentsUtils.calculateDocumentsStatus(currentItem);
 		detailedOrderService.save(currentItem);
 		doCancel();
 		refreshTable();
@@ -263,10 +252,12 @@ public class DocumentolohController {
 				TextField docName = new TextField(selectedDocument.getName().get());
 				docName.setEditable(false);
 				docName.setPrefWidth(400);
-				dialogContent.add(new Label(resourceBundle.getString("main.tab.documetoloh.docstatus.lable.docname")), 0, 0);
+				dialogContent.add(new Label(resourceBundle.getString("main.tab.documetoloh.docstatus.lable.docname")),
+						0, 0);
 				dialogContent.add(docName, 1, 0);
 
-				dialogContent.add(new Label(resourceBundle.getString("main.tab.documetoloh.docstatus.lable.docstatus")), 0, 1);
+				dialogContent.add(
+						new Label(resourceBundle.getString("main.tab.documetoloh.docstatus.lable.docstatus")), 0, 1);
 				if (selectedDocumentPerOrder != null) {
 					ComboBox<ProcessingStatus> processingStatusNode = new ComboBox<>(FXCollections
 							.observableArrayList(ProcessingStatus.values()));

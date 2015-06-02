@@ -18,7 +18,7 @@ public interface DetailedOrderRepository extends CrudRepository<DetailedOrder, L
 	List<DetailedOrder> findFirst100ByClientNameIgnoreCaseContainingAndPhoneNumberContainingAndRegistrationNotInOrderByDateDesc(
 			String clientName, String phoneNumber, Collection<ProcessingStatus> processingStatus);
 
-	@Query("select dor from DetailedOrder dor inner join dor.invitationDocument ind where upper(dor.clientName) like :clientName and dor.phoneNumber like :phoneNumber and ind.processingStatus not in (:processingStatus)")
+	@Query("select dor from DetailedOrder dor inner join dor.invitationDocument ind where upper(dor.clientName) like :clientName and dor.phoneNumber like :phoneNumber and ind.processingStatus not in (:processingStatus) order by dor.date")
 	List<DetailedOrder> findActiveForInvitator(@Param("clientName") String clientName,
 			@Param("phoneNumber") String phoneNumber,
 			@Param("processingStatus") Collection<ProcessingStatus> processingStatus);

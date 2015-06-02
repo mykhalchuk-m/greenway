@@ -60,7 +60,7 @@ public class DetailedOrderConverter {
 				});
 		detailedOrder.setDocumentPerOrders(documentsPerOrder);
 
-		if (detailedOrderDto.getInvitationDocument().getTitle().getValue() != null) {
+		if (detailedOrderDto.getInvitationDocument() != null) {
 			Invitation invitationDocument = new Invitation();
 			if (detailedOrderDto.getInvitationDocument().getId().getValue() != null) {
 				invitationDocument.setId(detailedOrderDto.getInvitationDocument().getId().get());
