@@ -106,7 +106,7 @@ public class MainController {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("About");
 		alert.setHeaderText(null);
-		alert.setContentText("This is the most anazinest program you have ever seen!");
+		alert.setContentText(resourceBundle.getString("menu.about"));
 
 		alert.showAndWait();
 	}

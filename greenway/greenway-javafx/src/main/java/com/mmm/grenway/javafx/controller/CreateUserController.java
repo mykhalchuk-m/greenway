@@ -23,21 +23,6 @@ public class CreateUserController {
 	@FXML
 	private void initialize() {
 		System.out.println("CreateUserController");
-//		createUserPane.setCenter(contentHelper.createUserForm(this::swithToShowUsersPane));
 	}
-
-//	public void swithToShowUsersPane(ActionEvent event, User user) {
-//		System.out.println(user);
-//		userRepository.save(user);
-//		System.out.println("in switch to pane action");
-//		try {
-//			Scene scene = ((Node) event.getTarget()).getScene();
-//			TabPane adminTabPane = (TabPane) scene.lookup("#adminTabPane");
-//
-//			adminTabPane.getSelectionModel().select(2);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 }

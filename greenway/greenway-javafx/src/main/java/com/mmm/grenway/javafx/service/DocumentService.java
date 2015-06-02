@@ -26,4 +26,8 @@ public class DocumentService {
 		document.setPrice(documentDto.getPrice().get());
 		documentRepository.save(document);
 	}
+	
+	public void remove(Long id) {
+		documentRepository.delete(id);
+	}
 }

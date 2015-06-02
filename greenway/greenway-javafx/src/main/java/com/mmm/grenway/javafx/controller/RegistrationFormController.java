@@ -100,10 +100,10 @@ public class RegistrationFormController {
 		hBox.setPadding(new Insets(20, 0, 0, 0));
 		hBox.setAlignment(Pos.TOP_RIGHT);
 
-		Button save = new Button("Edit...");
+		Button save = new Button(resourceBundle.getString("main.tab.documetoloh.edit"));
 		save.setOnAction(v -> doSaveConsulting(v));
 
-		Button cancel = new Button("Cancel...");
+		Button cancel = new Button(resourceBundle.getString("main.tab.documetoloh.cancel"));
 		cancel.setOnAction(v -> doSaveConsulting(v));
 
 		hBox.getChildren().addAll(save, cancel);

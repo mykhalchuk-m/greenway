@@ -94,7 +94,7 @@
 								</TextArea>
 								<HBox>
 									<children>
-										<Hyperlink fx:id="addDocumentLink" text="Add doument" />
+										<Hyperlink fx:id="addDocumentLink" text="%main.tab.documetoloh.adddocument" />
 									</children>
 								</HBox>
 								<VBox prefWidth="100.0">

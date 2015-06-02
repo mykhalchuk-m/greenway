@@ -27,7 +27,7 @@ public class DocumentolohContentHelper {
 	private RegistrationFormController registrationFormController;
 
 	public Tab genetateDocumentolohTab() {
-		Tab docTab = new Tab("Documentoloh's Tab");
+		Tab docTab = new Tab(resourceBundle.getString("main.tab.documetoloh.general.title"));
 
 		docTab.setContent(generatreTabPane());
 		docTab.setClosable(false);
@@ -54,7 +54,7 @@ public class DocumentolohContentHelper {
 		});
 
 		Tab docFormTab = new Tab();
-		docFormTab.setText("Order Information");
+		docFormTab.setText(resourceBundle.getString("main.tab.documetoloh.form.title"));
 		docFormTab.setClosable(false);
 		docFormTab.setContent(screenConfig.getView(registrationFormController, "RegistrationFormPane.fxml"));
 		docFormTab.selectedProperty().addListener((ob, ov, nv) -> {

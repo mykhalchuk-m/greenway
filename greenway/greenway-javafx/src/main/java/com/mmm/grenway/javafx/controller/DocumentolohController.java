@@ -118,9 +118,9 @@ public class DocumentolohController {
 			doSave();
 		} else {
 			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warning");
-			alert.setHeaderText("Same order can't be send to intitator more then once");
-			alert.setContentText("Select another document ot check invitation status in the table");
+			alert.setTitle(resourceBundle.getString("main.tab.documetoloh.warn.title"));
+			alert.setHeaderText(resourceBundle.getString("main.tab.documetoloh.warn.header"));
+			alert.setContentText(resourceBundle.getString("main.tab.documetoloh.warn.content"));
 			alert.showAndWait();
 		}
 	}
@@ -131,7 +131,11 @@ public class DocumentolohController {
 			currentItem.getRegistration().set(ProcessingStatus.NEW);
 			doSave();
 		} else {
-			// TODO: show info alert
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle(resourceBundle.getString("main.tab.documetoloh.warn1.title"));
+			alert.setHeaderText(resourceBundle.getString("main.tab.documetoloh.warn1.header"));
+			alert.setContentText(resourceBundle.getString("main.tab.documetoloh.warn1.content"));
+			alert.showAndWait();
 		}
 	}
 
@@ -246,8 +250,8 @@ public class DocumentolohController {
 			}
 			if (event.getClickCount() == 2 && selectedDocument != null) {
 				Dialog<Pair<DocumentDto, ProcessingStatus>> dialog = new Dialog<>();
-				dialog.setTitle("Change Document Status");
-				dialog.setHeaderText("Select new status for curent document");
+				dialog.setTitle(resourceBundle.getString("main.tab.documetoloh.docstatus.title"));
+				dialog.setHeaderText(resourceBundle.getString("main.tab.documetoloh.docstatus.header"));
 				ButtonType changeButtonType = new ButtonType("Change", ButtonData.OK_DONE);
 				dialog.getDialogPane().getButtonTypes().addAll(changeButtonType, ButtonType.CANCEL);
 
@@ -259,10 +263,10 @@ public class DocumentolohController {
 				TextField docName = new TextField(selectedDocument.getName().get());
 				docName.setEditable(false);
 				docName.setPrefWidth(400);
-				dialogContent.add(new Label("Document name"), 0, 0);
+				dialogContent.add(new Label(resourceBundle.getString("main.tab.documetoloh.docstatus.lable.docname")), 0, 0);
 				dialogContent.add(docName, 1, 0);
 
-				dialogContent.add(new Label("Status"), 0, 1);
+				dialogContent.add(new Label(resourceBundle.getString("main.tab.documetoloh.docstatus.lable.docstatus")), 0, 1);
 				if (selectedDocumentPerOrder != null) {
 					ComboBox<ProcessingStatus> processingStatusNode = new ComboBox<>(FXCollections
 							.observableArrayList(ProcessingStatus.values()));

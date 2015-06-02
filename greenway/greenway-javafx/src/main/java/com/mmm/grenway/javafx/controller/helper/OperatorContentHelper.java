@@ -57,7 +57,7 @@ public class OperatorContentHelper {
 
 	private TabPane generateTabPane() {
 		Tab orderDetail = new Tab();
-		orderDetail.setText("Order Details");
+		orderDetail.setText(resourceBundle.getString("main.tab.operator.od.title"));
 		orderDetail.setClosable(false);
 		orderDetail.setContent(screenConfig.getView(consultDetailsController, "ConsultDetailsPane.fxml"));
 		orderDetail.selectedProperty().addListener((ob, ov, nv) -> {
@@ -67,7 +67,7 @@ public class OperatorContentHelper {
 		});
 
 		Tab registration = new Tab();
-		registration.setText("Registration");
+		registration.setText(resourceBundle.getString("main.tab.operator.reg.title"));
 		registration.setClosable(false);
 		registration.setContent(screenConfig.getView(registrationFormController, "RegistrationFormPane.fxml"));
 		registration.selectedProperty().addListener((ob, ov, nv) -> {

@@ -76,6 +76,7 @@ public class AdminContentHelper {
 		adminTabPane.setId("adminTabPane");
 		adminTabPane.setSide(Side.LEFT);
 		adminTab.setContent(adminTabPane);
+		adminTab.setClosable(false);
 
 		return adminTab;
 	}
