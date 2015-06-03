@@ -62,52 +62,56 @@ public class RegistrationFormController {
 		date.valueProperty().set(LocalDate.now());
 
 		sexmail.selectedProperty().addListener((obv, ov, nw) -> {
-			if (nw) {
-				// TODO: prevent NPE
+			if (nw && sexmail.getUserData() != null) {
 				detailedOrderDto.getOrderGeneralInfoDto().getSex().set(sexmail.getUserData().toString());
 			}
 		});
 		sexfemail.selectedProperty().addListener((obv, ov, nw) -> {
-			if (nw) {
+			if (nw && sexfemail.getUserData() != null) {
 				detailedOrderDto.getOrderGeneralInfoDto().getSex().set(sexfemail.getUserData().toString());
 			}
 		});
 
 		startDateProviding.setDayCellFactory(new DatePickerCellFactory(endDateProviding, false));
 		endDateProviding.setDayCellFactory(new DatePickerCellFactory(startDateProviding, true));
-		
+
 		prevVisaFrom0.setDayCellFactory(new DatePickerCellFactory(prevVisaTo0, false));
 		prevVisaTo0.setDayCellFactory(new DatePickerCellFactory(prevVisaFrom0, true));
 	}
 
 	public void initOperatorButtonBar() {
-		HBox hBox = new HBox(10);
-		hBox.setPadding(new Insets(20, 0, 0, 0));
-		hBox.setAlignment(Pos.TOP_RIGHT);
+		if (!detailedOrderDto.getIsDone().get()) {
+			HBox hBox = new HBox(10);
+			hBox.setPadding(new Insets(20, 0, 0, 0));
+			hBox.setAlignment(Pos.TOP_RIGHT);
 
-		Button saveConsulting = new Button(resourceBundle.getString("main.tab.operator.reg.form.button.saveConsulting"));
-		saveConsulting.setOnAction(v -> doSaveConsulting(v));
+			Button saveConsulting = new Button(
+					resourceBundle.getString("main.tab.operator.reg.form.button.saveConsulting"));
+			saveConsulting.setOnAction(v -> doSaveConsulting(v));
 
-		Button saveRegistration = new Button(resourceBundle.getString("main.tab.operator.reg.form.button.save"));
-		saveRegistration.setOnAction(v -> doSaveRegistration(v));
+			Button saveRegistration = new Button(resourceBundle.getString("main.tab.operator.reg.form.button.save"));
+			saveRegistration.setOnAction(v -> doSaveRegistration(v));
 
-		hBox.getChildren().addAll(saveRegistration, saveConsulting);
-		root.setBottom(hBox);
+			hBox.getChildren().addAll(saveRegistration, saveConsulting);
+			root.setBottom(hBox);
+		}
 	}
 
 	public void initDocumentolohButtonBar() {
-		HBox hBox = new HBox(10);
-		hBox.setPadding(new Insets(20, 0, 0, 0));
-		hBox.setAlignment(Pos.TOP_RIGHT);
+		if (!detailedOrderDto.getIsDone().get()) {
+			HBox hBox = new HBox(10);
+			hBox.setPadding(new Insets(20, 0, 0, 0));
+			hBox.setAlignment(Pos.TOP_RIGHT);
 
-		Button save = new Button(resourceBundle.getString("main.tab.documetoloh.edit"));
-		save.setOnAction(v -> doSaveConsulting(v));
+			Button save = new Button(resourceBundle.getString("main.tab.documetoloh.edit"));
+			save.setOnAction(v -> doSaveConsulting(v));
 
-		Button cancel = new Button(resourceBundle.getString("main.tab.documetoloh.cancel"));
-		cancel.setOnAction(v -> doSaveConsulting(v));
+			Button cancel = new Button(resourceBundle.getString("main.tab.documetoloh.cancel"));
+			cancel.setOnAction(v -> doSaveConsulting(v));
 
-		hBox.getChildren().addAll(save, cancel);
-		root.setBottom(hBox);
+			hBox.getChildren().addAll(save, cancel);
+			root.setBottom(hBox);
+		}
 	}
 
 	// TODO: change it to use DTO

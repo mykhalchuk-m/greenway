@@ -88,19 +88,19 @@ public class AdminContentHelper {
 		gridPane.setVgap(10);
 		gridPane.setPadding(new Insets(20, 20, 20, 20));
 
-		Label userName = new Label("User Name:");
+		Label userName = new Label(resourceBundle.getString("main.tab.admin.createuser.username.lable"));
 		gridPane.add(userName, 0, 0);
 
 		TextField userNameField = new TextField();
 		gridPane.add(userNameField, 1, 0);
 
-		Label password = new Label("Password:");
+		Label password = new Label(resourceBundle.getString("main.tab.admin.createuser.password.lable"));
 		gridPane.add(password, 0, 1);
 
 		PasswordField passwordField = new PasswordField();
 		gridPane.add(passwordField, 1, 1);
 
-		Label confirmpassword = new Label("Confirm password:");
+		Label confirmpassword = new Label(resourceBundle.getString("main.tab.admin.createuser.confirmpassword.lable"));
 		gridPane.add(confirmpassword, 0, 2);
 
 		PasswordField confirmPasswordField = new PasswordField();
@@ -112,19 +112,23 @@ public class AdminContentHelper {
 		ComboBox<String> roles = new ComboBox<String>(UserDtoConverter.getUserRoles());
 		gridPane.add(roles, 1, 3);
 
-		Button btn = new Button("Sign in");
+		Button btn = new Button(resourceBundle.getString("main.tab.admin.createuser.createuser"));
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(btn);
 		gridPane.add(hbBtn, 1, 4);
 
-		ContextMenu userNameAlert = new ContextMenu(new MenuItem("User name is required"));
+		ContextMenu userNameAlert = new ContextMenu(new MenuItem(
+				resourceBundle.getString("main.tab.admin.createuser.validate.username")));
 		userNameAlert.setAutoHide(false);
-		ContextMenu passwordAlert = new ContextMenu(new MenuItem("Password is required"));
+		ContextMenu passwordAlert = new ContextMenu(new MenuItem(
+				resourceBundle.getString("main.tab.admin.createuser.validate.password")));
 		passwordAlert.setAutoHide(false);
-		ContextMenu confirmPasswordAlert = new ContextMenu(new MenuItem("Password doesn't match"));
+		ContextMenu confirmPasswordAlert = new ContextMenu(new MenuItem(
+				resourceBundle.getString("main.tab.admin.createuser.validate.confirmpassword")));
 		confirmPasswordAlert.setAutoHide(false);
-		ContextMenu userRoleAlert = new ContextMenu(new MenuItem("Select one of role"));
+		ContextMenu userRoleAlert = new ContextMenu(new MenuItem(
+				resourceBundle.getString("main.tab.admin.createuser.validate.role")));
 		userRoleAlert.setAutoHide(false);
 
 		btn.setOnAction(new EventHandler<ActionEvent>() {

@@ -33,12 +33,9 @@ public class OperatorContentHelper {
 		Tab operatorTab = new Tab();
 		operatorTab.setText(resourceBundle.getString("main.tab.operator.title"));
 
-		TabPane operatorTabPane = generateTabPane();
-
-		operatorTab.setContent(operatorTabPane);
 		operatorTab.selectedProperty().addListener((ob, ov, nv) -> {
 			if (nv) {
-				operatorTabPane.getSelectionModel().select(0);
+				operatorTab.setContent(generateTabPane());
 			}
 		});
 		operatorTab.setClosable(false);

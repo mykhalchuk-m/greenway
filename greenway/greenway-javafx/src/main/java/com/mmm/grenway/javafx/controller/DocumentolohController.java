@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -29,6 +30,8 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 
@@ -69,6 +72,9 @@ public class DocumentolohController {
 	@FXML
 	private void initialize() {
 		System.out.println("DocumentolohController");
+		buttonDone.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/img/task-completed-icon.png"), 30,
+				30, true, true)));
+		buttonDone.setVisible(false);
 		initTableColumns();
 		initTableRowDoubleClick();
 		initFiltersListeners();
@@ -203,6 +209,25 @@ public class DocumentolohController {
 								allDocuments.getItems().add(e);
 							}
 						});
+	}
+
+	@FXML
+	private void doDone() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle(resourceBundle.getString("main.tab.documetoloh.done.alert.title"));
+		alert.setHeaderText(resourceBundle.getString("main.tab.documetoloh.done.alert.header"));
+		alert.setContentText(resourceBundle.getString("main.tab.documetoloh.done.alert.content"));
+		ButtonType ok = new ButtonType(resourceBundle.getString("common.button.ok"), ButtonData.OK_DONE);
+		ButtonType cancel = new ButtonType(resourceBundle.getString("common.button.cancel"), ButtonData.CANCEL_CLOSE);
+		alert.getButtonTypes().setAll(ok, cancel);
+		
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get().equals(ok)) {
+			currentItem.getIsDone().set(true);
+			detailedOrderService.save(currentItem);
+			doCancel();
+			refreshTable();
+		}
 	}
 
 	private void populateChangedProperties() {
@@ -362,10 +387,18 @@ public class DocumentolohController {
 					}
 					allDocuments.getItems().removeAll(currentItemDocs);
 					addDocumentLink.setDisable(false);
+					shouldShowDoneButton();
 				}
 			});
 			return row;
 		});
+	}
+
+	private void shouldShowDoneButton() {
+		if (ProcessingStatus.DONE.equals(currentItem.getDocumnentsStatus().get())
+				&& ProcessingStatus.DONE.equals(currentItem.getRegistration().get())) {
+			buttonDone.setVisible(true);
+		}
 	}
 
 	@FXML
@@ -412,4 +445,6 @@ public class DocumentolohController {
 	private ListView<DocumentDto> selecterDocument;
 	@FXML
 	private Hyperlink addDocumentLink;
+	@FXML
+	private Button buttonDone;
 }

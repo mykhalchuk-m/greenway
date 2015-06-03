@@ -39,9 +39,9 @@
             <Label text="%main.tab.admin.edit.enabled" GridPane.rowIndex="6" />
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
                <children>
-                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#editUser" text="%main.tab.admin.edit.button.save" />
-                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteUser" text="%main.tab.admin.edit.button.delete" />
-                  <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancel" text="%main.tab.admin.edit.button.cancel" />
+                  <Button mnemonicParsing="false" onAction="#editUser" text="%main.tab.admin.edit.button.save" />
+                  <Button mnemonicParsing="false" onAction="#deleteUser" text="%main.tab.admin.edit.button.delete" />
+                  <Button mnemonicParsing="false" onAction="#cancel" text="%main.tab.admin.edit.button.cancel" />
                </children>
             </HBox>
          </children>

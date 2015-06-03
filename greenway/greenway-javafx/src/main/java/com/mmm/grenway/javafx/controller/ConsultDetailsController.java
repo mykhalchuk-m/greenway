@@ -9,16 +9,21 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -214,8 +219,24 @@ public class ConsultDetailsController {
 		registrationColumn.setSortable(false);
 		operatorColumn.setCellValueFactory(value -> value.getValue().getOperator());
 		operatorColumn.setSortable(false);
-		noteColumn.setCellValueFactory(value -> value.getValue().getNote());
-		noteColumn.setSortable(false);
+		isDoneColumn.setCellValueFactory(value -> value.getValue().getIsDone());
+		isDoneColumn.setCellFactory(value -> {
+			return new TableCell<BaseOrderDto, Boolean>() {
+				@Override
+				protected void updateItem(Boolean item, boolean empty) {
+					if (item != null && !empty && item) {
+						ImageView isDoneImage = new ImageView(new Image(getClass().getResourceAsStream(
+								"/img/done-icon.png")));
+						isDoneImage.setFitWidth(20);
+						isDoneImage.setFitHeight(20);
+						setPadding(new Insets(0));
+						setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+						setGraphic(isDoneImage);
+					}
+				}
+			};
+		});
+		isDoneColumn.setSortable(false);
 	}
 
 	protected void initFiltersListeners() {
@@ -249,9 +270,9 @@ public class ConsultDetailsController {
 	@FXML
 	protected TableColumn<BaseOrderDto, String> operatorColumn;
 	@FXML
-	protected TableColumn<BaseOrderDto, String> noteColumn;
-	@FXML
 	protected TableColumn<BaseOrderDto, String> orderTypeColumn;
+	@FXML
+	protected TableColumn<BaseOrderDto, Boolean> isDoneColumn;
 
 	@FXML
 	protected TextFieldValidatable supplierField;

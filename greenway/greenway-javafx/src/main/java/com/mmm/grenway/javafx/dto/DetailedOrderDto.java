@@ -3,14 +3,14 @@ package com.mmm.grenway.javafx.dto;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
-import com.mmm.greenway.entity.DetailedOrder;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import com.mmm.greenway.entity.DetailedOrder;
 
 public class DetailedOrderDto extends BaseOrderDto {
 	private OrderGeneralInfoDto orderGeneralInfoDto;

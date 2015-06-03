@@ -75,7 +75,7 @@ public class DocumentController {
 				protected void updateItem(DocumentDto item, boolean empty) {
 					if (item != null && !empty) {
 						ImageView removeImage = new ImageView(new Image(getClass().getResourceAsStream(
-								"/img/Remove-icon.png")));
+								"/img/remove-icon.png")));
 						removeImage.setFitHeight(20);
 						removeImage.setFitWidth(20);
 						Button button = new Button("", removeImage);

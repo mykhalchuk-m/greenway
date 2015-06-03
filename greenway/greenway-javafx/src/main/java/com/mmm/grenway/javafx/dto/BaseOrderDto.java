@@ -1,7 +1,9 @@
 package com.mmm.grenway.javafx.dto;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,6 +25,7 @@ public class BaseOrderDto {
 	private ObjectProperty<ProcessingStatus> documnentsStatus;
 	private ObjectProperty<ProcessingStatus> registration;
 	private ObjectProperty<OrderType> orderType;
+	private BooleanProperty isDone;
 
 	public BaseOrderDto(BaseOrder baseOrder) {
 		id = new SimpleLongProperty(baseOrder.getId());
@@ -35,6 +38,7 @@ public class BaseOrderDto {
 		registration = new SimpleObjectProperty<ProcessingStatus>(baseOrder.getRegistration());
 		note = new SimpleStringProperty(baseOrder.getNote());
 		orderType = new SimpleObjectProperty<OrderType>(baseOrder.getOrderType());
+		isDone = new SimpleBooleanProperty(baseOrder.getIsDone());
 	}
 
 	public BaseOrderDto() {
@@ -48,6 +52,7 @@ public class BaseOrderDto {
 		registration = new SimpleObjectProperty<ProcessingStatus>();
 		note = new SimpleStringProperty();
 		orderType = new SimpleObjectProperty<OrderType>();
+		isDone = new SimpleBooleanProperty(false);
 	}
 
 	public StringProperty getSupplierName() {
@@ -128,5 +133,13 @@ public class BaseOrderDto {
 
 	public void setDocumnentsStatus(ObjectProperty<ProcessingStatus> documnentsStatus) {
 		this.documnentsStatus = documnentsStatus;
+	}
+
+	public BooleanProperty getIsDone() {
+		return isDone;
+	}
+
+	public void setIsDone(BooleanProperty isDone) {
+		this.isDone = isDone;
 	}
 }

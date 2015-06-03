@@ -2,9 +2,7 @@ package com.mmm.grenway.javafx.service.converter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
@@ -77,6 +75,7 @@ public class DetailedOrderConverter {
 		if (detailedOrderDto.getRegistrationDate().get() != null) {
 			detailedOrder.setRegistrationDate(detailedOrderDto.getRegistrationDate().get());
 		}
+		detailedOrder.setIsDone(detailedOrderDto.getIsDone().get());
 		return detailedOrder;
 	}
 
@@ -189,11 +188,7 @@ public class DetailedOrderConverter {
 		detailedOrder.getPreviousVisasDates().forEach(e -> {
 			detailedOrderDto.getPreviousVisasDates().add(new DateIntervalDto(e));
 		});
-	}
-
-	public static ObservableList<String> getProcessStatuses(ResourceBundle enumBundle) {
-		return FXCollections.observableArrayList(Arrays.asList(ProcessingStatus.values()).stream()
-				.map(role -> enumBundle.getString(role.name())).collect(Collectors.toList()));
+		detailedOrderDto.getIsDone().set(detailedOrder.getIsDone());
 	}
 
 	public static ObservableList<DetailedOrderDto> convertToDetailedOrderDto(List<DetailedOrder> list) {

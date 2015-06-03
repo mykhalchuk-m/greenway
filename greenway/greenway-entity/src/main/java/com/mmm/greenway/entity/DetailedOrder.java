@@ -52,6 +52,7 @@ public class DetailedOrder extends BaseOrder {
 	@Column
 	private LocalDate registrationDate;
 
+
 	public OrderGeneralInfo getOrderGeneralInfo() {
 		return orderGeneralInfo;
 	}

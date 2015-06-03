@@ -41,7 +41,9 @@ public class BaseOrder {
 	private ProcessingStatus registration = ProcessingStatus.NONE;
 	@Enumerated(EnumType.STRING)
 	private OrderType orderType = OrderType.CONSULT;
-
+	@Column
+	private Boolean isDone = false;
+	
 	public Long getId() {
 		return id;
 	}
@@ -120,5 +122,13 @@ public class BaseOrder {
 
 	public void setDocumentsStatus(ProcessingStatus documentsStatus) {
 		this.documentsStatus = documentsStatus;
+	}
+	
+	public Boolean getIsDone() {
+		return isDone;
+	}
+
+	public void setIsDone(Boolean isDone) {
+		this.isDone = isDone;
 	}
 }

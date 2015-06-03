@@ -29,8 +29,8 @@
                             <TableColumn text="%main.tab.operator.od.table.docsstatus" fx:id="documentsColumn"/>
                             <TableColumn text="%main.tab.operator.od.table.regstatus" fx:id="registrationColumn"/>
                             <TableColumn text="%main.tab.operator.od.table.operator" fx:id="operatorColumn"/>
-                            <TableColumn text="%main.tab.operator.od.table.note" fx:id="noteColumn"/>
                             <TableColumn text="%main.tab.operator.od.table.date" fx:id="dateColumn"/>
+                            <TableColumn text="" fx:id="isDoneColumn" maxWidth="20" minWidth="20"/>
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

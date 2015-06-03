@@ -53,7 +53,7 @@ public class DetailedOrderService {
 
 	public ObservableList<DetailedOrderDto> findDetailedOrdersRegisterd(BaseOrderFilterDto baseOrderFilterDto) {
 		List<DetailedOrder> detailedOrders = detailedOrderRepository
-				.findFirst100ByClientNameIgnoreCaseContainingAndPhoneNumberContainingAndOrderTypeOrderByDateDesc(
+				.findFirst100ByClientNameIgnoreCaseContainingAndPhoneNumberContainingAndOrderTypeAndIsDoneFalseOrderByDateDesc(
 						baseOrderFilterDto.getClientNameFilter().get(),
 						baseOrderFilterDto.getPhoneNumberFilter().get(), OrderType.REGISTER);
 		return DetailedOrderConverter.convertToDetailedOrderDto(detailedOrders);
