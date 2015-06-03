@@ -15,6 +15,7 @@ public class UserDto {
 	private BooleanProperty accountNonLocked;
 	private BooleanProperty credentialsNonExpired;
 	private StringProperty roles;
+	private StringProperty location;
 
 	public UserDto() {
 		this(new User());
@@ -28,6 +29,7 @@ public class UserDto {
 		credentialsNonExpired = new SimpleBooleanProperty(user.getCredentialsNonExpired());
 		enabled = new SimpleBooleanProperty(user.getEnabled());
 		roles = new SimpleStringProperty(user.getRole() == null ? "" : user.getRole().name());
+		location = new SimpleStringProperty(user.getLocation());
 	}
 
 	public void applyChanges(UserDto userDto) {
@@ -105,5 +107,13 @@ public class UserDto {
 
 	public void setRoles(StringProperty roles) {
 		this.roles = roles;
+	}
+
+	public StringProperty getLocation() {
+		return location;
+	}
+
+	public void setLocation(StringProperty location) {
+		this.location = location;
 	}
 }

@@ -24,14 +24,16 @@ public class TempUserCreateService {
 		user.setUserName("admin");
 		user.setPassword(passwordEncoder.encode("admin"));
 		user.setRole(UserRole.ROLE_ADMIN);
+		user.setLocation("Lviv");
 		userRepository.save(user);
 	}
-
+;
 	private void createOperator(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		User user = new User();
 		user.setUserName("op");
 		user.setPassword(passwordEncoder.encode("op"));
 		user.setRole(UserRole.ROLE_OPERATOR);
+		user.setLocation("Lviv");
 		userRepository.save(user);
 	}
 	
@@ -40,6 +42,7 @@ public class TempUserCreateService {
 		user.setUserName("doc");
 		user.setPassword(passwordEncoder.encode("doc"));
 		user.setRole(UserRole.ROLE_DOKUMENTOLOH);
+		user.setLocation("Lviv");
 		userRepository.save(user);
 	}
 	
@@ -48,6 +51,7 @@ public class TempUserCreateService {
 		user.setUserName("reg");
 		user.setPassword(passwordEncoder.encode("reg"));
 		user.setRole(UserRole.ROLE_REGISTRATOR);
+		user.setLocation("Lviv");
 		userRepository.save(user);
 	}
 	
@@ -56,6 +60,7 @@ public class TempUserCreateService {
 		user.setUserName("inv");
 		user.setPassword(passwordEncoder.encode("inv"));
 		user.setRole(UserRole.ROLE_INVITATION_DELIVERY);
+		user.setLocation("Lviv");
 		userRepository.save(user);
 	}
 

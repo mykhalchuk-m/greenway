@@ -26,6 +26,8 @@ public class DetailedOrderService {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
+	private UserDtoService userService;
+	@Autowired
 	private BaseOrderRepository baseOrderRepository;
 	@Autowired
 	private BaseOrderService baseOrderService;
@@ -52,10 +54,11 @@ public class DetailedOrderService {
 	}
 
 	public ObservableList<DetailedOrderDto> findDetailedOrdersRegisterd(BaseOrderFilterDto baseOrderFilterDto) {
+		String location = userRepository.findOne(userService.getCurentUserName().get()).getLocation();
 		List<DetailedOrder> detailedOrders = detailedOrderRepository
-				.findFirst100ByClientNameIgnoreCaseContainingAndPhoneNumberContainingAndOrderTypeAndIsDoneFalseOrderByDateDesc(
+				.findFirst100ByClientNameIgnoreCaseContainingAndPhoneNumberContainingAndOrderTypeAndIsDoneFalseAndOperatorLocationOrderByDateDesc(
 						baseOrderFilterDto.getClientNameFilter().get(),
-						baseOrderFilterDto.getPhoneNumberFilter().get(), OrderType.REGISTER);
+						baseOrderFilterDto.getPhoneNumberFilter().get(), OrderType.REGISTER, location);
 		return DetailedOrderConverter.convertToDetailedOrderDto(detailedOrders);
 	}
 

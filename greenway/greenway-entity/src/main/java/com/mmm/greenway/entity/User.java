@@ -5,10 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
+@SecondaryTable(name = "office_location")
+@NamedNativeQuery(name = "User.findAllLocations", query = "select distinct(l.location) from office_location l")
 public class User {
 	@Id
 	@Column(length = 50)
@@ -25,6 +29,8 @@ public class User {
 	private Boolean enabled;
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
+	@Column(table = "office_location")
+	private String location;
 
 	public User() {
 		this.accountNonExpired = true;
@@ -88,7 +94,7 @@ public class User {
 	public void setRole(UserRole role) {
 		this.role = role;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -151,5 +157,13 @@ public class User {
 	public String toString() {
 		return new StringBuilder("[User -> name: ").append(userName).append(", password: ").append(password)
 				.append("]").toString();
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 }

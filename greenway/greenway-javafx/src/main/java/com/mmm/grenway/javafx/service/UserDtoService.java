@@ -2,6 +2,7 @@ package com.mmm.grenway.javafx.service;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +63,11 @@ public class UserDtoService {
 
 	public void remove(UserDto userDto) {
 		userRepository.delete(userDto.getUserName().get());
+	}
+	
+	public ObservableList<String> findAllLocations() {
+		ObservableList<String> result = FXCollections.observableArrayList();
+		userRepository.findAllLocations().forEach(l -> result.add(l));
+		return result;
 	}
 }

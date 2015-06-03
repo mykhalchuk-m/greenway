@@ -37,6 +37,8 @@ public class UsersController {
 
 		form.getChildren().add(contentHelper.createUserForm(this::addUserIntoTable));
 		view.getChildren().add(screenConfig.getView(showUsersController, "ShowUsersPane.fxml"));
+		
+		userService.findAllLocations().forEach(l -> System.out.println("location -> " + l));
 	}
 	
 	public void addUserIntoTable(ActionEvent event, UserDto userDto) {

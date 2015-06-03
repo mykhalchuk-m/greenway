@@ -36,6 +36,7 @@ public class UserDtoConverter {
 		user.setAccountNonLocked(userDto.getAccountNonLocked().get());
 		user.setCredentialsNonExpired(userDto.getCredentialsNonExpired().get());
 		user.setEnabled(userDto.getEnabled().get());
+		user.setLocation(userDto.getLocation().get());
 		
 		return user;
 	}

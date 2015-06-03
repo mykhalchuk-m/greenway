@@ -18,4 +18,6 @@ public interface UserRepository extends CrudRepository<User, String> {
 
 	@Query("select u from User u where u.role = :userRole and upper(u.userName) like :token%")
 	List<User> findUsersWithRoleAndNameStartsWith(@Param("userRole") UserRole userRole, @Param("token") String token);
+	
+	List<String> findAllLocations();
 }

@@ -14,15 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.mmm.greenway.data.repository.UserRepository;
 import com.mmm.grenway.javafx.dto.UserDto;
+import com.mmm.grenway.javafx.service.UserDtoService;
 import com.mmm.grenway.javafx.service.converter.UserDtoConverter;
 
 @Component
 public class EditUserController {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserDtoService userService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -32,6 +32,8 @@ public class EditUserController {
 	private PasswordField passwordField;
 	@FXML
 	private ComboBox<String> roleField;
+	@FXML
+	private ComboBox<String> locationField;
 	@FXML
 	private CheckBox accountNonExpiredField;
 	@FXML
@@ -58,6 +60,9 @@ public class EditUserController {
 			roleField.setItems(UserDtoConverter.getUserRoles());
 			roleField.valueProperty().bindBidirectional(userDto.getRoles());
 			roleField.setValue(internalUserDto.getRoles().get());
+			locationField.setItems(userService.findAllLocations());
+			locationField.valueProperty().bindBidirectional(userDto.getLocation());
+			locationField.getSelectionModel().select(internalUserDto.getLocation().get());
 			accountNonExpiredField.selectedProperty().bindBidirectional(userDto.getAccountNonExpired());
 			accountNonExpiredField.setSelected(internalUserDto.getAccountNonExpired().get());
 			accountNonLockedField.selectedProperty().bindBidirectional(userDto.getAccountNonLocked());

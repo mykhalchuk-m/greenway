@@ -22,9 +22,12 @@ public interface DetailedOrderRepository extends CrudRepository<DetailedOrder, L
 	 *            phone number of client who made the order
 	 * @param orderType
 	 *            for documentoloh OrderType.REGISTERED is required
+	 * @param location
+	 *            location which belongs to operator who created particular
+	 *            order
 	 * */
-	List<DetailedOrder> findFirst100ByClientNameIgnoreCaseContainingAndPhoneNumberContainingAndOrderTypeAndIsDoneFalseOrderByDateDesc(
-			String clientName, String phoneNumber, OrderType orderType);
+	List<DetailedOrder> findFirst100ByClientNameIgnoreCaseContainingAndPhoneNumberContainingAndOrderTypeAndIsDoneFalseAndOperatorLocationOrderByDateDesc(
+			String clientName, String phoneNumber, OrderType orderType, String location);
 
 	/**
 	 * Select list of DetailedOrder elements for registrator by next parameters

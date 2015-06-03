@@ -31,6 +31,7 @@ import com.mmm.grenway.javafx.cfg.ScreenConfig;
 import com.mmm.grenway.javafx.controller.DocumentController;
 import com.mmm.grenway.javafx.controller.UsersController;
 import com.mmm.grenway.javafx.dto.UserDto;
+import com.mmm.grenway.javafx.service.UserDtoService;
 import com.mmm.grenway.javafx.service.converter.UserDtoConverter;
 
 @Component
@@ -43,6 +44,8 @@ public class AdminContentHelper {
 	private ScreenConfig screenConfig;
 	@Autowired
 	private UsersController usersController;
+	@Autowired
+	private UserDtoService userService;
 	@Autowired
 	private DocumentController documentController;
 
@@ -87,6 +90,7 @@ public class AdminContentHelper {
 		gridPane.setHgap(10);
 		gridPane.setVgap(10);
 		gridPane.setPadding(new Insets(20, 20, 20, 20));
+		gridPane.setPrefWidth(400);
 
 		Label userName = new Label(resourceBundle.getString("main.tab.admin.createuser.username.lable"));
 		gridPane.add(userName, 0, 0);
@@ -106,17 +110,25 @@ public class AdminContentHelper {
 		PasswordField confirmPasswordField = new PasswordField();
 		gridPane.add(confirmPasswordField, 1, 2);
 
-		Label userRole = new Label("User Role:");
+		Label userRole = new Label(resourceBundle.getString("main.tab.admin.createuser.role.lable"));
 		gridPane.add(userRole, 0, 3);
 
 		ComboBox<String> roles = new ComboBox<String>(UserDtoConverter.getUserRoles());
 		gridPane.add(roles, 1, 3);
+		
+		Label locationLable = new Label(resourceBundle.getString("main.tab.admin.createuser.location.lable"));
+		gridPane.add(locationLable, 0, 4);
+		
+		ComboBox<String> locationSelect = new ComboBox<String>(userService.findAllLocations());
+		locationSelect.getSelectionModel().select(0);
+		locationSelect.setEditable(true);
+		gridPane.add(locationSelect, 1, 4);
 
 		Button btn = new Button(resourceBundle.getString("main.tab.admin.createuser.createuser"));
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(btn);
-		gridPane.add(hbBtn, 1, 4);
+		gridPane.add(hbBtn, 1, 5);
 
 		ContextMenu userNameAlert = new ContextMenu(new MenuItem(
 				resourceBundle.getString("main.tab.admin.createuser.validate.username")));
@@ -158,11 +170,13 @@ public class AdminContentHelper {
 					userDto.getUserName().set(userNameField.getText());
 					userDto.getPassword().set(passwordField.getText());
 					userDto.getRoles().set(roles.getSelectionModel().getSelectedItem());
+					userDto.getLocation().set(locationSelect.getValue());
 					c.accept(event, userDto);
 					userNameField.clear();
 					passwordField.clear();
 					confirmPasswordField.clear();
 					roles.getSelectionModel().select("");
+					locationSelect.getSelectionModel().select("");
 				}
 			}
 		});
