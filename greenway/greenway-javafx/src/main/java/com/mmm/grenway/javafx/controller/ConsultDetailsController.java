@@ -2,6 +2,10 @@ package com.mmm.grenway.javafx.controller;
 
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -47,7 +51,9 @@ public class ConsultDetailsController {
 	private static final String OFFICE_VALUE = "office";
 	private BaseOrderFilterDto baseOrderFilterDto = new BaseOrderFilterDto();
 	private Long currentItemId = null;
-
+	private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+	private ScheduledFuture<?> result = null;
+	
 	@Autowired
 	protected RegistrationFormController registrationFormController;
 	@Autowired
@@ -198,8 +204,6 @@ public class ConsultDetailsController {
 	}
 
 	protected void initTableColumns() {
-		baseOrderTab.setItems(getData());
-
 		clientNameColumn.setCellValueFactory(value -> value.getValue().getClientName());
 		clientNameColumn.setSortable(false);
 		clientPhoneColumn.setCellValueFactory(value -> value.getValue().getPhoneNumber());
@@ -241,11 +245,30 @@ public class ConsultDetailsController {
 
 	protected void initFiltersListeners() {
 		filterClientName.textProperty().addListener((ob, ov, nv) -> {
-			baseOrderTab.setItems(getData());
+			if (result != null) {
+				result.cancel(false);
+			}
+			result = scheduler.schedule(new Runnable() {
+
+				@Override
+				public void run() {
+					refreshTable();
+				}
+			}, 1, TimeUnit.SECONDS);
+
 		});
 
 		filterPhone.textProperty().addListener((ob, ov, nv) -> {
-			baseOrderTab.setItems(getData());
+			if (result != null) {
+				result.cancel(false);
+			}
+			result = scheduler.schedule(new Runnable() {
+
+				@Override
+				public void run() {
+					refreshTable();
+				}
+			}, 1, TimeUnit.SECONDS);
 		});
 	}
 

@@ -4,7 +4,6 @@ import java.util.ResourceBundle;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -24,7 +23,7 @@ import com.mmm.grenway.javafx.service.DetailedOrderService;
 import com.mmm.grenway.javafx.util.DateUtil;
 
 @Component
-public class RegistratorController {
+public class RegistratorController extends BaseController {
 
 	@Autowired
 	private DetailedOrderService detailedOrderService;
@@ -51,7 +50,7 @@ public class RegistratorController {
 	private void doSave() {
 		populateChangedProperties();
 		detailedOrderService.save(currentItem);
-		clientsTable.setItems(getData());
+		refreshTable();
 		doCancel();
 	}
 
@@ -62,19 +61,7 @@ public class RegistratorController {
 		registrationStatus.getSelectionModel().select(0);
 	}
 
-	private void initFiltersListeners() {
-		clientNameFilter.textProperty().addListener((ob, ov, nv) -> {
-			clientsTable.setItems(getData());
-		});
-
-		phoneFilter.textProperty().addListener((ob, ov, nv) -> {
-			clientsTable.setItems(getData());
-		});
-	}
-
 	private void initTableColumns() {
-		clientsTable.setItems(getData());
-
 		clientNameColumn.setSortable(false);
 		clientNameColumn.setCellValueFactory(value -> value.getValue().getClientName());
 		bithdayColumn.setSortable(false);
@@ -120,9 +107,9 @@ public class RegistratorController {
 		currentItem.getRegistration().set(processingStatus != null ? processingStatus : ProcessingStatus.NONE);
 		currentItem.getRegistrationDate().set(registrationDate.getValue());
 	}
-
-	private ObservableList<DetailedOrderDto> getData() {
-		return detailedOrderService.findDetailedOrdersForRegistrator(orderFilterDto);
+	
+	public void refreshTable() {
+		clientsTable.setItems(detailedOrderService.findDetailedOrdersForRegistrator(orderFilterDto));
 	}
 
 	@FXML
@@ -155,4 +142,14 @@ public class RegistratorController {
 	private DatePicker registrationDate;
 	@FXML
 	private ComboBox<ProcessingStatus> registrationStatus;
+
+	@Override
+	protected TextField getClientNameFilter() {
+		return clientNameFilter;
+	}
+
+	@Override
+	protected TextField getClientPhoneFilter() {
+		return phoneFilter;
+	}
 }

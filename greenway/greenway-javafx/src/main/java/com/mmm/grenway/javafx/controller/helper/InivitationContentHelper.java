@@ -2,7 +2,9 @@ package com.mmm.grenway.javafx.controller.helper;
 
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 
@@ -21,24 +23,60 @@ public class InivitationContentHelper {
 	@Autowired
 	private InvitationDeliveryController invitationDeliveryController;
 
-	public Tab genetateInivitationTab() {
+	public Tab genetateInivitationTab(ProgressIndicator progressIndicator) {
+		progressIndicator.setVisible(true);
+		
 		Tab inivitationTab = new Tab(resourceBundle.getString("main.tab.inv.title"));
 		inivitationTab.setClosable(false);
-		inivitationTab.setContent(screenConfig.getView(invitationDeliveryController, "InvitationDeliveryPane.fxml"));
-		inivitationTab.selectedProperty().addListener((ob, ov, nv) -> {
-			if (nv) {
+		
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				inivitationTab.setContent(screenConfig.getView(invitationDeliveryController, "InvitationDeliveryPane.fxml"));
 				invitationDeliveryController.refreshTable();
+
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						progressIndicator.setVisible(false);
+						inivitationTab.selectedProperty().addListener((ob, ov, nv) -> {
+							if (nv) {
+								invitationDeliveryController.refreshTable();
+							}
+						});
+					}
+				});
+
 			}
-		});
+		}).start();
 		return inivitationTab;
 	}
 
-	public Node genetateInivitationContent() {
+	public Node genetateInivitationContent(ProgressIndicator progressIndicator) {
+		progressIndicator.setVisible(true);
+		
 		Node node = screenConfig.getView(invitationDeliveryController, "InvitationDeliveryPane.fxml");
 		AnchorPane.setTopAnchor(node, 0.0);
 		AnchorPane.setLeftAnchor(node, 0.0);
 		AnchorPane.setBottomAnchor(node, 0.0);
 		AnchorPane.setRightAnchor(node, 0.0);
+		
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				invitationDeliveryController.refreshTable();
+
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						progressIndicator.setVisible(false);
+					}
+				});
+
+			}
+		}).start();
 		return node;
 	}
 }

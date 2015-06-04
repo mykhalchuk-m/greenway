@@ -3,6 +3,10 @@ package com.mmm.grenway.javafx.controller;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -68,7 +72,9 @@ public class DocumentolohController {
 	private DetailedOrderDto currentItem = new DetailedOrderDto();
 	private DocumentDto invDocDto = new DocumentDto();
 	private BaseOrderFilterDto orderFilterDto = new BaseOrderFilterDto();
-
+	private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+	private ScheduledFuture<?> result = null;
+	
 	@FXML
 	private void initialize() {
 		System.out.println("DocumentolohController");
@@ -78,9 +84,6 @@ public class DocumentolohController {
 		initTableColumns();
 		initTableRowDoubleClick();
 		initFiltersListeners();
-		allDocuments.setItems(documentService.findAll());
-		allDocuments.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		allDocuments.setDisable(true);
 
 		addDocumentLink.setOnAction(event -> {
 			if (allDocuments.isDisable()) {
@@ -330,11 +333,13 @@ public class DocumentolohController {
 
 	public void refreshTable() {
 		baseOrderTab.setItems(getData());
+		
+		allDocuments.setItems(documentService.findAll());
+		allDocuments.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		allDocuments.setDisable(true);
 	}
 
 	private void initTableColumns() {
-		baseOrderTab.setItems(getData());
-
 		clientNameColumn.setCellValueFactory(value -> value.getValue().getClientName());
 		clientNameColumn.setSortable(false);
 		clientPhoneColumn.setCellValueFactory(value -> value.getValue().getPhoneNumber());
@@ -357,12 +362,31 @@ public class DocumentolohController {
 
 	private void initFiltersListeners() {
 		filterClientName.textProperty().addListener((ob, ov, nv) -> {
-			baseOrderTab.setItems(getData());
-		});
+			if (result != null) {
+				result.cancel(false);
+			}
+			result = scheduler.schedule(new Runnable() {
 
-		filterPhone.textProperty().addListener((ob, ov, nv) -> {
-			baseOrderTab.setItems(getData());
+				@Override
+				public void run() {
+					baseOrderTab.setItems(getData());
+				}
+			}, 1, TimeUnit.SECONDS);
+
 		});
+		
+		filterPhone.textProperty().addListener((ob, ov, nv) -> {
+			if (result != null) {
+				result.cancel(false);
+			}
+			result = scheduler.schedule(new Runnable() {
+
+				@Override
+				public void run() {
+					baseOrderTab.setItems(getData());
+				}
+			}, 1, TimeUnit.SECONDS);
+		});;
 	}
 
 	private void initTableRowDoubleClick() {

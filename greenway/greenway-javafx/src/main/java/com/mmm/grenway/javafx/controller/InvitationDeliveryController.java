@@ -3,6 +3,10 @@ package com.mmm.grenway.javafx.controller;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -35,6 +39,8 @@ public class InvitationDeliveryController {
 	protected ResourceBundle enumBundle;
 	private DetailedOrderDto currentItem = new DetailedOrderDto();
 	private BaseOrderFilterDto orderFilterDto = new BaseOrderFilterDto();
+	private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+	private ScheduledFuture<?> result = null;
 
 	@FXML
 	private void initialize() {
@@ -101,11 +107,30 @@ public class InvitationDeliveryController {
 
 	private void initFiltersListeners() {
 		filterUserName.textProperty().addListener((ob, ov, nv) -> {
-			usersTable.setItems(getData());
+			if (result != null) {
+				result.cancel(false);
+			}
+			result = scheduler.schedule(new Runnable() {
+
+				@Override
+				public void run() {
+					refreshTable();
+				}
+			}, 1, TimeUnit.SECONDS);
+
 		});
 
 		filterPhoneNumber.textProperty().addListener((ob, ov, nv) -> {
-			usersTable.setItems(getData());
+			if (result != null) {
+				result.cancel(false);
+			}
+			result = scheduler.schedule(new Runnable() {
+
+				@Override
+				public void run() {
+					refreshTable();
+				}
+			}, 1, TimeUnit.SECONDS);
 		});
 	}
 

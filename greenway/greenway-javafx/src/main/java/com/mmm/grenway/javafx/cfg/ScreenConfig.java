@@ -47,6 +47,7 @@ public class ScreenConfig {
 		primaryStage.setY(bounds.getMinY());
 		primaryStage.setWidth(bounds.getWidth());
 		primaryStage.setHeight(bounds.getHeight());
+		primaryStage.setMaximized(true);
 
 		if (!primaryStage.isShowing()) {
 			primaryStage.show();

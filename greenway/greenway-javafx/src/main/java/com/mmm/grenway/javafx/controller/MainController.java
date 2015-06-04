@@ -11,9 +11,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,10 +53,19 @@ public class MainController {
 	private RegistratorContentHelper registratorContentHelper;
 	@Autowired
 	private LoginController loginController;
+	private ProgressIndicator progressIndicator = new ProgressIndicator();
 
 	@FXML
 	private void initialize() {
 		System.out.println("Main controller");
+		progressIndicator.setVisible(false);
+
+		BorderPane borderPane = new BorderPane();
+		borderPane.setCenter(progressIndicator);
+		AnchorPane.setLeftAnchor(borderPane, 0.0);
+		AnchorPane.setTopAnchor(borderPane, 50.0);
+		AnchorPane.setRightAnchor(borderPane, 0.0);
+		mainContent.getChildren().add(borderPane);
 
 		UserRole userRole = UserRole.valueOf(SecurityContextHolder.getContext().getAuthentication().getAuthorities()
 				.iterator().next().getAuthority());
@@ -62,10 +73,10 @@ public class MainController {
 		switch (userRole) {
 		case ROLE_ADMIN:
 			tabs.add(adminContentHelper.generateAdminTab());
-			tabs.add(inivitationContaentHelper.genetateInivitationTab());
-			tabs.add(registratorContentHelper.genetateRegistratorTab());
-			tabs.add(documentolohContentHelper.genetateDocumentolohTab());
-			tabs.add(operatorContentHelper.generateOperatorTab());
+			tabs.add(inivitationContaentHelper.genetateInivitationTab(progressIndicator));
+			tabs.add(registratorContentHelper.genetateRegistratorTab(progressIndicator));
+			tabs.add(documentolohContentHelper.genetateDocumentolohTab(progressIndicator));
+			tabs.add(operatorContentHelper.generateOperatorTab(progressIndicator));
 			Collections.reverse(tabs);
 			TabPane tabPane = new TabPane();
 			tabPane.getTabs().addAll(tabs);
@@ -76,16 +87,16 @@ public class MainController {
 			mainContent.getChildren().add(tabPane);
 			break;
 		case ROLE_INVITATION_DELIVERY:
-			mainContent.getChildren().add(inivitationContaentHelper.genetateInivitationContent());
+			mainContent.getChildren().add(inivitationContaentHelper.genetateInivitationContent(progressIndicator));
 			break;
 		case ROLE_REGISTRATOR:
-			mainContent.getChildren().add(registratorContentHelper.genetateRegistratorContent());
+			mainContent.getChildren().add(registratorContentHelper.genetateRegistratorContent(progressIndicator));
 			break;
 		case ROLE_DOKUMENTOLOH:
-			mainContent.getChildren().add(documentolohContentHelper.genetateDocumentolohContent());
+			mainContent.getChildren().add(documentolohContentHelper.genetateDocumentolohContent(progressIndicator));
 			break;
 		case ROLE_OPERATOR:
-			mainContent.getChildren().add(operatorContentHelper.generateOperatorContent());
+			mainContent.getChildren().add(operatorContentHelper.generateOperatorContent(progressIndicator));
 		}
 
 	}

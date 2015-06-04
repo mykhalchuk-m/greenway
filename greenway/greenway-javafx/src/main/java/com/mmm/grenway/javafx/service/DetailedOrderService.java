@@ -63,19 +63,21 @@ public class DetailedOrderService {
 	}
 
 	public ObservableList<DetailedOrderDto> findDetailedOrdersForRegistrator(BaseOrderFilterDto baseOrderFilterDto) {
+		String location = userRepository.findOne(userService.getCurentUserName().get()).getLocation();
 		List<DetailedOrder> detailedOrders = detailedOrderRepository
-				.findFirst100ByClientNameIgnoreCaseContainingAndPhoneNumberContainingAndRegistrationNotInOrderByDateDesc(
+				.findFirst100ByClientNameIgnoreCaseContainingAndPhoneNumberContainingAndRegistrationNotInAndOperatorLocationOrderByDateDesc(
 						baseOrderFilterDto.getClientNameFilter().get(),
 						baseOrderFilterDto.getPhoneNumberFilter().get(),
-						Arrays.asList(ProcessingStatus.NONE, ProcessingStatus.DONE));
+						Arrays.asList(ProcessingStatus.NONE, ProcessingStatus.DONE), location);
 		return DetailedOrderConverter.convertToDetailedOrderDto(detailedOrders);
 	}
 
 	public ObservableList<DetailedOrderDto> findDetailedOrdersForInvitator(BaseOrderFilterDto baseOrderFilterDto) {
+		String location = userRepository.findOne(userService.getCurentUserName().get()).getLocation();
 		List<DetailedOrder> detailedOrders = detailedOrderRepository.findActiveForInvitator("%"
 				+ baseOrderFilterDto.getClientNameFilter().get() + "%", "%"
 				+ baseOrderFilterDto.getPhoneNumberFilter().get() + "%",
-				Arrays.asList(ProcessingStatus.NONE, ProcessingStatus.DONE));
+				Arrays.asList(ProcessingStatus.NONE, ProcessingStatus.DONE), location);
 		return DetailedOrderConverter.convertToDetailedOrderDto(detailedOrders);
 	}
 }

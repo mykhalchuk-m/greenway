@@ -29,7 +29,6 @@ import org.springframework.stereotype.Component;
 import com.mmm.grenway.javafx.cfg.ScreenConfig;
 
 @Component
-// @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
 public class LoginController {
 	private static final String EMPTY_STRING = "";
 
@@ -82,7 +81,9 @@ public class LoginController {
 				Authentication request = new UsernamePasswordAuthenticationToken(name, pass);
 				Authentication response = authenticationManager.authenticate(request);
 
+				SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_GLOBAL);
 				SecurityContextHolder.getContext().setAuthentication(response);
+				System.out.println("auth principal -> " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 				screenConfig.loadView(mainController, "MainPane.fxml");
 			} catch (AuthenticationException e) {
 				errorMessage.setText(resourceBundle.getString("login.errorMessage.invelidCredetional"));
