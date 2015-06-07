@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 import com.mmm.greenway.data.repository.UserRepository;
-import com.mmm.greenway.data.service.TempUserCreateService;
+import com.mmm.greenway.data.service.InitUserCreateService;
 
 @Configuration
 public class SecurityConfig {
@@ -41,8 +41,8 @@ public class SecurityConfig {
 
 	@Autowired
 	@Bean
-	public TempUserCreateService tempUserCreateService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-		return new TempUserCreateService(userRepository, passwordEncoder);
+	public InitUserCreateService initUserCreateService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		return new InitUserCreateService(userRepository, passwordEncoder);
 	}
 
 }

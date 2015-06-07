@@ -2,9 +2,6 @@ package com.mmm.grenway.javafx.controller;
 
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -18,7 +15,9 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -33,27 +32,28 @@ import javafx.scene.layout.AnchorPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.mmm.greenway.entity.OrderType;
+import com.mmm.greenway.entity.UserRole;
 import com.mmm.grenway.javafx.controller.helper.TextFieldValidatable;
 import com.mmm.grenway.javafx.dto.BaseOrderDto;
 import com.mmm.grenway.javafx.dto.BaseOrderFilterDto;
 import com.mmm.grenway.javafx.service.BaseOrderService;
+import com.mmm.grenway.javafx.service.UserDtoService;
 import com.mmm.grenway.javafx.util.DateUtil;
 
 @Component
 @Scope("prototype")
-public class ConsultDetailsController {
+public class ConsultDetailsController extends BaseController {
 
 	private static final String OFFICE_VALUE = "office";
 	private BaseOrderFilterDto baseOrderFilterDto = new BaseOrderFilterDto();
 	private Long currentItemId = null;
-	private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-	private ScheduledFuture<?> result = null;
-	
+
 	@Autowired
 	protected RegistrationFormController registrationFormController;
 	@Autowired
@@ -62,6 +62,8 @@ public class ConsultDetailsController {
 	protected ResourceBundle resourceBundle;
 	@Autowired
 	protected ResourceBundle enumBundle;
+	@Autowired
+	private UserDtoService userService;
 
 	protected ObservableList<BaseOrderDto> getData() {
 		return baseOrderService.findOrderDetails(baseOrderFilterDto);
@@ -110,6 +112,7 @@ public class ConsultDetailsController {
 		baseOrderFilterDto.getClientNameFilter().bind(filterClientName.textProperty());
 		baseOrderFilterDto.getPhoneNumberFilter().bind(filterPhone.textProperty());
 		initFiltersListeners();
+		initFilterLocation();
 	}
 
 	@FXML
@@ -243,8 +246,23 @@ public class ConsultDetailsController {
 		isDoneColumn.setSortable(false);
 	}
 
+	private void initFilterLocation() {
+		SimpleGrantedAuthority sga = new SimpleGrantedAuthority(UserRole.ROLE_ADMIN.toString());
+
+		if (userService.getCurrentUserDetails().getAuthorities().contains(sga)) {
+			filterLocation.setVisible(true);
+			filterLocation.setItems(userService.findAllLocations());
+
+			baseOrderFilterDto.getLocationFilter().bind(filterLocation.valueProperty());
+		} else {
+			baseOrderFilterDto.getLocationFilter().set(
+					userService.findUser(userService.getCurentUserName().get()).getLocation().get());
+		}
+	}
+
 	protected void initFiltersListeners() {
-		filterClientName.textProperty().addListener((ob, ov, nv) -> {
+		super.initFiltersListeners();
+		filterLocation.valueProperty().addListener((ob, ov, nv) -> {
 			if (result != null) {
 				result.cancel(false);
 			}
@@ -255,20 +273,13 @@ public class ConsultDetailsController {
 					refreshTable();
 				}
 			}, 1, TimeUnit.SECONDS);
-
+			refreshTable();
 		});
 
-		filterPhone.textProperty().addListener((ob, ov, nv) -> {
-			if (result != null) {
-				result.cancel(false);
-			}
-			result = scheduler.schedule(new Runnable() {
-
-				@Override
-				public void run() {
-					refreshTable();
-				}
-			}, 1, TimeUnit.SECONDS);
+		filterClear.setOnAction(v -> {
+			filterClientName.clear();
+			filterPhone.clear();
+			filterLocation.setValue("");
 		});
 	}
 
@@ -276,6 +287,10 @@ public class ConsultDetailsController {
 	protected TextField filterClientName;
 	@FXML
 	protected TextField filterPhone;
+	@FXML
+	private ComboBox<String> filterLocation;
+	@FXML
+	private Hyperlink filterClear;
 	@FXML
 	protected TableView<BaseOrderDto> baseOrderTab;
 	@FXML
@@ -321,4 +336,14 @@ public class ConsultDetailsController {
 	protected TextFieldValidatable phoneCodes;
 	@FXML
 	protected TextField phoneCountryCode;
+
+	@Override
+	protected TextField getClientNameFilter() {
+		return filterClientName;
+	}
+
+	@Override
+	protected TextField getClientPhoneFilter() {
+		return filterPhone;
+	}
 }

@@ -27,13 +27,13 @@ public class RegistratorContentHelper {
 		progressIndicator.setVisible(true);
 
 		Tab registratorTab = new Tab(resourceBundle.getString("main.tab.registrator.title"));
+		registratorTab.setContent(screenConfig.getView(registratorController, "RegistratorPane.fxml"));
 		registratorTab.setClosable(false);
 
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				registratorTab.setContent(screenConfig.getView(registratorController, "RegistratorPane.fxml"));
 				registratorController.refreshTable();
 
 				Platform.runLater(new Runnable() {

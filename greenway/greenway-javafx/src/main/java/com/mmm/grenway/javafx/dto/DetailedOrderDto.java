@@ -36,7 +36,7 @@ public class DetailedOrderDto extends BaseOrderDto {
 		suitableInOutDatesDto = new DateIntervalDto();
 		previousVisasDates = FXCollections.observableArrayList();
 		documentPerOrder = FXCollections.observableArrayList();
-		invitationDocument = new InvitationDto();
+		invitationDocument = null;
 		registrationDate = new SimpleObjectProperty<LocalDate>();
 	}
 

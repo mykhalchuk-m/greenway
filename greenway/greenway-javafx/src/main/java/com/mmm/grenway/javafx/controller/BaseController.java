@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 import javafx.scene.control.TextField;
 
 public abstract class BaseController {
-	private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-	private ScheduledFuture<?> result = null;
+	protected ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+	protected ScheduledFuture<?> result = null;
 	
 	protected void initFiltersListeners() {
 		getClientNameFilter().textProperty().addListener((ob, ov, nv) -> {
@@ -44,4 +44,5 @@ public abstract class BaseController {
 	protected abstract TextField getClientPhoneFilter();
 	
 	protected abstract void refreshTable();
+	
 }

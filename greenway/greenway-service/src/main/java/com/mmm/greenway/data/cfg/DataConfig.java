@@ -20,18 +20,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = { "com.mmm.greenway.data.repository" })
-@ComponentScan(basePackages = { "com.mmm.greenway.data", "com.mmm.greenway.entity", "com.mmm.greenway.entity.converter"})
+@EnableJpaRepositories(basePackages = { "com.mmm.greenway.data.repository" }, repositoryFactoryBeanClass = com.mmm.greenway.data.repository.custom.LimitableJpaRepositoryFactoryBean.class)
+@ComponentScan(basePackages = { "com.mmm.greenway.data", "com.mmm.greenway.entity", "com.mmm.greenway.entity.converter" })
 @PropertySource("classpath:/application.properties")
 public class DataConfig {
 
 	@Autowired
-    private Environment env;
-	
+	private Environment env;
+
 	@SuppressWarnings("unchecked")
 	@Bean
 	@Autowired
-	DataSource getDataSource(Environment env) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	DataSource getDataSource(Environment env) throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException {
 		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
 		dataSource.setDriverClass((Class<? extends java.sql.Driver>) Class.forName(env.getProperty("db.driver")));
 		dataSource.setUrl(env.getProperty("db.url"));
@@ -49,9 +50,10 @@ public class DataConfig {
 
 		Properties properties = new Properties();
 		properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
-		properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
 		properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
 		properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
+		properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+
 		entityManagerFactoryBean.setJpaProperties(properties);
 
 		return entityManagerFactoryBean;

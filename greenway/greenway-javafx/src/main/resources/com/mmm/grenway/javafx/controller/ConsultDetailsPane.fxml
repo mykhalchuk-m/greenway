@@ -8,108 +8,115 @@
 <?import com.mmm.grenway.javafx.controller.helper.TextFieldValidatable?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.ConsultDetailsController" fx:id="root">
-   <children>
-      <SplitPane dividerPositions="0.75" layoutX="77.0" layoutY="71.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
-               <children>
-                  <BorderPane prefHeight="598.0" prefWidth="569.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </padding>
-                     <center>
-                        <TableView fx:id="baseOrderTab" prefHeight="200.0" prefWidth="200.0">
-                          <columns>
-                            <TableColumn text="%main.tab.operator.od.table.clientName" fx:id="clientNameColumn"/>
-                            <TableColumn text="%main.tab.operator.od.table.clientPhone" fx:id="clientPhoneColumn"/>
-                            <TableColumn text="%main.tab.operator.od.table.supplier" fx:id="supplierColumn"/>
-							<TableColumn text="%main.tab.operator.od.table.orderType" fx:id="orderTypeColumn"/>
-                            <TableColumn text="%main.tab.operator.od.table.docsstatus" fx:id="documentsColumn"/>
-                            <TableColumn text="%main.tab.operator.od.table.regstatus" fx:id="registrationColumn"/>
-                            <TableColumn text="%main.tab.operator.od.table.operator" fx:id="operatorColumn"/>
-                            <TableColumn text="%main.tab.operator.od.table.date" fx:id="dateColumn"/>
-                            <TableColumn text="" fx:id="isDoneColumn" maxWidth="20" minWidth="20"/>
-                          </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TableView>
-                     </center>
-                     <top>
-                        <HBox spacing="10.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets bottom="20.0" />
-                           </padding>
-                           <children>
-                              <TextField fx:id="filterClientName" promptText="%main.tab.operator.od.filter.clientName"/>
-                              <TextField fx:id="filterPhone" promptText="%main.tab.operator.od.filter.clientPhone"/>
-                           </children>
-                        </HBox>
-                     </top>
-                  </BorderPane>
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
-               <children>
-                  <VBox prefHeight="598.0" prefWidth="396.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <GridPane>
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" percentWidth="35"/>
-                            <ColumnConstraints hgrow="SOMETIMES" percentWidth="65"/>
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Label text="%main.tab.operator.od.supplier.label" />
-                              <Label text="%main.tab.operator.od.clientName.label" GridPane.rowIndex="2" />
-                              <Label text="%main.tab.operator.od.phone.label" GridPane.rowIndex="3" />
-                              <Label text="%main.tab.operator.od.note.label" GridPane.rowIndex="5" />
-                              <Label text="%main.tab.operator.od.operator.label" GridPane.rowIndex="4" />
-                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowSpan="2">
-                                 <children>
-                                    <TextFieldValidatable fx:id="supplierField"/>
-                                    <CheckBox fx:id="supplierCheckBox" mnemonicParsing="false" text="%main.tab.operator.od.supplier.checkbox" />
-                                 </children>
-                              </VBox>
-                              <TextFieldValidatable fx:id="clientName" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <HBox GridPane.columnIndex="1" GridPane.rowIndex="3" alignment="TOP_LEFT">
-                              	<children>
-		                              <TextField fx:id="phoneCountryCode" text="+38" minWidth="40" maxWidth="40" editable="false"/>
-		                              <TextFieldValidatable fx:id="phoneCodes" minWidth="40" maxWidth="40"/>
-		                              <TextFieldValidatable fx:id="clientPhone" prefWidth="1000"/>
-                              	</children>
-                              </HBox>
-                              <TextField fx:id="operatorField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                           </children>
-                        </GridPane>
-                        <TextArea fx:id="noteArea" prefHeight="200.0" prefWidth="200.0" wrapText="true"/>
-                        <HBox alignment="CENTER_RIGHT" spacing="20.0">
-                           <children>
-                              <Button fx:id="consultBuppon" mnemonicParsing="false" text="%main.tab.operator.od.button.consulting" onAction="#doConsulting"/>
-                              <Button fx:id="registerButton" mnemonicParsing="false" text="%main.tab.operator.od.button.registration" onAction="#doRegistration"/>
-                              <Button fx:id="buttonCancel" mnemonicParsing="false" text="%main.tab.operator.od.button.cancel" onAction="#doCancel"/>
-                           </children>
-                           <padding>
-                              <Insets top="20.0" />
-                           </padding>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
-   </children>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mmm.grenway.javafx.controller.ConsultDetailsController"
+	fx:id="root">
+	<children>
+		<SplitPane dividerPositions="0.75" layoutX="77.0" layoutY="71.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0"
+			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+			<items>
+				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
+					<children>
+						<BorderPane prefHeight="598.0" prefWidth="569.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+							AnchorPane.topAnchor="0.0">
+							<padding>
+								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+							</padding>
+							<center>
+								<TableView fx:id="baseOrderTab" prefHeight="200.0" prefWidth="200.0">
+									<columns>
+										<TableColumn text="%main.tab.operator.od.table.clientName" fx:id="clientNameColumn" />
+										<TableColumn text="%main.tab.operator.od.table.clientPhone" fx:id="clientPhoneColumn" />
+										<TableColumn text="%main.tab.operator.od.table.supplier" fx:id="supplierColumn" />
+										<TableColumn text="%main.tab.operator.od.table.orderType" fx:id="orderTypeColumn" />
+										<TableColumn text="%main.tab.operator.od.table.docsstatus" fx:id="documentsColumn" />
+										<TableColumn text="%main.tab.operator.od.table.regstatus" fx:id="registrationColumn" />
+										<TableColumn text="%main.tab.operator.od.table.operator" fx:id="operatorColumn" />
+										<TableColumn text="%main.tab.operator.od.table.date" fx:id="dateColumn" />
+										<TableColumn text="" fx:id="isDoneColumn" maxWidth="20" minWidth="20" />
+									</columns>
+									<columnResizePolicy>
+										<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+									</columnResizePolicy>
+								</TableView>
+							</center>
+							<top>
+								<HBox spacing="10.0" BorderPane.alignment="CENTER">
+									<padding>
+										<Insets bottom="20.0" />
+									</padding>
+									<children>
+										<TextField fx:id="filterClientName" promptText="%main.tab.operator.od.filter.clientName" />
+										<TextField fx:id="filterPhone" promptText="%main.tab.operator.od.filter.clientPhone" />
+										<ComboBox fx:id="filterLocation" visible="false" />
+										<Hyperlink fx:id="filterClear" text="%main.tab.operator.od.filter.clearFilters" />
+									</children>
+								</HBox>
+							</top>
+						</BorderPane>
+					</children>
+				</AnchorPane>
+				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
+					<padding>
+						<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+					</padding>
+					<children>
+						<VBox prefHeight="598.0" prefWidth="396.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+							AnchorPane.topAnchor="0.0">
+							<children>
+								<GridPane>
+									<columnConstraints>
+										<ColumnConstraints hgrow="SOMETIMES" percentWidth="35" />
+										<ColumnConstraints hgrow="SOMETIMES" percentWidth="65" />
+									</columnConstraints>
+									<rowConstraints>
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+									</rowConstraints>
+									<children>
+										<Label text="%main.tab.operator.od.supplier.label" />
+										<Label text="%main.tab.operator.od.clientName.label" GridPane.rowIndex="2" />
+										<Label text="%main.tab.operator.od.phone.label" GridPane.rowIndex="3" />
+										<Label text="%main.tab.operator.od.note.label" GridPane.rowIndex="5" />
+										<Label text="%main.tab.operator.od.operator.label" GridPane.rowIndex="4" />
+										<VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowSpan="2">
+											<children>
+												<TextFieldValidatable fx:id="supplierField" />
+												<CheckBox fx:id="supplierCheckBox" mnemonicParsing="false" text="%main.tab.operator.od.supplier.checkbox" />
+											</children>
+										</VBox>
+										<TextFieldValidatable fx:id="clientName" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+										<HBox GridPane.columnIndex="1" GridPane.rowIndex="3" alignment="TOP_LEFT">
+											<children>
+												<TextField fx:id="phoneCountryCode" text="+38" minWidth="40" maxWidth="40" editable="false" />
+												<TextFieldValidatable fx:id="phoneCodes" minWidth="40" maxWidth="40" />
+												<TextFieldValidatable fx:id="clientPhone" prefWidth="1000" />
+											</children>
+										</HBox>
+										<TextField fx:id="operatorField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+									</children>
+								</GridPane>
+								<TextArea fx:id="noteArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
+								<HBox alignment="CENTER_RIGHT" spacing="20.0">
+									<children>
+										<Button fx:id="consultBuppon" mnemonicParsing="false" text="%main.tab.operator.od.button.consulting" onAction="#doConsulting" />
+										<Button fx:id="registerButton" mnemonicParsing="false" text="%main.tab.operator.od.button.registration" onAction="#doRegistration" />
+										<Button fx:id="buttonCancel" mnemonicParsing="false" text="%main.tab.operator.od.button.cancel" onAction="#doCancel" />
+									</children>
+									<padding>
+										<Insets top="20.0" />
+									</padding>
+								</HBox>
+							</children>
+						</VBox>
+					</children>
+				</AnchorPane>
+			</items>
+		</SplitPane>
+	</children>
 </AnchorPane>

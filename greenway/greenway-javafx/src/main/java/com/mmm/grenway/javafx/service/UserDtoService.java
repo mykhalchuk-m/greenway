@@ -25,8 +25,11 @@ public class UserDtoService {
 	private PasswordEncoder passwordEncoder;
 
 	public StringProperty getCurentUserName() {
-		return new SimpleStringProperty(((UserDetails) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal()).getUsername());
+		return new SimpleStringProperty(getCurrentUserDetails().getUsername());
+	}
+
+	public UserDetails getCurrentUserDetails() {
+		return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
 	public ObservableList<UserDto> findUsers() {
@@ -64,10 +67,14 @@ public class UserDtoService {
 	public void remove(UserDto userDto) {
 		userRepository.delete(userDto.getUserName().get());
 	}
-	
+
 	public ObservableList<String> findAllLocations() {
 		ObservableList<String> result = FXCollections.observableArrayList();
 		userRepository.findAllLocations().forEach(l -> result.add(l));
 		return result;
+	}
+
+	public UserDto findUser(String userName) {
+		return new UserDto(userRepository.findOne(userName));
 	}
 }

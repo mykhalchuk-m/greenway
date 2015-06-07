@@ -27,13 +27,13 @@ public class InivitationContentHelper {
 		progressIndicator.setVisible(true);
 		
 		Tab inivitationTab = new Tab(resourceBundle.getString("main.tab.inv.title"));
+		inivitationTab.setContent(screenConfig.getView(invitationDeliveryController, "InvitationDeliveryPane.fxml"));
 		inivitationTab.setClosable(false);
 		
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				inivitationTab.setContent(screenConfig.getView(invitationDeliveryController, "InvitationDeliveryPane.fxml"));
 				invitationDeliveryController.refreshTable();
 
 				Platform.runLater(new Runnable() {
