@@ -38,7 +38,7 @@ public class ScreenConfig {
 	 */
 	private void setNode(Node node) {
 		Scene scene = new Scene((Parent) node);
-		scene.getStylesheets().add(ScreenConfig.class.getResource("/css/gw-style.css").toExternalForm());
+//		scene.getStylesheets().add(ScreenConfig.class.getResource("/css/gw-style.css").toExternalForm());
 		primaryStage.setScene(scene);
 		
 		Screen screen = Screen.getPrimary();
@@ -47,7 +47,7 @@ public class ScreenConfig {
 		primaryStage.setY(bounds.getMinY());
 		primaryStage.setWidth(bounds.getWidth());
 		primaryStage.setHeight(bounds.getHeight());
-		primaryStage.setMaximized(true);
+//		primaryStage.setMaximized(true);
 
 		if (!primaryStage.isShowing()) {
 			primaryStage.show();
